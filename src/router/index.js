@@ -11,8 +11,8 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    path: '/monitors/:id',
-    name: 'Monitor',
+    path: '/monitors/:id?',
+    name: 'Monitors',
     component: () => import('../views/Monitors.vue')
   }
 ]
