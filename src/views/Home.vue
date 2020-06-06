@@ -8,7 +8,7 @@
         </ac-grid>
         <ac-grid cols=12 align-h="center">
             <ac-col cols="11">
-                <graph :data="data" :layout="layout"></graph>
+                <graph :data="data" :layout="layout" :spinner="spinner"></graph>
             </ac-col>
         </ac-grid>
 	</div>
@@ -48,7 +48,8 @@ export default {
                         "title":"Number of Endpoints",
                     }
                 }
-            }
+            },
+            spinner:{"message":"Generating graph...","show":true}
         }
     },
     methods:{
@@ -81,6 +82,7 @@ export default {
                     const maxBucketDate = moment(bucket.max,"X");
                     monitorDates.push(maxBucketDate.format("YYYY-MM-DD HH:mm:ss"));
                 })
+                this.spinner.message ="Generating graph...";
                 this.layout.layout.yaxis.range = [0,Math.max(...monitorCounts)];
                 this.data.data[0] = {
                     "x":monitorDates,
@@ -89,9 +91,12 @@ export default {
                 }
                 this.layout.ready=true;
                 this.data.ready=true;
+                this.spinner.show=false;
             },
         graphData(){
+            this.spinner.message="Fetching data...";
             this.$store.dispatch('loadData',this).then(()=>{
+                this.spinner.message =`Processing data...`;
                 this.processData();
             })
         }

@@ -1,11 +1,5 @@
 <template>
     <div class="status-heatmap" ref="wrapper">
-        <div class="spinner-view" ref="spinner">
-            <div class="spinner">
-                <div v-for="n in 4" :class="'rect'+n" :key="n"></div>
-            </div>
-            <div class="spinner-text">{{spinnerMessage}}</div>
-        </div>
         <div class="graph-menu" ref="graphMenu">
             <div class="legend-wrapper" v-if="legend">
                 <div class="legend">
@@ -18,7 +12,8 @@
                 </div>
             </div>
         </div>
-        <graph :layout="graphLayout" :data="graphData" :config="graphConfig" class="graphContainer" ref="graphContainer"></graph>
+        <graph :layout="graphLayout" :data="graphData" :config="graphConfig" class="graphContainer" ref="graphContainer"
+        :spinner="tempSpinner"></graph>
     </div>
 </template>
 <script type="text/javascript">
@@ -91,7 +86,7 @@
                         } 
                     }
                 },
-                spinnerMessage:"Generating graph...",
+                tempSpinner:{"show":true,"message":"Generating graph..."},
                 graphData:{
                     "ready":false,
                     "data":[]
@@ -99,13 +94,6 @@
             }
         },
         methods:{
-            showSpinner(val){
-                if(val){
-                    this.$refs.spinner.classList.add("active");
-                }else{
-                    this.$refs.spinner.classList.remove("active");
-                }
-            },
             updateEmbedIDURL(embedFunction){
                 if(typeof embedFunction !== "function"){
                     throw TypeError("Argument 'embedFunction' must be of type function");
@@ -149,7 +137,7 @@
                     const minVisibleStatusValue = Math.min(...visibleStatusValues);
                     const maxVisibleStatusValue = Math.max(...visibleStatusValues);
                     this.updateHeatmapCharts().then((heatmapCharts)=>{
-                        this.spinnerMessage ="Generating graph...";
+                        this.tempSpinner.message ="Generating graph...";
                         // Set colors for heatmap values
                         const colorScale=[];
                         // If no visible or no hidden status values, use default scale
@@ -188,7 +176,7 @@
                     });
                 }).finally(()=>{
                     this.graphLoading=false; 
-                    this.showSpinner(false);
+                    this.tempSpinner.show=false;
                 })
                 return promise;
             },
@@ -209,7 +197,7 @@
                                     "statusLabel":data.statusLabel
                                 });
                             }else if(data.status=="update"){
-                                this.spinnerMessage =`Processing data (${data.body}%)`;
+                                this.tempSpinner.message =`Processing data (${data.body}%)`;
                             }
                         });
                         worker.postMessage({
@@ -237,9 +225,9 @@
                 deep:true,
                 async handler(val){
                     await this.$nextTick();
-                    this.showSpinner(val.show)
+                    this.tempSpinner.show=val.show;
                     if(val.message!=null){
-                        this.spinnerMessage = val.message;
+                        this.tempSpinner.message = val.message;
                     }
                 }
             },
@@ -353,85 +341,6 @@
             margin: 0 0.5em 0 1em;
             white-space: nowrap;
         }
-    }
-    .spinner-view{
-        background-color: #FFF;
-        box-shadow: 3px 3px 5px rgba(0,0,0,0.1);
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 100;
-        background-color: #FFF;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        flex-direction: column;
-        padding: 5%;
-        box-sizing: border-box;
-        &:not(.active){
-            display: none
-        }
-        &.active ~ * {
-            opacity: 0;
-        }
-        .spinner-text{
-            margin: 1% 0 0 0;
-            color: #333;
-        }
-        .spinner {
-            width: 50px;
-            height: 40px;
-            text-align: center;
-            font-size: 10px;
-            & > div {
-                background-color: #6d6ab7;
-                height: 100%;
-                width: 6px;
-                display: inline-block;
-                margin: 0 1px;
-                -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-                animation: sk-stretchdelay 1.2s infinite ease-in-out;
-            }
-            .rect2 {
-                -webkit-animation-delay: -1.1s;
-                animation-delay: -1.1s;
-            }
-
-            .rect3 {
-                -webkit-animation-delay: -1.0s;
-                animation-delay: -1.0s;
-            }
-
-            .rect4 {
-                -webkit-animation-delay: -0.9s;
-                animation-delay: -0.9s;
-            }
-
-            .rect5 {
-                -webkit-animation-delay: -0.8s;
-                animation-delay: -0.8s;
-            }
-        }
-        .spinner-text{
-            margin: 1% 0 0 0;
-            color: #333;
-        }
-    }
-}
-@-webkit-keyframes sk-stretchdelay {
-    0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
-    20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes sk-stretchdelay {
-    0%, 40%, 100% { 
-        transform: scaleY(0.4);
-        -webkit-transform: scaleY(0.4);
-    }  20% { 
-        transform: scaleY(1.0);
-        -webkit-transform: scaleY(1.0);
     }
 }
 </style>
