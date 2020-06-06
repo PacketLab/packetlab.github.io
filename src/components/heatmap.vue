@@ -153,7 +153,6 @@
                             // Sort color scale ascending
                             colorScale.sort((a,b)=>parseFloat(a[0])-parseFloat(b[0]));
                         }
-                        console.log(colorScale);
                         this.graphData.data[0]={
                             "x":dataSummary.dates,
                             "y":dataSummary.parentIDs.map(id=>this.embedIDURL(id)),
