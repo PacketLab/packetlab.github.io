@@ -6,9 +6,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@vue-spa
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@vue-spa
       with:
         node-version: '12.x'
     - run: npm install
