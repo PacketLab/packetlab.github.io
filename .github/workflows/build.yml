@@ -1,9 +1,9 @@
 name: Build
 on: [push]
 jobs:
-	runs-on: ubuntu-latest
-	strategy:
-		matrix:
-    		node-version: 12.x
-	steps:
-	- run: npm run build
+  runs-on: ubuntu-latest
+  strategy:
+    matrix:
+        node-version: 12.x
+  steps:
+  - run: npm run build
