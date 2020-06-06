@@ -21,7 +21,7 @@ self.addEventListener("message",(e)=>{
         // Only start worker if data is available
         if(group.length>0){
             workerPromises.push(new Promise((resolve,reject)=>{    
-                const worker = new Worker("./process-heatmap-group.js");
+                const worker = new Worker("./process-heatmap-group.worker.js");
                 // End thread when worker finishes
                 worker.addEventListener("message",function(e){
                     const data = e.data;

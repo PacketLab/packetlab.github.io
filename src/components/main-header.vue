@@ -5,7 +5,7 @@
                 <h1>{{title}}</h1>
             </div>
             <div class="logo-wrapper">
-                <img src="@/assets/pktlab_logo.svg" alt="PacketLab Logo">
+                <img src="@/assets/pktlab_logo.svg" alt="PacketLab Logo" @click="returnHome" class="logo">
             </div>
         </ac-nav>
     </div>
@@ -20,6 +20,13 @@
         data(){
             return {
 
+            }
+        },
+        methods:{
+            returnHome(){
+                if(this.$router.currentRoute.name!="Home"){
+                    this.$router.push({'name':'Home'})
+                }
             }
         }
     }
@@ -44,6 +51,9 @@
             height: 60px;
             margin:  0 2vw;
             max-width: 50vw;
+        }
+        .logo-wrapper img{
+            cursor: pointer;
         }
         + main{
             position: relative;

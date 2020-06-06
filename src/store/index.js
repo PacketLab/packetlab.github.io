@@ -1,12 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import DataWorker from 'worker-loader!../workers/fetch-data.worker.js';
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    "dataURL":"/data/monitors-status.jsonl",
+    "dataURL":"https://corsanywhere.herokuapp.com/http://pktlab.caida.org:20557/data.jsonl",
     "dataLoaded":false,
     "data":null
   },
@@ -22,7 +21,7 @@ export default new Vuex.Store({
     loadData({commit,state}){
         return new Promise((resolve,reject)=>{
             if(!state.dataLoaded){
-                const worker = new DataWorker();    
+                const worker = new Worker("workers/fetch-data.worker.js");    
                 worker.addEventListener("message",function(e){
                     worker.terminate();
                     const data = e.data;

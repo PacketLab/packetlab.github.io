@@ -22,5 +22,9 @@ const router = new VueRouter({
   base: (process.env.NODE_ENV == "development ") ? "/" : "/~vspillai/packet-lab/",
   routes
 })
-
+router.onError(error => {
+  if (/loading chunk \d* failed./i.test(error.message)) {
+    window.location.reload()
+  }
+})
 export default router

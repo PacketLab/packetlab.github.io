@@ -3,14 +3,12 @@
         <main-header :title="title"></main-header>
         <ac-grid cols=12 align-h="center">
             <ac-col cols="11">
-                <div class="dropdown-wrapper">
-                    <ac-dropdown :options="rangeDropdownOptions" v-model="range"></ac-dropdown>
-                </div>
+                <date-range-dropdown :callback="initMonitorHeatmap" :route="{name:'Monitors',params:{id:this.params.id}}"  v-on:change="setTimeRange"></date-range-dropdown>
             </ac-col>
         </ac-grid>
         <ac-grid cols=12 align-h="center">
             <ac-col cols="11">
-                <heatmap :spinner="spinner" type="Monitor"></heatmap>
+                <heatmap :spinner="spinner" :dataSummary="dataSummary" legend></heatmap>
             </ac-col>
         </ac-grid>
     </div>
@@ -18,6 +16,7 @@
 <script type="text/javascript">
     import mainHeader from "@/components/main-header"
     import heatmap from "@/components/heatmap"
+    import dateRangeDropdown from "@/components/date-range-dropdown"
     import moment from "moment"
     import Color from "ac-colors"
     export default {
@@ -25,50 +24,20 @@
             return {
                 defaultTitle:"Monitors Overview",
                 title:"",
-                defaultRange:"24hours",
-                range:"",
-                rangeValues:{
-                    "24hours":{
-                        "from":[1,'days'],
-                        "text":"Last 24 Hours",
-                        "value":"24hours",
-                    },
-                    "7days":{
-                        "from":[7,'days'],
-                        "text":"Last 7 Days",
-                        "value":"7days",
-                    },
-                    "28days":{
-                        "from":[28,'days'],
-                        "text":"Last 28 Days",
-                        "value":"28days",
-                    },
-                    "90days":{
-                        "from":[90,'days'],
-                        "text":"Last 90 Days",
-                        "value":"90days",
-                    },
-                    "365days":{
-                        "from":[365,'days'],
-                        "text":"Last 365 Days",
-                        "value":"365days",
-                    },
-                    // Days since unix epoch
-                    "lifetime":{
-                        "from":[Math.floor(moment().format("X")/86400),'days'],
-                        "text":"Lifetime",
-                        "value":"lifetime",
-                    },
+                dataSummary:{
+                    "ready":false,
                 },
                 spinner:{
                     show:true,
                     message:"Generating graph..."
-                }
+                },
+                timeRange:{toTime:null,fromTime:null}
             }
         },
         components:{
             "main-header":mainHeader,
             "heatmap":heatmap,
+            "date-range-dropdown":dateRangeDropdown,
         },
         computed:{
             params(){
@@ -85,6 +54,9 @@
             }
         },
         methods:{
+            setTimeRange(range){
+                this.timeRange = range;
+            },
             setTitle(){
                 if(this.params.id!=null){
                     this.title = "Monitor "+this.params.id;
@@ -92,29 +64,12 @@
                     this.title = this.defaultTitle;
                 }
             },
-            setRange(rangeChanged=false){
-                if(this.query.range==null ||  this.rangeValues[this.query.range]==null){
-                    this.range = this.defaultRange;
-                    rangeChanged =true
-                }else if(this.query.range!=this.range){
-                    if(this.range==null){
-                        this.range = this.query.range;
-                    }else{
-                        rangeChanged=true;
-                    }
-                }
-                if(rangeChanged){
-                    this.$router.replace({name:"Monitors",params:{id:this.params.id},query:{range:this.range}});
-                    this.initMonitorHeatmap();
-                }
-            },
             processData(){
                 this.spinner={show:true,message:"Sorting data..."};
-                let {toTime,fromTime}=this.getTimeRange();
-                console.log(toTime);
-                console.log(fromTime);
-                const dataSummary = {};
+                let {toTime,fromTime}=this.timeRange
                 // Reduce data
+                const dataSummary = this.dataSummary;
+                dataSummary.ready = false;
                 dataSummary.minTimestamp=Number.MAX_VALUE;
                 dataSummary.maxTimestamp=0;
                 // Default fromTime is 0
@@ -124,7 +79,6 @@
                 dataSummary.type = "Monitor";
                 dataSummary.statusTypes = {};
                 const jsonDataRows = this.$store.state.data;
-                console.log(jsonDataRows);
                 let processedRows = 0;
                 const groupedData = Object.values(jsonDataRows.reduce((acc,curr)=>{
                     this.spinner = {
@@ -132,7 +86,7 @@
                         message:`Sorting data (${Math.ceil(processedRows/jsonDataRows.length*100)}%)`
                     };
                     processedRows++;
-                    const index = curr.monitor;
+                    const index = "M"+curr.monitor;
                     // Limit data to from fromTime to toTime
                     if((curr.start>=fromTime && curr.start<=toTime)||
                     (curr.end>=fromTime && curr.end<=toTime)){
@@ -204,13 +158,18 @@
                     }
                     return acc;
                 },{}));
-                console.log(groupedData);
-            },
-            getTimeRange(){
-                const toTime = moment().format("X"); 
-                const selectedRange = this.rangeValues[this.range]
-                const fromTime = moment().subtract(...selectedRange["from"]).format("X");
-                return {toTime,fromTime};
+                const statusTypeList = Object.values(dataSummary.statusTypes);
+                const valueIncrement = !isFinite(1/(statusTypeList.length-1)) ? 1 : 1/(statusTypeList.length-1);
+                statusTypeList.forEach((status,i)=>{
+                    status['value'] =  i*valueIncrement;
+                })
+                // If min and max timestamps not updated, set them equal to from and to range
+                dataSummary.minTimestamp = (dataSummary.minTimestamp==Number.MAX_VALUE) ? fromTime : dataSummary.minTimestamp;
+                dataSummary.maxTimestamp = (dataSummary.maxTimestamp==0) ? toTime : dataSummary.maxTimestamp;
+                dataSummary.startDate = moment(dataSummary.minTimestamp,"X").format("YYYY-MM-DD HH:mm:ss");
+                dataSummary.endDate = moment(dataSummary.maxTimestamp,"X").format("YYYY-MM-DD HH:mm:ss");
+                dataSummary.groupedData = groupedData;
+                dataSummary.ready = true;
             },
             initMonitorHeatmap(){
                 this.spinner={show:true,message:"Fetching data..."};
@@ -219,8 +178,9 @@
                 })
             }
         },
-        mounted(){
-
+        async mounted(){
+            await this.$nextTick();
+            this.initMonitorHeatmap();
         },
         watch:{
             params:{
@@ -228,37 +188,7 @@
                     this.setTitle();
                 },
                 immediate:true,
-            },
-            query:{
-                handler(){
-                    this.setRange();
-                },
-                immediate:true,
-            },
-            range:{
-                handler(val,oldVal){
-                    if(val!=oldVal){
-                        this.setRange();
-                    }
-                }
             }
         }
     }
 </script>
-<style lang="scss">
-    .dropdown-wrapper{
-        background-color: #FFF;
-        box-shadow: 3px 3px 5px rgba(0,0,0,0.1);
-        box-sizing:border-box;
-        width: 100%;
-        margin: 2% 0;
-        .dropdown{
-            border: none;
-        }
-    }  
-    @media screen and (min-width: 576px){
-        .dropdown-wrapper{
-            max-width: 300px;
-        }
-    }
-</style>

@@ -31,19 +31,40 @@ self.addEventListener("message",(e)=>{
                     dates.push(minBucketDate.format("YYYY-MM-DD HH:mm:ss"));
                 }
             }
-            let currentBucketState = (bucket.vals.length==0) ? prevBucketState 
-                : {"status":bucket.vals[0].status,"success":bucket.vals[0].success,"exp":bucket.vals[0].exp};
-            currentBucketState = (currentBucketState.status==null || heatmapConfig.statusTypes[currentBucketState.status].hidden) ? {} 
-                : currentBucketState;
-            const bucketStatusValue = (currentBucketState.status!=null) ? heatmapConfig.statusTypes[currentBucketState.status].value : null;
+            const bucketStatusSummary = {};
+            bucket.vals.forEach(val=>{
+                if(bucketStatusSummary[val.exp]==null){
+                    bucketStatusSummary[val.exp] = val.status;
+                }else{
+                    if(bucketStatusSummary[val.exp] != null){
+                        bucketStatusSummary[val.exp] = val.status;
+                    }
+                }
+            })
+            const availableBuckets = bucket.vals.filter((val)=>bucketStatusSummary[val.exp]!=null);
+            let currentBucketState = (availableBuckets.length==0) ? 
+                prevBucketState : 
+                {
+                    "status":availableBuckets[0].status,
+                    "success":availableBuckets[0].success,
+                    "exp":availableBuckets[0].exp
+                };
+            currentBucketState = (currentBucketState.status==null || heatmapConfig.statusTypes[currentBucketState.status].hidden) ? 
+                {} : 
+                currentBucketState;
+            const bucketStatusValue = (currentBucketState.status!=null) ? 
+                heatmapConfig.statusTypes[currentBucketState.status].value : 
+                null;
             // Update bucket state
             prevBucketState = currentBucketState;
             statusRow.push(bucketStatusValue);
             const avgBucketDate = moment((bucket.min+bucket.max)/2,"X").format("YYYY-MM-DD HH:mm:ss");
-            const bucketLabelDate =  (bucket.vals[0]==null) ? avgBucketDate :
-                moment(bucket.vals[0].timestamp,"X").format("YYYY-MM-DD HH:mm:ss");
-            const bucketLabel = (currentBucketState.status==null) ? null 
-                : `Date: ${bucketLabelDate}<br>ID: ${parent.id}<br>Exp: ${currentBucketState.exp}<br>Success: ${currentBucketState.success}`;
+            const bucketLabelDate =  (availableBuckets[0]==null) ? 
+                avgBucketDate :
+                moment(availableBuckets[0].timestamp,"X").format("YYYY-MM-DD HH:mm:ss");
+            const bucketLabel = (currentBucketState.status==null) ? 
+                null : 
+                `Date: ${bucketLabelDate}<br>ID: ${parent.id}<br>Exp: ${currentBucketState.exp}<br>Success: ${currentBucketState.success}`;
             labelRow.push(bucketLabel);
         });
         // Adding minBucketDate add every date except for last max
