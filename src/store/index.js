@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
-
+const base = (process.env.NODE_ENV == "development") ? "/" : "/~vspillai/packet-lab/";
 export default new Vuex.Store({
   state: {
     "dataURL":{
@@ -11,7 +11,7 @@ export default new Vuex.Store({
         "format":"jsonl"
       },
       "experiments":{
-        "url":"/data/experiments.jsonl",
+        "url":base + "data/experiments.jsonl",
         "format":"jsonl"
       }
     },
