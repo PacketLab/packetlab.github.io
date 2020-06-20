@@ -5,17 +5,27 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    "dataURL":"https://corsanywhere.herokuapp.com/http://pktlab.caida.org:20557/data.jsonl",
+    "dataURL":{
+      "data":{
+        "url":"https://corsanywhere.herokuapp.com/http://pktlab.caida.org:20557/data.jsonl",
+        "format":"jsonl"
+      },
+      "experiments":{
+        "url":"/data/experiments.jsonl",
+        "format":"jsonl"
+      }
+    },
     "dataLoaded":false,
-    "data":null
+    "data":null,
+    "experiments":null
   },
   mutations: {
     setData(state,data){
-        if(data!=null){
-            state.data = data;
-            state.dataLoaded = true;
-        }
-    }
+        Object.keys(data).forEach((key)=>{
+          state[key] = data[key]
+        })
+        state.dataLoaded = true;
+    },
   },
   actions: {
     loadData({commit,state}){

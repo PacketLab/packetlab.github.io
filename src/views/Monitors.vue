@@ -3,18 +3,26 @@
         <main-header :title="title"></main-header>
         <ac-grid cols=12 align-h="center">
             <ac-col cols="11">
-                <date-range-dropdown :callback="initMonitorHeatmap" :route="{name:'Monitors',params:{id:this.params.id}}"  v-on:change="setTimeRange"></date-range-dropdown>
+                <date-range-dropdown :callback="processHeatmapData" :route="{name:'Monitors',params:{id:this.params.id}}"  v-on:change="setTimeRange"></date-range-dropdown>
             </ac-col>
         </ac-grid>
         <ac-grid cols=12 align-h="center">
-            <ac-col cols="11">
-                <heatmap :spinner="spinner" :dataSummary="dataSummary" legend></heatmap>
+            <ac-col cols="11" class="graph-row">
+                <heatmap :spinner="heatmapSpinner" :dataSummary="dataSummary" legend></heatmap>
             </ac-col>
         </ac-grid>
+        <div v-if='monitorIDs'>
+            <ac-grid cols=12 align-h="center">
+                <ac-col cols="11" class="graph-row">
+                    <graph :data="latencyData" :layout="latencyLayout" :spinner="latencySpinner"></graph>
+                </ac-col>
+            </ac-grid>
+        </div>
     </div>
 </template>
 <script type="text/javascript">
     import mainHeader from "@/components/main-header"
+    import graph from "@/components/graph";
     import heatmap from "@/components/heatmap"
     import dateRangeDropdown from "@/components/date-range-dropdown"
     import moment from "moment"
@@ -22,22 +30,45 @@
     export default {
         data(){
             return {
+                timeRange:{toTime:null,fromTime:null},
                 defaultTitle:"Monitors Overview",
                 title:"",
                 dataSummary:{
                     "ready":false,
                 },
-                spinner:{
+                heatmapSpinner:{
                     show:true,
                     message:"Generating graph..."
                 },
-                timeRange:{toTime:null,fromTime:null}
+                latencySpinner:{
+                    show:true,
+                    message:"Generating graph..."
+                },
+                latencyData:{
+                    "ready":false,
+                    "data":[],
+                },
+                latencyLayout:{
+                    "ready":false,
+                    "layout":{
+                        "title":"Average DNS Query Latency by Hour",
+                        "xaxis":{
+                            "title":"Hour of Day (UTC)",
+                            "range":[0,23],
+                            "dtick":1
+                        },
+                        "yaxis":{
+                            "title":"Average Endpoint DNS Query Latency (ms)",
+                        }
+                    }
+                }
             }
         },
         components:{
             "main-header":mainHeader,
             "heatmap":heatmap,
             "date-range-dropdown":dateRangeDropdown,
+            "graph":graph,
         },
         computed:{
             params(){
@@ -64,8 +95,8 @@
                     this.title = this.defaultTitle;
                 }
             },
-            processData(){
-                this.spinner={show:true,message:"Sorting data..."};
+            processHeatmapData(){
+                this.heatmapSpinner={show:true,message:"Sorting data..."};
                 let {toTime,fromTime}=this.timeRange
                 // Reduce data
                 const dataSummary = this.dataSummary;
@@ -81,7 +112,7 @@
                 const jsonDataRows = this.$store.state.data;
                 let processedRows = 0;
                 const groupedData = Object.values(jsonDataRows.reduce((acc,curr)=>{
-                    this.spinner = {
+                    this.heatmapSpinner = {
                         show:true,
                         message:`Sorting data (${Math.ceil(processedRows/jsonDataRows.length*100)}%)`
                     };
@@ -171,16 +202,101 @@
                 dataSummary.groupedData = groupedData;
                 dataSummary.ready = true;
             },
-            initMonitorHeatmap(){
-                this.spinner={show:true,message:"Fetching data..."};
+            processLatencyData(){
+                this.latencySpinner={show:true,message:"Sorting data..."};
+                this.latencyData.ready=false;
+                this.latencyLayout.ready=false;
+                let {toTime,fromTime}=this.timeRange
+                const latencyExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="latency").map(exp=>exp.name);
+                fromTime = (fromTime!=null) ? fromTime : 0;
+                // Default toTime is current time
+                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
+                const jsonDataRows = this.$store.state.data;
+                const latencyResults = {}
+                const addLatencyRecord = (record, exp)=>{
+                    if(!latencyResults[exp]){
+                        latencyResults[exp] = new Array(24).fill(null);
+                    }
+                    // Time is in nanoseconds, convert to ms
+                    const sendTime = record.ctrl_stime/(10**6);
+                    const recvTime = record.ctrl_rtime/(10**6);
+                    const latency = (recvTime-sendTime);
+                    const hours = moment(sendTime,"X").utc().hours();
+                    // Verify data is properly parsed
+                    if(!isNaN(hours) && !isNaN(latency)){
+                        if(!latencyResults[exp][hours]){
+                            latencyResults[exp][hours] = []
+                        }
+                        latencyResults[exp][hours].push(latency);
+                    }
+                }
+                let processedRows = 0;
+                jsonDataRows.forEach((curr)=>{
+                    if((curr.start>=fromTime && curr.start<=toTime)||
+                    (curr.end>=fromTime && curr.end<=toTime)){
+                        if(latencyExperiments.includes(curr.exp)){
+                            if(curr.exp=="DNS_local"){
+                                curr.data.rst_list.forEach((record)=>{
+                                    addLatencyRecord(record, curr.exp)
+                                });
+                            }else{
+                                addLatencyRecord(curr.data, curr.exp);
+                            }
+                        }
+                    }
+                    this.latencySpinner = {
+                        show:true,
+                        message:`Sorting data (${Math.ceil(processedRows/jsonDataRows.length*100)}%)`
+                    };
+                    processedRows++;
+                });
+                let maxAvgLatency = Number.MIN_SAFE_INTEGER;
+                Object.values(latencyResults).forEach((expData)=>{
+                    Object.keys(expData).forEach((hour)=>{    
+                        // Replace list of latencies with avg latency
+                        expData[hour] = expData[hour].reduce((acc, curr)=>acc+curr)/expData[hour].length;
+                        maxAvgLatency = Math.max(maxAvgLatency,expData[hour]);
+                    })
+                });
+                this.latencySpinner.message="Generating graph...";
+                this.latencyData.data=[];
+                const markerBorderWidth = 2;
+                const utcHours = new Array(24).fill().map((v,i)=>i); 
+                Object.keys(latencyResults).forEach((exp)=>{
+                    const traceColor = Color.random()
+                    this.latencyData.data.push({
+                        x:utcHours,
+                        y:latencyResults[exp],
+                        name:exp,
+                        mode:"lines+markers",
+                        line:{
+                            color:traceColor.rgbString
+                        },
+                        marker:{
+                            color:"rgba(0,0,0,0)",
+                            line:{
+                                color:traceColor.rgbString,
+                                width:markerBorderWidth
+                            }
+                        }
+                    })
+                })
+                // Update yaxis range
+                this.latencyLayout.layout.yaxis.range=[0,maxAvgLatency+markerBorderWidth];
+                this.latencyData.ready=true;
+                this.latencyLayout.ready=true;
+                this.latencySpinner.show=false;
+            },
+            initGraphData(){
+                this.heatmapSpinner={show:true,message:"Fetching data..."};
+                this.latencySpinner={show:true,message:"Fetching data..."};
                 this.$store.dispatch('loadData',this).then(()=>{
-                    this.processData();
+                    this.processHeatmapData();
+                    if(this.monitorIDs){
+                        this.processLatencyData();
+                    }
                 })
             }
-        },
-        async mounted(){
-            await this.$nextTick();
-            this.initMonitorHeatmap();
         },
         watch:{
             params:{
@@ -188,7 +304,20 @@
                     this.setTitle();
                 },
                 immediate:true,
+            },
+            monitorIDs:{
+                immediate:true,
+                deep:true,
+                async handler(){   
+                    await this.$nextTick();
+                    this.initGraphData();
+                }
             }
         }
     }
 </script>
+<style lang='scss' scoped>
+    .graph-row{
+        margin: 2% 0;
+    }
+</style>
