@@ -17,11 +17,14 @@
                     <graph :data="latencyHourlyData" :layout="latencyHourlyLayout" :spinner="latencyHourlySpinner"></graph>
                 </ac-col>
             </ac-grid>
-        </div>
-        <div v-if='monitorIDs'>
             <ac-grid cols=12 align-h="center">
                 <ac-col cols="11" class="graph-row">
                     <graph :data="latencyTimeData" :layout="latencyTimeLayout" :spinner="latencyTimeSpinner"></graph>
+                </ac-col>
+            </ac-grid>
+            <ac-grid cols=12 align-h="center">
+                <ac-col cols="11" class="graph-row">
+                    <graph :data="bandwidthTimeData" :layout="bandwidthTimeLayout" :spinner="bandwidthTimeSpinner"></graph>
                 </ac-col>
             </ac-grid>
         </div>
@@ -86,10 +89,31 @@
                             "type":"date"
                         },
                         "yaxis":{
-                            "title":"Average Endpoint DNS Query Latency (ms)",
+                            "title":"Endpoint DNS Query Latency (ms)",
                         }
                     }
-                }
+                },
+                bandwidthTimeSpinner:{
+                    show:true,
+                    message:"Generating graph..."
+                },
+                bandwidthTimeData:{
+                    "ready":false,
+                    "data":[],
+                },
+                bandwidthTimeLayout:{
+                    "ready":false,
+                    "layout":{
+                        "title":"Available Bandwidth & Bottleneck Bandwidth to Controller over Time",
+                        "xaxis":{
+                            "title":"Date",
+                            "type":"date"
+                        },
+                        "yaxis":{
+                            "title":"Measured Bandwidth (Mbps)",
+                        }
+                    }
+                },
             }
         },
         components:{
@@ -373,7 +397,6 @@
                 this.latencyTimeSpinner.message="Generating graph...";
                 this.latencyTimeData.data=[];
                 const markerBorderWidth = 2;
-                console.log(latencyTimeResults);
                 Object.keys(latencyTimeResults).forEach((exp)=>{
                     const traceColor = Color.random();
                     this.latencyTimeData.data.push({
@@ -398,6 +421,81 @@
                 this.latencyTimeLayout.ready=true;
                 this.latencyTimeSpinner.show=false;
             },
+            processBandwidthTimeData(){
+                this.bandwidthTimeSpinner={show:true,message:"Sorting data..."};
+                this.bandwidthTimeData.ready=false;
+                this.bandwidthTimeLayout.ready=false;
+                let {toTime,fromTime}=this.timeRange
+                const bandwidthTimeExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="bandwidth").map(exp=>exp.name);
+                fromTime = (fromTime!=null) ? fromTime : 0;
+                // Default toTime is current time
+                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
+                const monitorIDs = this.monitorIDs.map((id)=>id.toLowerCase());
+                const jsonDataRows = this.$store.state.data;
+                const bandwidthTimeResults = {}
+                const addBandwidthTimeRecord = (data)=>{
+                    bandwidthTimeResults.avail_band = bandwidthTimeResults.avail_band || [];
+                    bandwidthTimeResults.btnk_band = bandwidthTimeResults.btnk_band || [];
+                    
+                    // Time is in nanoseconds, convert to ms
+                    const sendTime = data.ctrl_stime/(10**6);
+                    const timestamp = moment(sendTime,"x").utc().format("YYYY-MM-DD HH:mm:ss.SS");
+                    // Verify data is properly parsed
+                    bandwidthTimeResults.avail_band.push({
+                        // Bandwidth is in bps, convert to Mbps
+                        "bandwidth":data.avail_band / (10**6),
+                        timestamp
+                    });
+                    bandwidthTimeResults.btnk_band.push({
+                        // Bandwidth is in bps, convert to Mbps
+                        "bandwidth":data.btnk_band / (10**6),
+                        timestamp
+                    });
+                }
+                let processedRows = 0;
+                jsonDataRows.forEach((curr)=>{
+                    const index = ("M"+curr.monitor).toLowerCase();
+                    if(monitorIDs.includes(index)){
+                        if((curr.start>=fromTime && curr.start<=toTime)||
+                        (curr.end>=fromTime && curr.end<=toTime)){
+                            if(bandwidthTimeExperiments.includes(curr.exp)){
+                                addBandwidthTimeRecord(curr.data);
+                            }
+                        }
+                    }
+                    this.bandwidthTimeSpinner = {
+                        show:true,
+                        message:`Sorting data (${Math.ceil(processedRows/jsonDataRows.length*100)}%)`
+                    };
+                    processedRows++;
+                });
+                this.bandwidthTimeSpinner.message="Generating graph...";
+                this.bandwidthTimeData.data=[];
+                const markerBorderWidth = 2;
+                Object.keys(bandwidthTimeResults).forEach((exp)=>{
+                    const traceColor = Color.random();
+                    this.bandwidthTimeData.data.push({
+                        x:bandwidthTimeResults[exp].map(record=>record.timestamp),
+                        y:bandwidthTimeResults[exp].map(record=>record.bandwidth),
+                        name:exp,
+                        mode:"lines+markers",
+                        line:{
+                            color:traceColor.rgbString
+                        },
+                        marker:{
+                            color:"rgba(0,0,0,0)",
+                            line:{
+                                color:traceColor.rgbString,
+                                width:markerBorderWidth
+                            }
+                        }
+                    })
+                })
+                // Update yaxis range
+                this.bandwidthTimeData.ready=true;
+                this.bandwidthTimeLayout.ready=true;
+                this.bandwidthTimeSpinner.show=false;
+            },
             initGraphData(){
                 this.heatmapSpinner={show:true,message:"Fetching data..."};
                 this.latencyHourlySpinner={show:true,message:"Fetching data..."};
@@ -407,6 +505,7 @@
                     if(this.monitorIDs){
                         this.processLatencyHourlyData();
                         this.processLatencyTimeData();
+                        this.processBandwidthTimeData();
                     }
                 })
             }
