@@ -440,17 +440,20 @@
                     // Time is in nanoseconds, convert to ms
                     const sendTime = data.ctrl_stime/(10**6);
                     const timestamp = moment(sendTime,"x").utc().format("YYYY-MM-DD HH:mm:ss.SS");
-                    // Verify data is properly parsed
-                    bandwidthTimeResults.avail_band.push({
-                        // Bandwidth is in bps, convert to Mbps
-                        "bandwidth":data.avail_band / (10**6),
-                        timestamp
-                    });
-                    bandwidthTimeResults.btnk_band.push({
-                        // Bandwidth is in bps, convert to Mbps
-                        "bandwidth":data.btnk_band / (10**6),
-                        timestamp
-                    });
+
+                    if(data.avail_band && data.btnk_band){
+                        bandwidthTimeResults.avail_band.push({
+                            // Bandwidth is in bps, convert to Mbps
+                            "bandwidth":data.avail_band / (10**6),
+                            timestamp
+                        });
+                        bandwidthTimeResults.btnk_band.push({
+                            // Bandwidth is in bps, convert to Mbps
+                            "bandwidth":data.btnk_band / (10**6),
+                            timestamp
+                        });
+                    }
+                    
                 }
                 let processedRows = 0;
                 jsonDataRows.forEach((curr)=>{
@@ -500,6 +503,7 @@
                 this.heatmapSpinner={show:true,message:"Fetching data..."};
                 this.latencyHourlySpinner={show:true,message:"Fetching data..."};
                 this.latencyTimeSpinner={show:true,message:"Fetching data..."};
+                this.bandwidthTimeSpinner={show:true,message:"Fetching data..."};
                 this.$store.dispatch('loadData',this).then(()=>{
                     this.processHeatmapData();
                     if(this.monitorIDs){
