@@ -14,7 +14,14 @@
         <div v-if='monitorIDs'>
             <ac-grid cols=12 align-h="center">
                 <ac-col cols="11" class="graph-row">
-                    <graph :data="latencyData" :layout="latencyLayout" :spinner="latencySpinner"></graph>
+                    <graph :data="latencyHourlyData" :layout="latencyHourlyLayout" :spinner="latencyHourlySpinner"></graph>
+                </ac-col>
+            </ac-grid>
+        </div>
+        <div v-if='monitorIDs'>
+            <ac-grid cols=12 align-h="center">
+                <ac-col cols="11" class="graph-row">
+                    <graph :data="latencyTimeData" :layout="latencyTimeLayout" :spinner="latencyTimeSpinner"></graph>
                 </ac-col>
             </ac-grid>
         </div>
@@ -40,15 +47,15 @@
                     show:true,
                     message:"Generating graph..."
                 },
-                latencySpinner:{
+                latencyHourlySpinner:{
                     show:true,
                     message:"Generating graph..."
                 },
-                latencyData:{
+                latencyHourlyData:{
                     "ready":false,
                     "data":[],
                 },
-                latencyLayout:{
+                latencyHourlyLayout:{
                     "ready":false,
                     "layout":{
                         "title":"Average DNS Query Latency by Hour",
@@ -56,6 +63,27 @@
                             "title":"Hour of Day (UTC)",
                             "range":[0,23],
                             "dtick":1
+                        },
+                        "yaxis":{
+                            "title":"Average Endpoint DNS Query Latency (ms)",
+                        }
+                    }
+                },
+                latencyTimeSpinner:{
+                    show:true,
+                    message:"Generating graph..."
+                },
+                latencyTimeData:{
+                    "ready":false,
+                    "data":[],
+                },
+                latencyTimeLayout:{
+                    "ready":false,
+                    "layout":{
+                        "title":"DNS Query Latency to Different DNS Resolvers over Time",
+                        "xaxis":{
+                            "title":"Date",
+                            "type":"date"
                         },
                         "yaxis":{
                             "title":"Average Endpoint DNS Query Latency (ms)",
@@ -202,32 +230,32 @@
                 dataSummary.groupedData = groupedData;
                 dataSummary.ready = true;
             },
-            processLatencyData(){
-                this.latencySpinner={show:true,message:"Sorting data..."};
-                this.latencyData.ready=false;
-                this.latencyLayout.ready=false;
+            processLatencyHourlyData(){
+                this.latencyHourlySpinner={show:true,message:"Sorting data..."};
+                this.latencyHourlyData.ready=false;
+                this.latencyHourlyLayout.ready=false;
                 let {toTime,fromTime}=this.timeRange
-                const latencyExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="latency").map(exp=>exp.name);
+                const latencyHourlyExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="latency").map(exp=>exp.name);
                 fromTime = (fromTime!=null) ? fromTime : 0;
                 // Default toTime is current time
                 toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
                 const monitorIDs = this.monitorIDs.map((id)=>id.toLowerCase());
                 const jsonDataRows = this.$store.state.data;
-                const latencyResults = {}
-                const addLatencyRecord = (record, exp)=>{
-                    if(!latencyResults[exp]){
-                        latencyResults[exp] = new Array(24).fill();
-                        latencyResults[exp] = latencyResults[exp].map(()=>[]);
+                const latencyHourlyResults = {}
+                const addLatencyHourlyRecord = (record, exp)=>{
+                    if(!latencyHourlyResults[exp]){
+                        latencyHourlyResults[exp] = new Array(24).fill();
+                        latencyHourlyResults[exp] = latencyHourlyResults[exp].map(()=>[]);
                     }
                     
                     // Time is in nanoseconds, convert to ms
                     const sendTime = record.ctrl_stime/(10**6);
                     const recvTime = record.ctrl_rtime/(10**6);
                     const latency = (recvTime-sendTime);
-                    const hours = moment(sendTime,"X").utc().hours();
+                    const hours = moment(sendTime,"x").utc().hours();
                     // Verify data is properly parsed
                     if(!isNaN(hours) && !isNaN(latency)){
-                        latencyResults[exp][hours].push(latency);
+                        latencyHourlyResults[exp][hours].push(latency);
                     }
                 }
                 let processedRows = 0;
@@ -236,44 +264,42 @@
                     if(monitorIDs.includes(index)){
                         if((curr.start>=fromTime && curr.start<=toTime)||
                         (curr.end>=fromTime && curr.end<=toTime)){
-                            if(latencyExperiments.includes(curr.exp)){
+                            if(latencyHourlyExperiments.includes(curr.exp)){
                                 if(curr.exp=="DNS_local"){ 
-                                    addLatencyRecord(curr.data.rst_list[0], curr.exp)
+                                    addLatencyHourlyRecord(curr.data.rst_list[0], curr.exp)
                                 }else{
-                                    addLatencyRecord(curr.data, curr.exp);
+                                    addLatencyHourlyRecord(curr.data, curr.exp);
                                 }
                             }
                         }
                     }
-                    this.latencySpinner = {
+                    this.latencyHourlySpinner = {
                         show:true,
                         message:`Sorting data (${Math.ceil(processedRows/jsonDataRows.length*100)}%)`
                     };
                     processedRows++;
                 });
-                let maxAvgLatency = 0;
-                Object.keys(latencyResults).forEach((expName)=>{
+                Object.keys(latencyHourlyResults).forEach((expName)=>{
                     let prevLatency = null;
-                    latencyResults[expName] = latencyResults[expName].map((hourData)=>{
+                    latencyHourlyResults[expName] = latencyHourlyResults[expName].map((hourData)=>{
                         const filteredHourData = hourData.filter((val)=>!!val);
                         if(filteredHourData.length==0){
                             return prevLatency;
                         }
                         const avgLatency =  filteredHourData.reduce((acc, curr)=>acc+curr)/filteredHourData.length;
                         prevLatency = avgLatency;
-                        maxAvgLatency = Math.max(maxAvgLatency,avgLatency);
-                        return maxAvgLatency; 
+                        return avgLatency; 
                     });
                 });
-                this.latencySpinner.message="Generating graph...";
-                this.latencyData.data=[];
+                this.latencyHourlySpinner.message="Generating graph...";
+                this.latencyHourlyData.data=[];
                 const markerBorderWidth = 2;
                 const utcHours = new Array(24).fill().map((v,i)=>i); 
-                Object.keys(latencyResults).forEach((exp)=>{
+                Object.keys(latencyHourlyResults).forEach((exp)=>{
                     const traceColor = Color.random();
-                    this.latencyData.data.push({
+                    this.latencyHourlyData.data.push({
                         x:utcHours,
-                        y:latencyResults[exp],
+                        y:latencyHourlyResults[exp],
                         name:exp,
                         mode:"lines+markers",
                         line:{
@@ -289,17 +315,98 @@
                     })
                 })
                 // Update yaxis range
-                this.latencyData.ready=true;
-                this.latencyLayout.ready=true;
-                this.latencySpinner.show=false;
+                this.latencyHourlyData.ready=true;
+                this.latencyHourlyLayout.ready=true;
+                this.latencyHourlySpinner.show=false;
+            },
+            processLatencyTimeData(){
+                this.latencyTimeSpinner={show:true,message:"Sorting data..."};
+                this.latencyTimeData.ready=false;
+                this.latencyTimeLayout.ready=false;
+                let {toTime,fromTime}=this.timeRange
+                const latencyTimeExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="latency").map(exp=>exp.name);
+                fromTime = (fromTime!=null) ? fromTime : 0;
+                // Default toTime is current time
+                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
+                const monitorIDs = this.monitorIDs.map((id)=>id.toLowerCase());
+                const jsonDataRows = this.$store.state.data;
+                const latencyTimeResults = {}
+                const addLatencyTimeRecord = (record, exp)=>{
+                    if(!latencyTimeResults[exp]){
+                        latencyTimeResults[exp] = []
+                    }
+                    
+                    // Time is in nanoseconds, convert to ms
+                    const sendTime = record.ctrl_stime/(10**6);
+                    const recvTime = record.ctrl_rtime/(10**6);
+                    const latency = (recvTime-sendTime);
+                    const timestamp = moment(sendTime,"x").utc().format("YYYY-MM-DD HH:mm:ss.SS");
+                    // Verify data is properly parsed
+                    if(!isNaN(latency)){
+                        latencyTimeResults[exp].push({
+                            timestamp,
+                            latency
+                        });
+                    }
+                }
+                let processedRows = 0;
+                jsonDataRows.forEach((curr)=>{
+                    const index = ("M"+curr.monitor).toLowerCase();
+                    if(monitorIDs.includes(index)){
+                        if((curr.start>=fromTime && curr.start<=toTime)||
+                        (curr.end>=fromTime && curr.end<=toTime)){
+                            if(latencyTimeExperiments.includes(curr.exp)){
+                                if(curr.exp=="DNS_local"){ 
+                                    addLatencyTimeRecord(curr.data.rst_list[0], curr.exp)
+                                }else{
+                                    addLatencyTimeRecord(curr.data, curr.exp);
+                                }
+                            }
+                        }
+                    }
+                    this.latencyTimeSpinner = {
+                        show:true,
+                        message:`Sorting data (${Math.ceil(processedRows/jsonDataRows.length*100)}%)`
+                    };
+                    processedRows++;
+                });
+                this.latencyTimeSpinner.message="Generating graph...";
+                this.latencyTimeData.data=[];
+                const markerBorderWidth = 2;
+                console.log(latencyTimeResults);
+                Object.keys(latencyTimeResults).forEach((exp)=>{
+                    const traceColor = Color.random();
+                    this.latencyTimeData.data.push({
+                        x:latencyTimeResults[exp].map(record=>record.timestamp),
+                        y:latencyTimeResults[exp].map(record=>record.latency),
+                        name:exp,
+                        mode:"lines+markers",
+                        line:{
+                            color:traceColor.rgbString
+                        },
+                        marker:{
+                            color:"rgba(0,0,0,0)",
+                            line:{
+                                color:traceColor.rgbString,
+                                width:markerBorderWidth
+                            }
+                        }
+                    })
+                })
+                // Update yaxis range
+                this.latencyTimeData.ready=true;
+                this.latencyTimeLayout.ready=true;
+                this.latencyTimeSpinner.show=false;
             },
             initGraphData(){
                 this.heatmapSpinner={show:true,message:"Fetching data..."};
-                this.latencySpinner={show:true,message:"Fetching data..."};
+                this.latencyHourlySpinner={show:true,message:"Fetching data..."};
+                this.latencyTimeSpinner={show:true,message:"Fetching data..."};
                 this.$store.dispatch('loadData',this).then(()=>{
                     this.processHeatmapData();
                     if(this.monitorIDs){
-                        this.processLatencyData();
+                        this.processLatencyHourlyData();
+                        this.processLatencyTimeData();
                     }
                 })
             }
