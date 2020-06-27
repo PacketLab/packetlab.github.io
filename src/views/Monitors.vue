@@ -14,12 +14,12 @@
         <div v-if='monitorIDs'>
             <ac-grid cols=12 align-h="center">
                 <ac-col cols="11" class="graph-row">
-                    <graph :data="latencyHourlyData" :layout="latencyHourlyLayout" :spinner="latencyHourlySpinner"></graph>
+                    <graph :data="latencyTimeData" :layout="latencyTimeLayout" :spinner="latencyTimeSpinner"></graph>
                 </ac-col>
             </ac-grid>
             <ac-grid cols=12 align-h="center">
                 <ac-col cols="11" class="graph-row">
-                    <graph :data="latencyTimeData" :layout="latencyTimeLayout" :spinner="latencyTimeSpinner"></graph>
+                    <graph :data="latencyHourlyData" :layout="latencyHourlyLayout" :spinner="latencyHourlySpinner"></graph>
                 </ac-col>
             </ac-grid>
             <ac-grid cols=12 align-h="center">
@@ -27,10 +27,17 @@
                     <graph :data="bandwidthTimeData" :layout="bandwidthTimeLayout" :spinner="bandwidthTimeSpinner"></graph>
                 </ac-col>
             </ac-grid>
+
+            <ac-grid cols=12 align-h="center">
+                <ac-col cols="11" class="graph-row">
+                    <graph :data="bandwidthHourlyData" :layout="bandwidthHourlyLayout" :spinner="bandwidthHourlySpinner"></graph>
+                </ac-col>
+            </ac-grid>
         </div>
     </div>
 </template>
 <script type="text/javascript">
+    import stats from "stats-lite"
     import mainHeader from "@/components/main-header"
     import graph from "@/components/graph";
     import heatmap from "@/components/heatmap"
@@ -111,6 +118,28 @@
                         },
                         "yaxis":{
                             "title":"Measured Bandwidth (Mbps)",
+                        }
+                    }
+                },
+                bandwidthHourlySpinner:{
+                    show:true,
+                    message:"Generating graph..."
+                },
+                bandwidthHourlyData:{
+                    "ready":false,
+                    "data":[],
+                },
+                bandwidthHourlyLayout:{
+                    "ready":false,
+                    "layout":{
+                        "title":"Average Available Bandwidth & Bottleneck Bandwidth to Controller by Hour",
+                        "xaxis":{
+                            "title":"Hour of Day (UTC)",
+                            "range":[0,23],
+                            "dtick":1
+                        },
+                        "yaxis":{
+                            "title":"Average Measured Bandwidth (Mbps)",
                         }
                     }
                 },
@@ -310,7 +339,7 @@
                         if(filteredHourData.length==0){
                             return prevLatency;
                         }
-                        const avgLatency =  filteredHourData.reduce((acc, curr)=>acc+curr)/filteredHourData.length;
+                        const avgLatency = stats.mean(filteredHourData);
                         prevLatency = avgLatency;
                         return avgLatency; 
                     });
@@ -499,17 +528,127 @@
                 this.bandwidthTimeLayout.ready=true;
                 this.bandwidthTimeSpinner.show=false;
             },
+            processBandwidthHourlyData(){
+                this.bandwidthHourlySpinner={show:true,message:"Sorting data..."};
+                this.bandwidthHourlyData.ready=false;
+                this.bandwidthHourlyLayout.ready=false;
+                let {toTime,fromTime}=this.timeRange
+                const bandwidthHourlyExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="bandwidth").map(exp=>exp.name);
+                fromTime = (fromTime!=null) ? fromTime : 0;
+                // Default toTime is current time
+                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
+                const monitorIDs = this.monitorIDs.map((id)=>id.toLowerCase());
+                const jsonDataRows = this.$store.state.data;
+                const bandwidthHourlyResults = {}
+                const addBandwidthHourlyRecord = (data)=>{
+                    if(!bandwidthHourlyResults.avail_band){
+                        bandwidthHourlyResults.avail_band = new Array(24).fill();
+                        bandwidthHourlyResults.avail_band = bandwidthHourlyResults.avail_band.map(()=>[]);
+                    }
+                    if(!bandwidthHourlyResults.btnk_band){
+                        bandwidthHourlyResults.btnk_band = new Array(24).fill();
+                        bandwidthHourlyResults.btnk_band = bandwidthHourlyResults.btnk_band.map(()=>[]);
+                    }
+                    
+                    // Time is in nanoseconds, convert to ms
+                    const sendTime = data.ctrl_stime/(10**6);
+                    const hours = moment(sendTime,"x").utc().hours();
+
+                    if(data.avail_band && data.btnk_band){
+                        // Bandwidth is in bps, convert to Mbps
+                        bandwidthHourlyResults.avail_band[hours].push(data.avail_band / (10**6));
+                        bandwidthHourlyResults.btnk_band[hours].push(data.btnk_band / (10**6));
+                    }
+                    
+                }
+                let processedRows = 0;
+                jsonDataRows.forEach((curr)=>{
+                    const index = ("M"+curr.monitor).toLowerCase();
+                    if(monitorIDs.includes(index)){
+                        if((curr.start>=fromTime && curr.start<=toTime)||
+                        (curr.end>=fromTime && curr.end<=toTime)){
+                            if(bandwidthHourlyExperiments.includes(curr.exp)){
+                                addBandwidthHourlyRecord(curr.data);
+                            }
+                        }
+                    }
+                    this.bandwidthHourlySpinner = {
+                        show:true,
+                        message:`Sorting data (${Math.ceil(processedRows/jsonDataRows.length*100)}%)`
+                    };
+                    processedRows++;
+                });
+                const meanBandwidthHourlyResults = {}
+                // Standard deviation data for error bars
+                const stdevBandwidthHourlyResults = {}
+                Object.keys(bandwidthHourlyResults).forEach((expName)=>{
+                    let prevAvgBandwidth = null;
+                    let prevStdevBandwidth = null;
+                    meanBandwidthHourlyResults[expName] = bandwidthHourlyResults[expName].map((hourData)=>{
+                        const filteredHourData = hourData.filter((val)=>!!val);
+                        if(filteredHourData.length==0){
+                            return prevAvgBandwidth;
+                        }
+                        const avgBandwidth =  stats.mean(filteredHourData);
+                        prevAvgBandwidth = avgBandwidth;
+                        return avgBandwidth; 
+                    });
+                    stdevBandwidthHourlyResults[expName] = bandwidthHourlyResults[expName].map((hourData)=>{
+                        const filteredHourData = hourData.filter((val)=>!!val);
+                        if(filteredHourData.length==0){
+                            return prevStdevBandwidth;
+                        }
+                        const stdevBandwidth =  stats.sampleStdev(filteredHourData);
+                        prevStdevBandwidth = stdevBandwidth;
+                        return stdevBandwidth; 
+                    });
+                });
+                this.bandwidthHourlySpinner.message="Generating graph...";
+                this.bandwidthHourlyData.data=[];
+                const markerBorderWidth = 2;
+                const utcHours = new Array(24).fill().map((v,i)=>i); 
+                Object.keys(meanBandwidthHourlyResults).forEach((exp)=>{
+                    const traceColor = Color.random();
+                    this.bandwidthHourlyData.data.push({
+                        x:utcHours,
+                        y:meanBandwidthHourlyResults[exp],
+                        error_y: {
+                            type: 'data',
+                            array: stdevBandwidthHourlyResults[exp],
+                            visible: true,
+                        },
+                        name:exp,
+                        mode:"lines+markers",
+                        line:{
+                            color:traceColor.rgbString
+                        },
+                        marker:{
+                            color:"rgba(0,0,0,0)",
+                            line:{
+                                color:traceColor.rgbString,
+                                width:markerBorderWidth
+                            }
+                        }
+                    })
+                })
+                // Update yaxis range
+                this.bandwidthHourlyData.ready=true;
+                this.bandwidthHourlyLayout.ready=true;
+                this.bandwidthHourlySpinner.show=false;
+            },
             initGraphData(){
                 this.heatmapSpinner={show:true,message:"Fetching data..."};
                 this.latencyHourlySpinner={show:true,message:"Fetching data..."};
                 this.latencyTimeSpinner={show:true,message:"Fetching data..."};
                 this.bandwidthTimeSpinner={show:true,message:"Fetching data..."};
+                this.bandwidthHourlySpinner={show:true,message:"Fetching data..."};
                 this.$store.dispatch('loadData',this).then(()=>{
                     this.processHeatmapData();
                     if(this.monitorIDs){
                         this.processLatencyHourlyData();
                         this.processLatencyTimeData();
                         this.processBandwidthTimeData();
+                        this.processBandwidthHourlyData();
                     }
                 })
             }

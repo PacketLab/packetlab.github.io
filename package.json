@@ -16,6 +16,7 @@
     "lodash": "^4.17.15",
     "lodash.clonedeep": "^4.5.0",
     "moment": "^2.27.0",
+    "stats-lite": "^2.2.0",
     "vue": "^2.6.11",
     "vue-plotly": "^1.1.0",
     "vue-router": "^3.3.4",
