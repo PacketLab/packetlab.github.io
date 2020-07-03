@@ -1,7 +1,8 @@
 self.addEventListener("message",(e)=>{
     const heatmapConfig = e.data;
     const dataSummary = heatmapConfig.dataSummary;
-    const hiddenStatus = heatmapConfig.hiddenStatus;
+    const visibleStatusTypes = heatmapConfig.visibleStatusTypes;
+    const visibleStatuses = visibleStatusTypes.map(status=>status.type);
     const statusChart = [];
     const statusLabel = [];
     // Generate date intervals for x-axis
@@ -13,6 +14,8 @@ self.addEventListener("message",(e)=>{
     const parentGroupSize = Math.ceil(totalRows/maxWorkers);
     const parentGroups = [];
     const workerPromises = [];
+    // Track the number of valid buckets per experiment to sort traces
+    const compiledStatusBucketCounts = {}
     for(let i=0;i<maxWorkers;i++){
         parentGroups.push(dataSummary.groupedData.slice(i*parentGroupSize,(i+1)*parentGroupSize));
     }
@@ -29,6 +32,11 @@ self.addEventListener("message",(e)=>{
                         worker.terminate();
                         statusChart[i] = data.statusChart;
                         statusLabel[i] = data.statusLabel;
+                        const statusBucketCounts = data.statusBucketCounts;
+                        Object.keys(statusBucketCounts).forEach((status)=>{
+                            compiledStatusBucketCounts[status] = compiledStatusBucketCounts[status] || 0;
+                            compiledStatusBucketCounts[status]+=statusBucketCounts[status];
+                        })
                         if(i==0){
                             dataSummary.dates = data.dates;
                         }
@@ -45,7 +53,7 @@ self.addEventListener("message",(e)=>{
                 worker.postMessage({
                     "parentGroup":group,
                     "heatmapConfig":heatmapConfig,
-                    "hiddenStatus":hiddenStatus,
+                    "visibleStatuses":visibleStatuses,
                     "dataSummary":dataSummary,
                     "datesSet":i!=0,
                 });
@@ -54,10 +62,22 @@ self.addEventListener("message",(e)=>{
     })
     // Wait till all workers have finished processing before returning status chart  
     Promise.all(workerPromises).then(()=>{
+        const compiledStatusChart = {};
+        const compiledStatusLabel = {};
+        visibleStatuses.forEach((status)=>{
+            compiledStatusChart[status] = [];
+            statusChart.forEach((parentGroup)=>{;
+                compiledStatusChart[status] = compiledStatusChart[status].concat(parentGroup[status]);
+            })
+            compiledStatusLabel[status] = [];
+            statusLabel.forEach((parentGroup)=>{;
+                compiledStatusLabel[status] = compiledStatusLabel[status].concat(parentGroup[status]);
+            })
+        });
         self.postMessage({
             "status":"finished",
-            "statusChart":[].concat(...statusChart),
-            "statusLabel":[].concat(...statusLabel),
+            "statusChart":compiledStatusChart,
+            "statusLabel":compiledStatusLabel,
             "dates":dataSummary.dates,
         });
     })

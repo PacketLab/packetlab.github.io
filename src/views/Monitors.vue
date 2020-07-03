@@ -176,21 +176,15 @@
                     this.title = this.defaultTitle;
                 }
             },
-            processHeatmapData(){
+            processHeatmapData(jsonDataRows,fromTime, toTime){
                 this.heatmapSpinner={show:true,message:"Sorting data..."};
-                let {toTime,fromTime}=this.timeRange
                 // Reduce data
                 const dataSummary = this.dataSummary;
                 dataSummary.ready = false;
                 dataSummary.minTimestamp=Number.MAX_VALUE;
                 dataSummary.maxTimestamp=0;
-                // Default fromTime is 0
-                fromTime = (fromTime!=null) ? fromTime : 0;
-                // Default toTime is current time
-                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
                 dataSummary.type = "Monitor";
                 dataSummary.statusTypes = {};
-                const jsonDataRows = this.$store.state.data;
                 let processedRows = 0;
                 const groupedData = Object.values(jsonDataRows.reduce((acc,curr)=>{
                     this.heatmapSpinner = {
@@ -199,82 +193,72 @@
                     };
                     processedRows++;
                     const index = "M"+curr.monitor;
-                    // Limit data to from fromTime to toTime
-                    if((curr.start>=fromTime && curr.start<=toTime)||
-                    (curr.end>=fromTime && curr.end<=toTime)){
-                        // If monitorIDs is set, limit to monitorIDs
-                        if(this.monitorIDs==null || (Array.isArray(this.monitorIDs) && this.monitorIDs.includes(index))){
-                            const dataStartTime = Math.max(fromTime,curr.start);
-                            const dataEndTime = Math.min(toTime,curr.end);
-                            // Update dataSummary max and min timestamp
-                            if(dataStartTime>dataSummary.maxTimestamp){
-                                dataSummary.maxTimestamp=dataStartTime;
-                            }
-                            if(dataStartTime<dataSummary.minTimestamp){
-                                dataSummary.minTimestamp=dataStartTime;
-                            }
-                            if(dataEndTime>dataSummary.maxTimestamp){
-                                dataSummary.maxTimestamp=dataEndTime;
-                            }
-                            if(dataEndTime<dataSummary.minTimestamp){
-                                dataSummary.minTimestamp=dataEndTime;
-                            }
-                            // If index for monitor is not set, make new object
-                            if(acc[index]==null){
-                                 acc[index] = {
-                                    "id":index,
-                                    "minTimestamp": Math.min(dataStartTime,dataEndTime),
-                                    "maxTimestamp": Math.max(dataStartTime,dataEndTime),
-                                    "records":[]
-                                 }
-                            }
-                            // Update current monitor max and min timestamp
-                            if(dataStartTime>acc[index].maxTimestamp){
-                                acc[index].maxTimestamp=dataStartTime;
-                            }
-                            if(dataStartTime<acc[index].minTimestamp){
-                                acc[index].minTimestamp=dataStartTime;
-                            }
-                            if(dataEndTime>acc[index].maxTimestamp){
-                                acc[index].maxTimestamp=dataEndTime;
-                            }
-                            if(dataEndTime<acc[index].minTimestamp){
-                                acc[index].minTimestamp=dataEndTime;
-                            }
-                            // Push one record for experiment start and one record for experiment end
-                            const status = curr.exp;
-                            acc[index].records.push({
-                                "status": status,
-                                "success": curr.success===1,
-                                "exp":curr.exp,
-                                "ip": curr.ip,
-                                "timestamp":dataStartTime,
-                            });
-                            acc[index].records.push({
-                                "status": null,
-                                "success": curr.success===1,
-                                "exp":curr.exp,
-                                "ip": curr.ip,
-                                "timestamp":dataEndTime,
-                            });
-                            // Add status to data summary;
-                            if(dataSummary.statusTypes[status]==null){
-                                const baseColor = Color.random();
-                                dataSummary.statusTypes[status]={
-                                    "type":status,
-                                    "hidden":false,
-                                    "color":baseColor.rgbString.toLowerCase(),
-                                }
-                            }
+                    const dataStartTime = Math.max(fromTime,curr.start);
+                    const dataEndTime = Math.min(toTime,curr.end);
+                    // Update dataSummary max and min timestamp
+                    if(dataStartTime>dataSummary.maxTimestamp){
+                        dataSummary.maxTimestamp=dataStartTime;
+                    }
+                    if(dataStartTime<dataSummary.minTimestamp){
+                        dataSummary.minTimestamp=dataStartTime;
+                    }
+                    if(dataEndTime>dataSummary.maxTimestamp){
+                        dataSummary.maxTimestamp=dataEndTime;
+                    }
+                    if(dataEndTime<dataSummary.minTimestamp){
+                        dataSummary.minTimestamp=dataEndTime;
+                    }
+                    // If index for monitor is not set, make new object
+                    if(acc[index]==null){
+                         acc[index] = {
+                            "id":index,
+                            "minTimestamp": Math.min(dataStartTime,dataEndTime),
+                            "maxTimestamp": Math.max(dataStartTime,dataEndTime),
+                            "records":{}
+                         }
+                    }
+                    // Update current monitor max and min timestamp
+                    if(dataStartTime>acc[index].maxTimestamp){
+                        acc[index].maxTimestamp=dataStartTime;
+                    }
+                    if(dataStartTime<acc[index].minTimestamp){
+                        acc[index].minTimestamp=dataStartTime;
+                    }
+                    if(dataEndTime>acc[index].maxTimestamp){
+                        acc[index].maxTimestamp=dataEndTime;
+                    }
+                    if(dataEndTime<acc[index].minTimestamp){
+                        acc[index].minTimestamp=dataEndTime;
+                    }
+                    // Push one record for experiment start and one record for experiment end
+                    const status = curr.exp;
+                    // Divide up records by status
+                    acc[index].records[status] = acc[index].records[status] || [];
+                    acc[index].records[status].push({
+                        "status": status,
+                        "success": curr.success===1,
+                        "exp":curr.exp,
+                        "ip": curr.ip,
+                        "timestamp":dataStartTime,
+                    });
+                    acc[index].records[status].push({
+                        "status": null,
+                        "success": curr.success===1,
+                        "exp":curr.exp,
+                        "ip": curr.ip,
+                        "timestamp":dataEndTime,
+                    });
+                    // Add status to data summary;
+                    if(dataSummary.statusTypes[status]==null){
+                        const baseColor = Color.random();
+                        dataSummary.statusTypes[status]={
+                            "type":status,
+                            "hidden":false,
+                            "color":baseColor.rgbString.toLowerCase(),
                         }
                     }
                     return acc;
                 },{}));
-                const statusTypeList = Object.values(dataSummary.statusTypes);
-                const valueIncrement = !isFinite(1/(statusTypeList.length-1)) ? 1 : 1/(statusTypeList.length-1);
-                statusTypeList.forEach((status,i)=>{
-                    status['value'] =  i*valueIncrement;
-                })
                 // If min and max timestamps not updated, set them equal to from and to range
                 dataSummary.minTimestamp = (dataSummary.minTimestamp==Number.MAX_VALUE) ? fromTime : dataSummary.minTimestamp;
                 dataSummary.maxTimestamp = (dataSummary.maxTimestamp==0) ? toTime : dataSummary.maxTimestamp;
@@ -283,17 +267,11 @@
                 dataSummary.groupedData = groupedData;
                 dataSummary.ready = true;
             },
-            processLatencyHourlyData(){
+            processLatencyHourlyData(jsonDataRows){
                 this.latencyHourlySpinner={show:true,message:"Sorting data..."};
                 this.latencyHourlyData.ready=false;
                 this.latencyHourlyLayout.ready=false;
-                let {toTime,fromTime}=this.timeRange
                 const latencyHourlyExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="latency").map(exp=>exp.name);
-                fromTime = (fromTime!=null) ? fromTime : 0;
-                // Default toTime is current time
-                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
-                const monitorIDs = this.monitorIDs.map((id)=>id.toLowerCase());
-                const jsonDataRows = this.$store.state.data;
                 const latencyHourlyResults = {}
                 const addLatencyHourlyRecord = (record, exp)=>{
                     if(!latencyHourlyResults[exp]){
@@ -313,17 +291,11 @@
                 }
                 let processedRows = 0;
                 jsonDataRows.forEach((curr)=>{
-                    const index = ("M"+curr.monitor).toLowerCase();
-                    if(monitorIDs.includes(index)){
-                        if((curr.start>=fromTime && curr.start<=toTime)||
-                        (curr.end>=fromTime && curr.end<=toTime)){
-                            if(latencyHourlyExperiments.includes(curr.exp)){
-                                if(curr.exp=="DNS_local"){ 
-                                    addLatencyHourlyRecord(curr.data.rst_list[0], curr.exp)
-                                }else{
-                                    addLatencyHourlyRecord(curr.data, curr.exp);
-                                }
-                            }
+                    if(latencyHourlyExperiments.includes(curr.exp)){
+                        if(curr.exp=="DNS_local"){ 
+                            addLatencyHourlyRecord(curr.data.rst_list[0], curr.exp)
+                        }else{
+                            addLatencyHourlyRecord(curr.data, curr.exp);
                         }
                     }
                     this.latencyHourlySpinner = {
@@ -372,17 +344,11 @@
                 this.latencyHourlyLayout.ready=true;
                 this.latencyHourlySpinner.show=false;
             },
-            processLatencyTimeData(){
+            processLatencyTimeData(jsonDataRows){
                 this.latencyTimeSpinner={show:true,message:"Sorting data..."};
                 this.latencyTimeData.ready=false;
                 this.latencyTimeLayout.ready=false;
-                let {toTime,fromTime}=this.timeRange
                 const latencyTimeExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="latency").map(exp=>exp.name);
-                fromTime = (fromTime!=null) ? fromTime : 0;
-                // Default toTime is current time
-                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
-                const monitorIDs = this.monitorIDs.map((id)=>id.toLowerCase());
-                const jsonDataRows = this.$store.state.data;
                 const latencyTimeResults = {}
                 const addLatencyTimeRecord = (record, exp)=>{
                     if(!latencyTimeResults[exp]){
@@ -404,17 +370,11 @@
                 }
                 let processedRows = 0;
                 jsonDataRows.forEach((curr)=>{
-                    const index = ("M"+curr.monitor).toLowerCase();
-                    if(monitorIDs.includes(index)){
-                        if((curr.start>=fromTime && curr.start<=toTime)||
-                        (curr.end>=fromTime && curr.end<=toTime)){
-                            if(latencyTimeExperiments.includes(curr.exp)){
-                                if(curr.exp=="DNS_local"){ 
-                                    addLatencyTimeRecord(curr.data.rst_list[0], curr.exp)
-                                }else{
-                                    addLatencyTimeRecord(curr.data, curr.exp);
-                                }
-                            }
+                    if(latencyTimeExperiments.includes(curr.exp)){
+                        if(curr.exp=="DNS_local"){ 
+                            addLatencyTimeRecord(curr.data.rst_list[0], curr.exp)
+                        }else{
+                            addLatencyTimeRecord(curr.data, curr.exp);
                         }
                     }
                     this.latencyTimeSpinner = {
@@ -450,17 +410,11 @@
                 this.latencyTimeLayout.ready=true;
                 this.latencyTimeSpinner.show=false;
             },
-            processBandwidthTimeData(){
+            processBandwidthTimeData(jsonDataRows){
                 this.bandwidthTimeSpinner={show:true,message:"Sorting data..."};
                 this.bandwidthTimeData.ready=false;
                 this.bandwidthTimeLayout.ready=false;
-                let {toTime,fromTime}=this.timeRange
                 const bandwidthTimeExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="bandwidth").map(exp=>exp.name);
-                fromTime = (fromTime!=null) ? fromTime : 0;
-                // Default toTime is current time
-                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
-                const monitorIDs = this.monitorIDs.map((id)=>id.toLowerCase());
-                const jsonDataRows = this.$store.state.data;
                 const bandwidthTimeResults = {}
                 const addBandwidthTimeRecord = (data)=>{
                     bandwidthTimeResults.avail_band = bandwidthTimeResults.avail_band || [];
@@ -486,14 +440,8 @@
                 }
                 let processedRows = 0;
                 jsonDataRows.forEach((curr)=>{
-                    const index = ("M"+curr.monitor).toLowerCase();
-                    if(monitorIDs.includes(index)){
-                        if((curr.start>=fromTime && curr.start<=toTime)||
-                        (curr.end>=fromTime && curr.end<=toTime)){
-                            if(bandwidthTimeExperiments.includes(curr.exp)){
-                                addBandwidthTimeRecord(curr.data);
-                            }
-                        }
+                    if(bandwidthTimeExperiments.includes(curr.exp)){
+                        addBandwidthTimeRecord(curr.data);
                     }
                     this.bandwidthTimeSpinner = {
                         show:true,
@@ -528,17 +476,11 @@
                 this.bandwidthTimeLayout.ready=true;
                 this.bandwidthTimeSpinner.show=false;
             },
-            processBandwidthHourlyData(){
+            processBandwidthHourlyData(jsonDataRows){
                 this.bandwidthHourlySpinner={show:true,message:"Sorting data..."};
                 this.bandwidthHourlyData.ready=false;
                 this.bandwidthHourlyLayout.ready=false;
-                let {toTime,fromTime}=this.timeRange
                 const bandwidthHourlyExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="bandwidth").map(exp=>exp.name);
-                fromTime = (fromTime!=null) ? fromTime : 0;
-                // Default toTime is current time
-                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
-                const monitorIDs = this.monitorIDs.map((id)=>id.toLowerCase());
-                const jsonDataRows = this.$store.state.data;
                 const bandwidthHourlyResults = {}
                 const addBandwidthHourlyRecord = (data)=>{
                     if(!bandwidthHourlyResults.avail_band){
@@ -563,14 +505,8 @@
                 }
                 let processedRows = 0;
                 jsonDataRows.forEach((curr)=>{
-                    const index = ("M"+curr.monitor).toLowerCase();
-                    if(monitorIDs.includes(index)){
-                        if((curr.start>=fromTime && curr.start<=toTime)||
-                        (curr.end>=fromTime && curr.end<=toTime)){
-                            if(bandwidthHourlyExperiments.includes(curr.exp)){
-                                addBandwidthHourlyRecord(curr.data);
-                            }
-                        }
+                    if(bandwidthHourlyExperiments.includes(curr.exp)){
+                        addBandwidthHourlyRecord(curr.data);
                     }
                     this.bandwidthHourlySpinner = {
                         show:true,
@@ -642,13 +578,48 @@
                 this.latencyTimeSpinner={show:true,message:"Fetching data..."};
                 this.bandwidthTimeSpinner={show:true,message:"Fetching data..."};
                 this.bandwidthHourlySpinner={show:true,message:"Fetching data..."};
+                let {toTime,fromTime}=this.timeRange
+                // Default fromTime is 0
+                fromTime = (fromTime!=null) ? fromTime : 0;
+                // Default toTime is current time
+                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
                 this.$store.dispatch('loadData',this).then(()=>{
-                    this.processHeatmapData();
+                    const jsonDataRows = this.$store.state.data.filter((row, i)=>{
+                        const index = ("M"+row.monitor).toLowerCase();
+                        this.heatmapSpinner={
+                            show:true,
+                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                        };
+                        this.latencyHourlySpinner={
+                            show:true,
+                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                        };
+                        this.latencyTimeSpinner={
+                            show:true,
+                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                        };
+                        this.bandwidthTimeSpinner={
+                            show:true,
+                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                        };
+                        this.bandwidthHourlySpinner={
+                            show:true,
+                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                        };
+                        return (this.monitorIDs==null || 
+                            (Array.isArray(this.monitorIDs) && this.monitorIDs.map((str)=>str.toLowerCase()).includes(index))
+                        )
+                        && (
+                            (row.start >= fromTime && row.start <= toTime) ||
+                            (row.end>=fromTime && row.end<=toTime)
+                        )
+                    });
+                    this.processHeatmapData(jsonDataRows, fromTime, toTime);
                     if(this.monitorIDs){
-                        this.processLatencyHourlyData();
-                        this.processLatencyTimeData();
-                        this.processBandwidthTimeData();
-                        this.processBandwidthHourlyData();
+                        this.processLatencyHourlyData(jsonDataRows);
+                        this.processLatencyTimeData(jsonDataRows);
+                        this.processBandwidthTimeData(jsonDataRows);
+                        this.processBandwidthHourlyData(jsonDataRows);
                     }
                 })
             }

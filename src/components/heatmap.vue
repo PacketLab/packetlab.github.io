@@ -2,7 +2,7 @@
     <div class="status-heatmap" ref="wrapper">
         <div class="graph-menu" ref="graphMenu">
             <div class="legend-wrapper" v-if="legend">
-                <div class="legend">
+                <div :class="{'legend':true,'show':showFullLegend}">
                     <div :class="['key-element', (status.hidden) ? 'disabled' : '']" v-for="status in statusTypeList" 
                     :key="status.type" 
                     @click="toggleHiddenStatus(status.type)">
@@ -10,6 +10,7 @@
                         <div class="key-label">{{status.type}}</div>
                     </div>
                 </div>
+                <div class="legend-toggle" @click="showFullLegend=!showFullLegend">{{legendToggleText}}</div>
             </div>
         </div>
         <graph :layout="graphLayout" :data="graphData" :config="graphConfig" class="graphContainer" ref="graphContainer"
@@ -40,7 +41,7 @@
         },
         data(){
             return {
-                BUCKETIFY_BUCKET_SIZE:3600,
+                BUCKETIFY_BUCKET_SIZE:30,
                 HEATMAP_MIN_HEIGHT:120,
                 // Bar height multiplied by number of bars for min height
                 ADJUSTED_BAR_HEIGHT:50,
@@ -54,6 +55,7 @@
                     parentIDReverse:(a,b)=>(a.id<b.id) ? 1 : -1,
                 },
                 embedIDURL:(id)=>id,
+                visibleStatusTypes:[],
                 statusTypeList:[],
                 graphConfig:{
                     "ready":false,
@@ -90,7 +92,8 @@
                 graphData:{
                     "ready":false,
                     "data":[]
-                }
+                },
+                showFullLegend:false,
             }
         },
         methods:{
@@ -111,6 +114,7 @@
                 const statusTypes = this.dataSummary.statusTypes;
                 if(statusTypes[status]!=null){
                     statusTypes[status].hidden = !statusTypes[status].hidden;
+                    this.updateStatusTypeList();
                     this.graph(this.dataSummary);
                 }
             },
@@ -121,6 +125,8 @@
                 this.graphData.ready=false;
                 this.graphLayout.ready=false;
                 this.graphConfig.ready=false;
+                // Scale bucket size proportionally to 30 seconds per 24 hours
+                this.BUCKETIFY_BUCKET_SIZE = (this.dataSummary.maxTimestamp - this.dataSummary.minTimestamp)*(3.4722*10**-4)
                 await this.$nextTick();
                 this.graphContainer.$el.style.height = Math.max(this.ADJUSTED_BAR_HEIGHT*dataSummary.groupedData.length,this.HEATMAP_MIN_HEIGHT)+"px";
                 const promise = new Promise((resolve,reject)=>{ 
@@ -131,40 +137,29 @@
                     dataSummary.parentIDs= groupedData.map(parent=>parent.id);
                     // Generate status chart and labels for z-values
                     // Heatmap values for visible statuses
-                    const visibleStatusTypes = Object.values(dataSummary.statusTypes).filter(status=>!status.hidden);
-                    const visibleStatusValues = visibleStatusTypes.map(status=>status.value);
-                    // Min and max heatmap values for viable statuses
-                    const minVisibleStatusValue = Math.min(...visibleStatusValues);
-                    const maxVisibleStatusValue = Math.max(...visibleStatusValues);
+                    const visibleStatusTypes = this.statusTypeList;
                     this.updateHeatmapCharts().then((heatmapCharts)=>{
                         this.tempSpinner.message ="Generating graph...";
-                        // Set colors for heatmap values
-                        const colorScale=[];
-                        // If no visible or no hidden status values, use default scale
-                        if(visibleStatusTypes.length==1){
-                            colorScale.push(["0",visibleStatusTypes[0].color]);
-                            colorScale.push(["1",visibleStatusTypes[0].color]);
-
-                        }else if(visibleStatusValues.length!=0){
-                            visibleStatusTypes.forEach((status)=>{
-                                // Scale status values from 0 to 1
-                                colorScale.push([this.scale(status.value,minVisibleStatusValue,maxVisibleStatusValue,0,1),status.color]);
-                            })
-                            // Sort color scale ascending
-                            colorScale.sort((a,b)=>parseFloat(a[0])-parseFloat(b[0]));
-                        }
-                        this.graphData.data[0]={
-                            "x":dataSummary.dates,
-                            "y":dataSummary.parentIDs.map(id=>this.embedIDURL(id)),
-                            "z":heatmapCharts.statusChart,
-                            "type":'heatmap',
-                            "hoverongaps":false,
-                            "colorscale":colorScale,
-                            "showscale":false,
-                            "text":heatmapCharts.statusLabel,
-                            "hoverinfo":"text",
-                            "ygap":.75,
-                        };
+                        // Reset graphData
+                        this.graphData.data = [];
+                        visibleStatusTypes.forEach((status, i)=>{
+                            // Set colors for heatmap values
+                            const colorScale=[];
+                            colorScale.push(["0.0", status.color]);
+                            colorScale.push(["1.0", status.color]);
+                            this.graphData.data[i]={
+                                "x":dataSummary.dates,
+                                "y":dataSummary.parentIDs.map(id=>this.embedIDURL(id)),
+                                "z":heatmapCharts.statusChart[status.type],
+                                "type":'heatmap',
+                                "hoverongaps":false,
+                                "colorscale":colorScale,
+                                "showscale":false,
+                                "text":heatmapCharts.statusLabel[status.type],
+                                "hoverinfo":"text",
+                                "ygap":.75,
+                            };
+                        })
                         this.graphData.ready=true;
                         this.graphLayout.ready=true;
                         this.graphConfig.ready=true;
@@ -201,19 +196,28 @@
                         });
                         worker.postMessage({
                             "dataSummary":that.dataSummary,
-                            "hiddenStatus":that.hiddenStatus,
-                            "statusTypes":that.dataSummary.statusTypes,
+                            "visibleStatusTypes":that.visibleStatusTypes,
                             "BUCKETIFY_BUCKET_SIZE":that.BUCKETIFY_BUCKET_SIZE,
                         });
                     }
                 })
                 return promise;
+            },
+            async updateStatusTypeList(){
+                this.visibleStatusTypes = null;
+                this.statusTypeList = null;
+                await this.$nextTick();
+                this.statusTypeList = Object.values(this.dataSummary.statusTypes || {});
+                this.visibleStatusTypes =  this.statusTypeList.filter(status=>!status.hidden);
             }
         },
         computed:{
             graphContainer(){
                 return this.$refs.graphContainer;
-            }
+            },
+            legendToggleText(){
+                return (this.showFullLegend) ? " - Show Less" : "+ Show More";
+            },
         },
         components:{
             graph
@@ -233,10 +237,8 @@
             dataSummary:{
                 immediate:true,
                 deep:true,
-                async handler(dataSummary){
-                    this.statusTypeList = null;
-                    await this.$nextTick();
-                    this.statusTypeList =  Object.values(dataSummary.statusTypes || {}).filter(status=>!status.hidden);
+                handler(dataSummary){
+                    this.updateStatusTypeList();
                     if(dataSummary.ready){
                         this.graph(dataSummary);
                     }

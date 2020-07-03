@@ -8,6 +8,7 @@ export default new Vuex.Store({
     "dataURL":{
       "data":{
         "url":"https://corsanywhere.herokuapp.com/http://pktlab.caida.org:20557/data.jsonl",
+        // "url":base + "data/monitors-status.jsonl",
         "format":"jsonl"
       },
       "experiments":{
