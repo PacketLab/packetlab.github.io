@@ -37,6 +37,10 @@
                 type:Object,
                 default:()=>({"show":true,"message":"Generating graph..."}),
             },
+            "embedIDURL":{
+                type:Function,
+                default:(id)=>id
+            }
             
         },
         data(){
@@ -54,7 +58,6 @@
                     parentID:(a,b)=>(a.id>b.id) ? 1 : -1,
                     parentIDReverse:(a,b)=>(a.id<b.id) ? 1 : -1,
                 },
-                embedIDURL:(id)=>id,
                 visibleStatusTypes:[],
                 statusTypeList:[],
                 graphConfig:{

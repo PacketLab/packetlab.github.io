@@ -4,3 +4,9 @@
 {"name":"DNS_quad_101", "category":"latency"}
 {"name":"DNS_local", "category":"latency"}
 {"name":"avail_band", "category":"bandwidth"}
+{"name":"DNS_quad_1", "category":"rtt"}
+{"name":"DNS_quad_8", "category":"rtt"}
+{"name":"DNS_quad_9", "category":"rtt"}
+{"name":"DNS_quad_101", "category":"rtt"}
+{"name":"DNS_local", "category":"rtt"}
+{"name":"avail_band", "category":"rtt"}

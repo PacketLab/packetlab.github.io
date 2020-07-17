@@ -8,7 +8,8 @@
         </ac-grid>
         <ac-grid cols=12 align-h="center">
             <ac-col cols="11" class="graph-row">
-                <heatmap :spinner="heatmapSpinner" :dataSummary="dataSummary" legend></heatmap>
+                <heatmap :spinner="heatmapSpinner" :dataSummary="dataSummary" legend
+                :embedIDURL="(id)=>`<a href='#/monitors/${id}'>${id}</a>`"></heatmap>
             </ac-col>
         </ac-grid>
         <div v-if='monitorIDs'>
@@ -31,6 +32,16 @@
             <ac-grid cols=12 align-h="center">
                 <ac-col cols="11" class="graph-row">
                     <graph :data="bandwidthHourlyData" :layout="bandwidthHourlyLayout" :spinner="bandwidthHourlySpinner"></graph>
+                </ac-col>
+            </ac-grid>
+            <ac-grid cols=12 align-h="center">
+                <ac-col cols="11" class="graph-row">
+                    <graph :data="rttTimeData" :layout="rttTimeLayout" :spinner="rttTimeSpinner"></graph>
+                </ac-col>
+            </ac-grid>
+            <ac-grid cols=12 align-h="center">
+                <ac-col cols="11" class="graph-row">
+                    <graph :data="rttHourlyData" :layout="rttHourlyLayout" :spinner="rttHourlySpinner"></graph>
                 </ac-col>
             </ac-grid>
         </div>
@@ -140,6 +151,49 @@
                         },
                         "yaxis":{
                             "title":"Average Measured Bandwidth (Mbps)",
+                        }
+                    }
+                },
+                rttTimeSpinner:{
+                    show:true,
+                    message:"Generating graph..."
+                },
+                rttTimeData:{
+                    "ready":false,
+                    "data":[],
+                },
+                rttTimeLayout:{
+                    "ready":false,
+                    "layout":{
+                        "title":"Endpoint Controller RTT over Time",
+                        "xaxis":{
+                            "title":"Date",
+                            "type":"date"
+                        },
+                        "yaxis":{
+                            "title":"Endpoint Controller RTT (ms)",
+                        }
+                    }
+                },
+                rttHourlySpinner:{
+                    show:true,
+                    message:"Generating graph..."
+                },
+                rttHourlyData:{
+                    "ready":false,
+                    "data":[],
+                },
+                rttHourlyLayout:{
+                    "ready":false,
+                    "layout":{
+                        "title":"Average Endpoint Controller RTT by Hour",
+                        "xaxis":{
+                            "title":"Hour of Day (UTC)",
+                            "range":[0,23],
+                            "dtick":1
+                        },
+                        "yaxis":{
+                            "title":"Average Endpoint Controller RTT (ms)",
                         }
                     }
                 },
@@ -274,19 +328,21 @@
                 const latencyHourlyExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="latency").map(exp=>exp.name);
                 const latencyHourlyResults = {}
                 const addLatencyHourlyRecord = (record, exp)=>{
-                    if(!latencyHourlyResults[exp]){
-                        latencyHourlyResults[exp] = new Array(24).fill();
-                        latencyHourlyResults[exp] = latencyHourlyResults[exp].map(()=>[]);
-                    }
-                    
-                    // Time is in nanoseconds, convert to ms
-                    const sendTime = record.ctrl_stime/(10**6);
-                    const recvTime = record.ctrl_rtime/(10**6);
-                    const latency = (recvTime-sendTime);
-                    const hours = moment(sendTime,"x").utc().hours();
-                    // Verify data is properly parsed
-                    if(!isNaN(hours) && !isNaN(latency)){
-                        latencyHourlyResults[exp][hours].push(latency);
+                    if(record){
+                        if(!latencyHourlyResults[exp]){
+                            latencyHourlyResults[exp] = new Array(24).fill();
+                            latencyHourlyResults[exp] = latencyHourlyResults[exp].map(()=>[]);
+                        }
+                        
+                        // Time is in nanoseconds, convert to ms
+                        const sendTime = record.end_stime/(10**6);
+                        const recvTime = record.end_rtime/(10**6);
+                        const latency = (recvTime-sendTime);
+                        const hours = moment(sendTime,"x").utc().hours();
+                        // Verify data is properly parsed
+                        if(!isNaN(hours) && !isNaN(latency)){
+                            latencyHourlyResults[exp][hours].push(latency);
+                        }
                     }
                 }
                 let processedRows = 0;
@@ -351,21 +407,24 @@
                 const latencyTimeExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="latency").map(exp=>exp.name);
                 const latencyTimeResults = {}
                 const addLatencyTimeRecord = (record, exp)=>{
-                    if(!latencyTimeResults[exp]){
-                        latencyTimeResults[exp] = []
-                    }
-                    
-                    // Time is in nanoseconds, convert to ms
-                    const sendTime = record.ctrl_stime/(10**6);
-                    const recvTime = record.ctrl_rtime/(10**6);
-                    const latency = (recvTime-sendTime);
-                    const timestamp = moment(sendTime,"x").utc().format("YYYY-MM-DD HH:mm:ss.SS");
-                    // Verify data is properly parsed
-                    if(!isNaN(latency)){
-                        latencyTimeResults[exp].push({
-                            timestamp,
-                            latency
-                        });
+                    if(record){
+                        if(!latencyTimeResults[exp]){
+                            latencyTimeResults[exp] = []
+                        }
+                        
+                        // Time is in nanoseconds, convert to ms
+                        const sendTime = record.end_stime/(10**6);
+                        const recvTime = record.end_rtime/(10**6);
+                        const latency = (recvTime-sendTime);
+                        const timestamp = moment(sendTime,"x").utc().format("YYYY-MM-DD HH:mm:ss.SS");
+                        // Verify data is properly parsed
+                        if(!isNaN(latency)){
+                            latencyTimeResults[exp].push({
+                                timestamp,
+                                latency,
+                                sendTime
+                            });
+                        }
                     }
                 }
                 let processedRows = 0;
@@ -387,6 +446,8 @@
                 this.latencyTimeData.data=[];
                 const markerBorderWidth = 2;
                 Object.keys(latencyTimeResults).forEach((exp)=>{
+                    // Sort records by sendTime
+                    latencyTimeResults[exp].sort((a,b)=>a.sendTime-b.sendTime)
                     const traceColor = Color.random();
                     this.latencyTimeData.data.push({
                         x:latencyTimeResults[exp].map(record=>record.timestamp),
@@ -428,12 +489,14 @@
                         bandwidthTimeResults.avail_band.push({
                             // Bandwidth is in bps, convert to Mbps
                             "bandwidth":data.avail_band / (10**6),
-                            timestamp
+                            timestamp,
+                            sendTime
                         });
                         bandwidthTimeResults.btnk_band.push({
                             // Bandwidth is in bps, convert to Mbps
                             "bandwidth":data.btnk_band / (10**6),
-                            timestamp
+                            timestamp,
+                            sendTime
                         });
                     }
                     
@@ -453,6 +516,8 @@
                 this.bandwidthTimeData.data=[];
                 const markerBorderWidth = 2;
                 Object.keys(bandwidthTimeResults).forEach((exp)=>{
+                    // Sort records by sendTime
+                    bandwidthTimeResults[exp].sort((a,b)=>a.sendTime-b.sendTime)
                     const traceColor = Color.random();
                     this.bandwidthTimeData.data.push({
                         x:bandwidthTimeResults[exp].map(record=>record.timestamp),
@@ -572,47 +637,212 @@
                 this.bandwidthHourlyLayout.ready=true;
                 this.bandwidthHourlySpinner.show=false;
             },
+            processRTTTimeData(jsonDataRows){
+                this.rttTimeSpinner={show:true,message:"Sorting data..."};
+                this.rttTimeData.ready=false;
+                this.rttTimeLayout.ready=false;
+                const rttTimeExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="rtt").map(exp=>exp.name);
+                const rttTimeResults = []
+                const addRTTTimeRecord = (record)=>{
+                    if(record){
+                        
+                        // Time is in nanoseconds, convert to ms
+                        const sendTime = record.ctrl_stime/(10**6);
+                        const recvTime = record.ctrl_rtime/(10**6);
+                        const rtt = (recvTime-sendTime);
+                        const timestamp = moment(sendTime,"x").utc().format("YYYY-MM-DD HH:mm:ss.SS");
+                        // Verify data is properly parsed
+                        if(!isNaN(rtt)){
+                            rttTimeResults.push({
+                                timestamp,
+                                rtt,
+                                sendTime
+                            });
+                        }
+                    }
+                }
+                let processedRows = 0;
+                jsonDataRows.forEach((curr)=>{
+                    if(rttTimeExperiments.includes(curr.exp)){
+                        if(curr.exp=="DNS_local"){ 
+                            addRTTTimeRecord(curr.data.rst_list[0])
+                        }else{
+                            addRTTTimeRecord(curr.data);
+                        }
+                    }
+                    this.rttTimeSpinner = {
+                        show:true,
+                        message:`Sorting data (${Math.ceil(processedRows/jsonDataRows.length*100)}%)`
+                    };
+                    processedRows++;
+                });
+                this.rttTimeSpinner.message="Generating graph...";
+                this.rttTimeData.data=[];
+                const markerBorderWidth = 2;
+                const traceColor = Color.random();
+                // Sort records by sendTime
+               rttTimeResults.sort((a,b)=>a.sendTime-b.sendTime)
+                this.rttTimeData.data.push({
+                    x:rttTimeResults.map(record=>record.timestamp),
+                    y:rttTimeResults.map(record=>record.rtt),
+                    name:"RTT",
+                    mode:"lines+markers",
+                    line:{
+                        color:traceColor.rgbString
+                    },
+                    marker:{
+                        color:"rgba(0,0,0,0)",
+                        line:{
+                            color:traceColor.rgbString,
+                            width:markerBorderWidth
+                        }
+                    }
+                })
+                // Update yaxis range
+                this.rttTimeData.ready=true;
+                this.rttTimeLayout.ready=true;
+                this.rttTimeSpinner.show=false;
+            },
+            processRTTHourlyData(jsonDataRows){
+                this.rttHourlySpinner={show:true,message:"Sorting data..."};
+                this.rttHourlyData.ready=false;
+                this.rttHourlyLayout.ready=false;
+                const rttHourlyExperiments = this.$store.state.experiments.filter((exp)=>exp.category=="rtt").map(exp=>exp.name);
+                const rttHourlyResults = new Array(24).fill().map(()=>[]);
+                const addRTTHourlyRecord = (record)=>{
+                    if(record){
+                        // Time is in nanoseconds, convert to ms
+                        const sendTime = record.ctrl_stime/(10**6);
+                        const recvTime = record.ctrl_rtime/(10**6);
+                        const rtt = (recvTime-sendTime);
+                        const hours = moment(sendTime,"x").utc().hours();
+                        // Verify data is properly parsed
+                        if(!isNaN(hours) && !isNaN(rtt)){
+                            rttHourlyResults[hours].push(rtt);
+                        }
+                    }
+                }
+                let processedRows = 0;
+                jsonDataRows.forEach((curr)=>{
+                    if(rttHourlyExperiments.includes(curr.exp)){
+                        if(curr.exp=="DNS_local"){ 
+                            addRTTHourlyRecord(curr.data.rst_list[0])
+                        }else{
+                            addRTTHourlyRecord(curr.data);
+                        }
+                    }
+                    this.rttHourlySpinner = {
+                        show:true,
+                        message:`Sorting data (${Math.ceil(processedRows/jsonDataRows.length*100)}%)`
+                    };
+                    processedRows++;
+                });
+                let prevAvgRTT = null;
+                let prevStdevRTT = null;
+                const meanRTTHourlyResults = rttHourlyResults.map((hourData)=>{
+                    const filteredHourData = hourData.filter((val)=>!!val);
+                    if(filteredHourData.length==0){
+                        return prevAvgRTT;
+                    }
+                    const avgRTT = stats.mean(filteredHourData);
+                    prevAvgRTT = avgRTT;
+                    return avgRTT; 
+                });
+                const stdevRTTHourlyResults = rttHourlyResults.map((hourData)=>{
+                    const filteredHourData = hourData.filter((val)=>!!val);
+                    if(filteredHourData.length==0){
+                        return prevStdevRTT;
+                    }
+                    const stdevRTT =  stats.sampleStdev(filteredHourData);
+                    prevStdevRTT = stdevRTT;
+                    return stdevRTT; 
+                });
+                this.rttHourlySpinner.message="Generating graph...";
+                this.rttHourlyData.data=[];
+                const markerBorderWidth = 2;
+                const utcHours = new Array(24).fill().map((v,i)=>i); 
+                const traceColor = Color.random();
+                this.rttHourlyData.data.push({
+                    x:utcHours,
+                    y:meanRTTHourlyResults,
+                    error_y: {
+                        type: 'data',
+                        array: stdevRTTHourlyResults,
+                        visible: true,
+                    },
+                    name:"Avg. RTT",
+                    mode:"lines+markers",
+                    line:{
+                        color:traceColor.rgbString
+                    },
+                    marker:{
+                        color:"rgba(0,0,0,0)",
+                        line:{
+                            color:traceColor.rgbString,
+                            width:markerBorderWidth
+                        }
+                    }
+                })
+                // Update yaxis range
+                this.rttHourlyData.ready=true;
+                this.rttHourlyLayout.ready=true;
+                this.rttHourlySpinner.show=false;
+            },
             initGraphData(){
                 this.heatmapSpinner={show:true,message:"Fetching data..."};
                 this.latencyHourlySpinner={show:true,message:"Fetching data..."};
                 this.latencyTimeSpinner={show:true,message:"Fetching data..."};
                 this.bandwidthTimeSpinner={show:true,message:"Fetching data..."};
                 this.bandwidthHourlySpinner={show:true,message:"Fetching data..."};
+                this.rttTimeSpinner={show:true,message:"Fetching data..."};
+                this.rttHourlySpinner={show:true,message:"Fetching data..."};
                 let {toTime,fromTime}=this.timeRange
                 // Default fromTime is 0
                 fromTime = (fromTime!=null) ? fromTime : 0;
                 // Default toTime is current time
                 toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
-                this.$store.dispatch('loadData',this).then(()=>{
+                this.$store.dispatch('loadData', fromTime).then(()=>{
                     const jsonDataRows = this.$store.state.data.filter((row, i)=>{
-                        const index = ("M"+row.monitor).toLowerCase();
-                        this.heatmapSpinner={
-                            show:true,
-                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
-                        };
-                        this.latencyHourlySpinner={
-                            show:true,
-                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
-                        };
-                        this.latencyTimeSpinner={
-                            show:true,
-                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
-                        };
-                        this.bandwidthTimeSpinner={
-                            show:true,
-                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
-                        };
-                        this.bandwidthHourlySpinner={
-                            show:true,
-                            message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
-                        };
-                        return (this.monitorIDs==null || 
-                            (Array.isArray(this.monitorIDs) && this.monitorIDs.map((str)=>str.toLowerCase()).includes(index))
-                        )
-                        && (
-                            (row.start >= fromTime && row.start <= toTime) ||
-                            (row.end>=fromTime && row.end<=toTime)
-                        )
+                        if(row.monitor){
+                            const index = ("M"+row.monitor).toLowerCase();
+                            this.heatmapSpinner={
+                                show:true,
+                                message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                            };
+                            this.latencyHourlySpinner={
+                                show:true,
+                                message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                            };
+                            this.latencyTimeSpinner={
+                                show:true,
+                                message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                            };
+                            this.bandwidthTimeSpinner={
+                                show:true,
+                                message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                            };
+                            this.bandwidthHourlySpinner={
+                                show:true,
+                                message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                            };
+                            this.rttTimeSpinner={
+                                show:true,
+                                message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                            };
+                            this.rttHourlySpinner={
+                                show:true,
+                                message:`Filtering data (${Math.ceil(i/this.$store.state.data.length*100)}%)`
+                            };
+                            return (this.monitorIDs==null || 
+                                (Array.isArray(this.monitorIDs) && this.monitorIDs.map((str)=>str.toLowerCase()).includes(index))
+                            )
+                            && (
+                                (row.start >= fromTime && row.start <= toTime) ||
+                                (row.end>=fromTime && row.end<=toTime)
+                            )
+                        }else{
+                            return false;
+                        }
                     });
                     this.processHeatmapData(jsonDataRows, fromTime, toTime);
                     if(this.monitorIDs){
@@ -620,6 +850,8 @@
                         this.processLatencyTimeData(jsonDataRows);
                         this.processBandwidthTimeData(jsonDataRows);
                         this.processBandwidthHourlyData(jsonDataRows);
+                        this.processRTTTimeData(jsonDataRows);
+                        this.processRTTHourlyData(jsonDataRows);
                     }
                 })
             }
