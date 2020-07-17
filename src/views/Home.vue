@@ -56,13 +56,8 @@ export default {
         setTimeRange(range){
             this.timeRange = range;
         },
-         processData(){
+         processData(fromTime, toTime){
                 this.data.ready=false;
-                let {toTime,fromTime}=this.timeRange;
-                // Default fromTime is 0
-                fromTime = (fromTime!=null) ? fromTime : 0;
-                // Default toTime is current time
-                toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
                 const jsonDataRows = this.$store.state.data;
                 const buckets = new Bucketify({
                     "list":jsonDataRows.filter((curr)=>(curr.start>=fromTime && curr.start<=toTime)),
@@ -95,9 +90,14 @@ export default {
             },
         graphData(){
             this.spinner.message="Fetching data...";
-            this.$store.dispatch('loadData',this).then(()=>{
+            let {toTime,fromTime}=this.timeRange;
+            // Default fromTime is 0
+            fromTime = (fromTime!=null) ? fromTime : 0;
+            // Default toTime is current time
+            toTime = (toTime!=null) ? toTime : parseFloat(moment().format("X"));
+            this.$store.dispatch('loadData',fromTime).then(()=>{
                 this.spinner.message =`Processing data...`;
-                this.processData();
+                this.processData(fromTime, toTime);
             })
         }
     },
