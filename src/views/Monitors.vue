@@ -1,6 +1,5 @@
 <template>
     <div class="monitors">
-        <main-header :title="title"></main-header>
         <ac-grid cols=12 align-h="center">
             <ac-col cols="11">
                 <date-range-dropdown :callback="processHeatmapData" :route="{name:'Monitors',params:{id:this.params.id}}"  v-on:change="setTimeRange"></date-range-dropdown>
@@ -49,7 +48,6 @@
 </template>
 <script type="text/javascript">
     import stats from "stats-lite"
-    import mainHeader from "@/components/main-header"
     import graph from "@/components/graph";
     import heatmap from "@/components/heatmap"
     import dateRangeDropdown from "@/components/date-range-dropdown"
@@ -200,7 +198,6 @@
             }
         },
         components:{
-            "main-header":mainHeader,
             "heatmap":heatmap,
             "date-range-dropdown":dateRangeDropdown,
             "graph":graph,

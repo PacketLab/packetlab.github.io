@@ -27,28 +27,42 @@ self.addEventListener("message",function(e){
 function fetchDataFromURL(source){
     const url = source.url;
     const format = source.format;
+    const decoder = new TextDecoder('utf-8');
     const promise = new Promise((resolve,reject)=>{
-        fetch(url).then((response)=>{
+        fetch(url).then(async (response)=>{
             if(response.ok){
-                return response.text();
+                if(format=="jsonl"){
+                    const jsonRows = [];
+                    let bufferString = "";
+                    const reader = response.body.getReader();
+                    let readDone = false;
+                    do{
+                        await reader.read().then(({value,done})=>{
+                            readDone = done;
+                            const chunk = decoder.decode(value);
+                            const chunkLength = chunk.length;
+                            for(let i=0;i<chunkLength;i++){
+                                const currentChar = chunk.charAt(i);
+                                if(currentChar=="\n"){
+                                    jsonRows.push(JSON.parse(bufferString));
+                                    bufferString="";
+                                }else{
+                                    bufferString+=currentChar;
+                                }
+                            }
+                        })
+                    }while(!readDone);
+                    if(bufferString.length>0){
+                        jsonRows.push(JSON.parse(bufferString));
+                    }
+                    resolve(jsonRows);
+                }else if(format=="json"){
+                    resolve(JSON.parse(response.text()))
+                }
+                
             }else{
                 throw Error("Invalid response");
             }
-        }).then((response_text)=>{
-            if(format=="jsonl"){
-                // Split text into rows at new line
-                const dataRows = response_text.split("\n")
-                // Remove empty string on last row
-                if(dataRows[dataRows.length-1].length==0){
-                    dataRows.pop();
-                }
-                const jsonDataRows = dataRows.map(row=>JSON.parse(row));
-                resolve(jsonDataRows);
-            }else if(format=="json"){
-                resolve(JSON.parse(response_text))
-            }
-            
-
         }).catch((error)=>{
             reject(error);
         });

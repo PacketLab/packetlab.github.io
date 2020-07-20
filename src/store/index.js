@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     "dataWeekURL":{
       "data":{
-        "url":"https://corsanywhere.herokuapp.com/http://pktlab.caida.org:20557/data_week.jsonl",
+        "url":"https://cors-anywhere.herokuapp.com/http://pktlab.caida.org:20557/data_week.jsonl",
         "format":"jsonl"
       },
       "experiments":{
@@ -18,7 +18,7 @@ export default new Vuex.Store({
     },
     "dataURL":{
       "data":{
-        "url":"https://corsanywhere.herokuapp.com/http://pktlab.caida.org:20557/data.jsonl",
+        "url":"https://cors-anywhere.herokuapp.com/http://pktlab.caida.org:20557/data.jsonl",
         "format":"jsonl"
       },
       "experiments":{
@@ -31,7 +31,8 @@ export default new Vuex.Store({
       "all":false,
     },
     "data":null,
-    "experiments":null
+    "experiments":null,
+    "navHidden":false,
   },
   mutations: {
     setData(state,dataMessage){
@@ -42,13 +43,15 @@ export default new Vuex.Store({
         })
         state.dataLoaded[timeframe] = true;
     },
+    setNavHidden(state, hidden){
+      state.navHidden = hidden;
+    }
   },
   actions: {
     loadData({commit,state}, fromTime){
         const SECONDS_PER_WEEK = 604800;
         const currentTime = moment().format("X")
         const weekPassed = (currentTime-fromTime) > SECONDS_PER_WEEK;
-        console.log(weekPassed);
         const timeframe = (weekPassed)?"all":"week";
         return new Promise((resolve,reject)=>{
             if(!state.dataLoaded[timeframe]){
