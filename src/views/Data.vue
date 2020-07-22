@@ -1,5 +1,5 @@
 <template>
-	<div class="home">
+	<main class="home">
         <ac-grid cols=12 align-h="center">
             <ac-col cols="11">
                 <date-range-dropdown :route="{name:'Data'}"  v-on:change="setTimeRange" :callback="graphData"></date-range-dropdown>
@@ -10,7 +10,7 @@
                 <graph :data="data" :layout="layout" :spinner="spinner"></graph>
             </ac-col>
         </ac-grid>
-	</div>
+	</main>
 </template>
 
 <script>

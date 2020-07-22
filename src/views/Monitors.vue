@@ -1,5 +1,5 @@
 <template>
-    <div class="monitors">
+    <main class="monitors">
         <ac-grid cols=12 align-h="center">
             <ac-col cols="11">
                 <date-range-dropdown :callback="processHeatmapData" :route="{name:'Monitors',params:{id:this.params.id}}"  v-on:change="setTimeRange"></date-range-dropdown>
@@ -44,7 +44,7 @@
                 </ac-col>
             </ac-grid>
         </div>
-    </div>
+    </main>
 </template>
 <script type="text/javascript">
     import stats from "stats-lite"
