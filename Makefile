@@ -13,7 +13,7 @@ deploy:
 	npm run build
 	git add --all .
 	git commit -m "Build for packetlab.github.io deployment"
-	git push deploy master
+	git push deploy vue-spa 
 clean:
 	rm -rf ../public_html/packet-lab/
 cleandata:
