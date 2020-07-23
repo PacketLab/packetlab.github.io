@@ -40,7 +40,7 @@ Vue.use(VueRouter)
 ]
 const router = new VueRouter({
   mode: 'hash',
-  base: (process.env.NODE_ENV == "development") ? "/" : "/~vspillai/packet-lab/",
+  base: (process.env.NODE_ENV == "development") ? "/" : process.env.BASE_URL,
   routes
 })
 router.beforeEach((to, from, next)=>{

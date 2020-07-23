@@ -2,6 +2,18 @@
 build: clean
 	mkdir -p ../public_html/packet-lab/
 	cp -r dist/* ../public_html/packet-lab/
+deploy_caida:
+	BASE_URL="/~vspillai/packet-lab/"
+	npm run build
+	git add --all .
+	git commit -m "Build for CAIDA deployment"
+	git push origin vue-spa
+deploy:
+	BASE_URL="/"
+	npm run build
+	git add --all .
+	git commit -m "Build for packetlab.github.io deployment"
+	git push deploy master
 clean:
 	rm -rf ../public_html/packet-lab/
 cleandata:
