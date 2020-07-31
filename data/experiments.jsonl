@@ -1,12 +1,6 @@
-{"name":"DNS_quad_1", "category":"latency"}
-{"name":"DNS_quad_8", "category":"latency"}
-{"name":"DNS_quad_9", "category":"latency"}
-{"name":"DNS_quad_101", "category":"latency"}
-{"name":"DNS_local", "category":"latency"}
-{"name":"avail_band", "category":"bandwidth"}
-{"name":"DNS_quad_1", "category":"rtt"}
-{"name":"DNS_quad_8", "category":"rtt"}
-{"name":"DNS_quad_9", "category":"rtt"}
-{"name":"DNS_quad_101", "category":"rtt"}
-{"name":"DNS_local", "category":"rtt"}
-{"name":"avail_band", "category":"rtt"}
+{"name":"DNS_quad_1", "color":"#D58092", "categories":["latency", "rtt"]}
+{"name":"DNS_quad_8", "color":"#00AD89", "categories":["latency", "rtt"]}
+{"name":"DNS_quad_9", "color":"#639ED0", "categories":["latency", "rtt"]}
+{"name":"DNS_quad_101", "color":"#AD8AD2", "categories":["latency", "rtt"]}
+{"name":"DNS_local", "color":"#C780C4", "categories":["latency", "rtt"]}
+{"name":"avail_band", "color":"#7FA44F", "categories":["bandwidth","rtt"]}
