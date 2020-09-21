@@ -25,6 +25,7 @@ self.addEventListener("message",function(e){
 })
 
 function fetchDataFromURL(source){
+    console.time("Worker Data Load"+source.url)
     const url = source.url;
     const format = source.format;
     const decoder = new TextDecoder('utf-8');
@@ -56,6 +57,7 @@ function fetchDataFromURL(source){
                         jsonRows.push(JSON.parse(bufferString));
                     }
                     resolve(jsonRows);
+                    console.timeEnd("Worker Data Load"+source.url)
                 }else if(format=="json"){
                     resolve(JSON.parse(response.text()))
                 }
