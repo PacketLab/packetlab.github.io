@@ -1,0 +1,182 @@
+{"0": {
+    "doc": "About",
+    "title": "About",
+    "content": "This page contains general information on what PacketLab is, the problem PacketLab tries to solve, and how PacketLab can be used. Readers looking for more in depth information can also refer to the original IMC’17 paper that first introduced PacketLab to the measurement community. TODO: below . ",
+    "url": "/about/",
+    "relUrl": "/about/"
+  },"1": {
+    "doc": "About",
+    "title": "The problem",
+    "content": "Finding and having access to the proper vantage . PacketLab is a universal measurement endpoint interface that lowers the barriers faced by experimenters and measurement endpoint operators. PacketLab is designed to complement existing network measurement interfaces rather than replace them entirely. PacketLab is based on two key ideas: . | Moving measurement logic out of the endpoint to a separate experiment control server, making each endpoint a lightweight packet source/sink | Providing a way to delegate access to measurement endpoints while retaining fine-grained control over how endpoints are used | . PacketLab is currently still under development, and many additions are underway. The current build of PacketLab (which can be downloaded at the top of this page) is suitable for creating and running experiments using an Experiment Controller and a Measurement Endpoint. A Broker and Proxy are currently in the works, as well as support for additional experiments. ",
+    "url": "/about/#the-problem",
+    "relUrl": "/about/#the-problem"
+  },"2": {
+    "doc": "About",
+    "title": "How is PacketLab used?",
+    "content": "PacketLab makes running network experiments easier by connecting experimenters to measurement endpoints. What makes PacketLab powerful is its flexibility. Experimenters have control over the experiments they want to use PacketLab resources to run, and PacketLab supports the running of custom experiments. PacketLab is also meant for experimenters interested in writing network experiments and exploring new frontiers of computer networking. The PacketLab library contains tools that can come in handy for many different types of experiments. The library’s functions and objects make experiment-writing simpler, and help experiments run seamlessly with PacketLab endpoints and controllers. However, hosting experiments is just as vital as writing them, and PacketLab is also made for endpoint operators. PacketLab endpoint operators can make their endpoints completely private, completely public, or anywhere in between. By volunteering your server as a public PacketLab endpoint, you enable experimenters to make discoveries through PacketLab and help advance computer networking knowledge. PacketLab can also be used for managing endpoints and handling the sharing of measurement resources. Operators can restrict what experiments experimenters can run based on type or resources needed. This can come in handy for a small group using private endpoints for internal use, as well as for people hosting public endpoints that want to manage how much their endpoints are used and who is able to use them. ",
+    "url": "/about/#how-is-packetlab-used",
+    "relUrl": "/about/#how-is-packetlab-used"
+  },"3": {
+    "doc": "About",
+    "title": "Who made PacketLab?",
+    "content": "PacketLab is currently being developed by a collaboration of students and researchers from the Center for Applied Data Analysis (CAIDA), the University of California at San-Diego (UCSD), and the University of Illinois at Urbana-Champaign (UIUC). The team consists of professional research scientists, professors, graduate students, and even some undergrads! Check out OUR TEAM of researchers and students. See the paper that started PacketLab. ",
+    "url": "/about/#who-made-packetlab",
+    "relUrl": "/about/#who-made-packetlab"
+  },"4": {
+    "doc": "About",
+    "title": "Host an Endpoint!",
+    "content": "Currently, PacketLab is not yet ready for endpoint operators to host public endpoints for PacketLab. However, we expect to be ready to welcome endpoint hosts very soon! . ",
+    "url": "/about/#host-an-endpoint",
+    "relUrl": "/about/#host-an-endpoint"
+  },"5": {
+    "doc": "Docs",
+    "title": "Documentation",
+    "content": "Here is a link to the library documentation. ",
+    "url": "/docs/#documentation",
+    "relUrl": "/docs/#documentation"
+  },"6": {
+    "doc": "Docs",
+    "title": "Docs",
+    "content": " ",
+    "url": "/docs/",
+    "relUrl": "/docs/"
+  },"7": {
+    "doc": "Download",
+    "title": "Download",
+    "content": "The PacketLab software package is available via two forms: prebuilt package (currently only for Linux amd64) and source tarball. See the following for their corresponding download links. ",
+    "url": "/download/",
+    "relUrl": "/download/"
+  },"8": {
+    "doc": "Download",
+    "title": "Latest release",
+    "content": "Prebuilt package . | Filename | Checksum | Build Time | . | pktlab-0.1.1_prebuilt.linux.amd64.zip | SHA256 | 2022/08/10 15:36 UTC | . Source tarball . | Filename | Checksum | Build Time | . | pktlab-0.1.1.tar.gz | SHA256 | 2022/08/10 15:36 UTC | . ",
+    "url": "/download/#latest-release",
+    "relUrl": "/download/#latest-release"
+  },"9": {
+    "doc": "Download",
+    "title": "Past releases",
+    "content": "Prebuilt package . | Filename | Checksum | Build Time | . | pktlab-0.1.0_prebuilt.linux.amd64.zip | SHA256 | 2022/08/10 02:25 UTC | . | pktlab-0.0.1_prebuilt.linux.amd64.zip | SHA256 | 2022/07/23 21:53 UTC | . Source tarball . | Filename | Checksum | Build Time | . | pktlab-0.1.0.tar.gz | SHA256 | 2022/08/10 02:25 UTC | . | pktlab-0.0.1.tar.gz | SHA256 | 2022/07/23 21:53 UTC | . ",
+    "url": "/download/#past-releases",
+    "relUrl": "/download/#past-releases"
+  },"10": {
+    "doc": "First local experiment",
+    "title": "Running our First Local Experiment",
+    "content": "After installation, we are now ready to run our first experiment. To keep things simple, for this tutorial we will demonstrate how to run an experiment locally (i.e. having both the controller and endpoint run on your machine for the experiment) using the PacketLab software package. ",
+    "url": "/tutorial/first_run_local/#running-our-first-local-experiment",
+    "relUrl": "/tutorial/first_run_local/#running-our-first-local-experiment"
+  },"11": {
+    "doc": "First local experiment",
+    "title": "Setup",
+    "content": "For this tutorial, we will use both the pktxpmgr program (PacketLab Experiment Manager Utility) and the pktendpt program (PacketLab Reference Measurement Endpoint). As two programs need to be run at the same time, it is recommended to open two terminals, one for pktxpmgr and one for pktendpt. If either program cannot be found via the PATH environment variable, one will need to navigate to the bin directory under the package installation directory to find the programs. In the following text, we will assume that the programs can be found via the PATH environment variable when describing the commands to run the programs. ",
+    "url": "/tutorial/first_run_local/#setup",
+    "relUrl": "/tutorial/first_run_local/#setup"
+  },"12": {
+    "doc": "First local experiment",
+    "title": "Running the Experiment Manager",
+    "content": "We will first start with running the Experiment Manager. Running the pktxpmgr requires supplying some additional arguments, which can be displayed by running pktxpmgr -h: . USAGE: pktxpmgr [-h] [-c XM_CONF_PATH] ADDR[:PORT] MLET [MLET_ARGS ...] . | ADDR[:PORT] refers to the IP address and port that the pktxpmgr should listen to accept incoming endpoint connections. For this tutorial, one should use 127.0.0.1:5566, i.e. listen on localhost port 5566. | MLET is the path to the compiled measurement applets (abbrev. mlet, pronounce as [EM-LET]) to run for this experiment. A set of compiled example mlets (test_fd, test_dns, and test_http_get) can be found within the installation directory under example_mlets for prebuilt package and share/pktlab/example_mlets for installation from source. For this tutorial, one can choose any mlet. We will use the test_http_get mlet as an example. For a high level description on what each mlet does: . | test_fd: Test if file descriptor 0 and 1 is open. This mlet does not issue any request to the endpoint. | test_dns: Craft and issues a DNS request to 8.8.8.8 for www.example.com. | test_http_get: Craft and issue a HTTP GET request to 93.184.216.34 (www.example.com resolved) for www.example.com. | . The -c option is to specify alternative config files to use when running pktxpmgr. Note that we will not need to supply this option as the config file ~/.pktlab/xpmgr.conf is used by default, which is created and populated when running pktlab_init. Though not used by the example mlets, mlets are allowed to accept arguments from the command-line via the [MLET_ARGS ...] arguments. | . One can now run pktxpmgr as follows: . pktxpmgr 127.0.0.1:5566 [EXAMPLE_MLETS_DIR_PATH]/test_http_get . where [EXAMPLE_MLETS_DIR_PATH] is the path to the example_mlets directory under the installation directory. Note when running this command, two things are happening: . | pktxpmgr publishes the experiment (in experiment descriptor form) to the CAIDA broker at pktbrokr.caida.org. | pktxpmgr creates a listening socket to greet incoming endpoints. | . Afterward for any incoming endpoint, pktxpmgr also perform TLS handshake with the endpoints, fork and exec the mlet, and forward any traffic between the endpoint and the mlet process. ",
+    "url": "/tutorial/first_run_local/#running-the-experiment-manager",
+    "relUrl": "/tutorial/first_run_local/#running-the-experiment-manager"
+  },"13": {
+    "doc": "First local experiment",
+    "title": "Running the Reference Endpoint",
+    "content": "Next, we will need to run the Reference Endpoint. Running the pktendpt does not require any additional arguments. One can directly run pktendpt as follows: . pktendpt . Note when running this command, pktendpt does one thing: . | pktendpt contacts the CAIDA broker at pktbrokr.caida.org to subscribe for experiments. | . Afterward for any received experiment descriptor from the broker, pktendpt creates a connection to the controller described by the descriptors. ",
+    "url": "/tutorial/first_run_local/#running-the-reference-endpoint",
+    "relUrl": "/tutorial/first_run_local/#running-the-reference-endpoint"
+  },"14": {
+    "doc": "First local experiment",
+    "title": "Seeing the Result",
+    "content": "After successfully running the two commands, one should see HTML code retrieved from the HTTP server www.example.com. Congratulations, you have just run your first experiment using PacketLab! For more information, see below for a rundown of what exactly happened for the HTML code to be displayed. Also see [Running our First External Experiment] on steps to run the example mlets with external (CAIDA) endpoints. Note one can kill the two processes with SIGINT directly. Process Rundown . To briefly explain the process, The Caida broker forwards the experiment descriptor to pktendpt after being notified of the experiment by pktxpmgr. Receiving an experiment descriptor, pktendpt initiates the connection to the controller described by the descriptor (in this case 127.0.0.1:5566). Both processes then complete the TLS handshake with pktxpmgr exec-ing the mlet test_http_get at the end, which starts issuing PacketLab protocol request to pktendpt over pktxpmgr. By design test_http_get then asks pktendpt (via multiple PacketLab protocol requests) on sending out the HTTP GET request, and receives the forwarded back HTTP response from pktendpt which is then displayed in the terminal. ",
+    "url": "/tutorial/first_run_local/#seeing-the-result",
+    "relUrl": "/tutorial/first_run_local/#seeing-the-result"
+  },"15": {
+    "doc": "First local experiment",
+    "title": "First local experiment",
+    "content": " ",
+    "url": "/tutorial/first_run_local/",
+    "relUrl": "/tutorial/first_run_local/"
+  },"16": {
+    "doc": "Host endpoint",
+    "title": "Hosting a PacketLab Endpoint",
+    "content": "Currently, we are not yet ready for endpoint operators to host additional public endpoints with PacketLab. However, we expect to be ready to welcome additional endpoints in the near future. When we are ready for additional endpoint hosts to join us, detailed instructions on how to host a PacketLab endpoint will be posted here. Stay tuned! . ",
+    "url": "/host_endpoint/#hosting-a-packetlab-endpoint",
+    "relUrl": "/host_endpoint/#hosting-a-packetlab-endpoint"
+  },"17": {
+    "doc": "Host endpoint",
+    "title": "Host endpoint",
+    "content": " ",
+    "url": "/host_endpoint/",
+    "relUrl": "/host_endpoint/"
+  },"18": {
+    "doc": "Installation",
+    "title": "Installation",
+    "content": "This page provides information on installing the PacketLab software package. Currently, we support installation via two methods: prebuilt package (currently only for Linux/amd64) and build from source. See Install Using Prebuilt Package or Install from Source for more information on either method. ",
+    "url": "/tutorial/installation/",
+    "relUrl": "/tutorial/installation/"
+  },"19": {
+    "doc": "Installation",
+    "title": "Install Using Prebuilt Package",
+    "content": "Prerequisite . | Linux kernel OS | Python &gt;= 3.7 | pip | Utility for zip archive extraction (e.g. unzip) Installation via prebuilt package is currently only for Linux on amd64 arch. We plan to support more platforms/archs in the future. | . Installation Steps . | Download the prebuilt package (see Download for download links). The latest release is preferred. | Extract the prebuilt package content. With unzip this can be done with unzip pktlab-[VER]_prebuilt.[PLATFORM].[ARCH].zip . | Install the required Python modules. This can be done by running pip install -r [EXTRACT_DIR_PATH]/setup_aux/requirements.txt . | Run the init script within [EXTRACT_DIR_PATH]/bin to setup the user home directory for the package. This can be done by executing the pktlab_init script with [EXTRACT_DIR_PATH]/bin/pktlab_init . Note during this step, pktlab_init may complain about not finding the PPKSMan command even if the previous pip step is completed successfully (the PPKSMan tool is shipped with the pktlab Python module). One possible reason for this is that pip installs the PPKSMan script to ~/.local/bin, which is by default not within the PATH variable. To fix this, one can add export PATH=~/.local/bin:$PATH to ~/.bashrc and run source ~/.bashrc to reload ~/.bashrc to fix the problem. | . After completing all previous steps, we will have the ~/.pktlab set up and ready for experiment/endpoint running. See Running our First Local Experiment and [Running our First External Experiment] for more information. Note one may also want to add [EXTRACT_DIR_PATH]/bin to PATH to run the shipped programs more easily. Also note if the extracted package content is shared among different users, only steps 3 and 4 (and PATH variable exporting if applicable) need to be performed by new users after the initial installation. See [Package File Structure] for information about the file tree and directories in the prebuilt package. ",
+    "url": "/tutorial/installation/#install-using-prebuilt-package",
+    "relUrl": "/tutorial/installation/#install-using-prebuilt-package"
+  },"20": {
+    "doc": "Installation",
+    "title": "Install from Source",
+    "content": "Prerequisite . | A POSIX.1-2004 compliant OS | OpenSSL &gt;= 1.1.1 | Python &gt;= 3.7 | pip | tar with gzip support (e.g. GNU tar) | Build tools (e.g. build-essential package for Debian/Ubuntu) | . Installation Steps . | Download the source tarball (see Download for download links). The latest release is preferred. | Extract the source tarball content. With GNU tar this can be done with tar xvzf pktlab-[VER].tar.gz . | cd into the extracted directory (should be pktlab-[VER]) | Run ./configure Note one may want to also specify the --prefix option to avoid installing in the system directories. To do this, instead run ./configure --prefix=[ABSOLUTE_INSTALL_DIR_PATH], where [ABSOLUTE_INSTALL_DIR_PATH] is the absolute path to the target install destination (need not exist beforehand). | Run make | Run make install. If all steps have been successful, the software package is now installed at the target location or in the GNU autotools default directories if --prefix is not specified. The default install destinations are /usr/local/bin, /usr/local/include, /usr/local/lib, and /usr/local/share. | Finally, follow step 3 and 4 in [Install Using Prebuilt Package]. Note the path should be [ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt or /usr/local/share/pktlab/setup_aux/requirements.txt for step 3. For step 4, the path should be [ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init if --prefix specified, or one can directly execute pktlab_init. | . After completing all previous steps, we will have the ~/.pktlab set up and ready for experiment/endpoint running. See [Running our First Local Experiment] and [Running our First External Experiment] for more information. Note one may also want to add [ABSOLUTE_INSTALL_DIR_PATH]/bin to PATH to run the shipped programs more easily when specifying --prefix. Also note if the built and installed content is shared among different users, only step 7 (and PATH variable exporting if applicable) needs to be performed by new users after the initial installation. See the [Package File Structure] below for information about the file tree and directories for the installed package. ",
+    "url": "/tutorial/installation/#install-from-source",
+    "relUrl": "/tutorial/installation/#install-from-source"
+  },"21": {
+    "doc": "Installation",
+    "title": "Package File Structure",
+    "content": "Prebuilt Package . | (PacketLab directory) . | bin . | pktendpt | pktlab_init | pktxpmgr | . | config . | endpt.conf.template | example.endpt.conf | xpmgr.conf.template | example.xpmgr.conf | . | cred . | caida_k_bop.pub | . | example_mlets . | Makefile | test_dns | test_dns.c | test_fd | test_fd.c | test_http_get | test_http_get.c | . | include . | pktctrl.h | pktlab.h | . | lib . | libpktlab.a | libpktlab.ssl.a | . | setup_aux . | pktlab-init.py | requirements.txt | . | . | . Source Tarball . | (installation directory) . | bin . | pktendpt | pktlab_init | pktxpmgr | . | include . | pktctrl.h | pktlab.h | . | lib . | libpktlab.a | libpktlab.ssl.a | . | share . | pktlab . | config . | endpt.conf.template | example.endpt.conf | xpmgr.conf.template | example.xpmgr.conf | . | cred . | caida_k_bop.pub | . | example_mlets . | Makefile | test_dns | test_dns.c | test_fd | test_fd.c | test_http_get | test_http_get.c | . | setup_aux . | pktlab-init.py | requirements.txt | . | . | . | . | . bin contains compiled binaries for the Broker, Experiment Manager, and Endpoint. config contains template config files for the Experiment Manager and Endpoint that can be modified to suit the needs of different experimenters, as well as an example config file for each entity. cred contains test credentials for running sample experiments and general testing. These credentials are NOT suitable for use in actual experiments - a key and certificate should be generated for them instead. example_mlets contains sample experiments included with PacketLab as well as a Makefile to compile them. include contains the two header files for the PacketLab Library. lib contains compiled source code for the PacketLab Library. setup_aux contains the PacketLab Python library requirements and initialization script code used when initializing PacketLab. share/pktlab is only present in the source tarball that is home to config, cred, example_mlets, and setup_aux. ",
+    "url": "/tutorial/installation/#package-file-structure",
+    "relUrl": "/tutorial/installation/#package-file-structure"
+  },"22": {
+    "doc": "Overview",
+    "title": "PacketLab Overview",
+    "content": "This page contains information w.r.t. the settings and jargons of PacketLab. The goal of this page is to allow software package users to have a better grasp of what is happening when setting up and running programs in the package in later tutorials. For users seeking more information on the design of PacketLab, see About. ",
+    "url": "/tutorial/pktlab_overview/#packetlab-overview",
+    "relUrl": "/tutorial/pktlab_overview/#packetlab-overview"
+  },"23": {
+    "doc": "Overview",
+    "title": "PacketLab Entities",
+    "content": "In the PacketLab design, there are six types of entities: experimenters, experiment controllers (abbrev. controllers), endpoint operators, measurement endpoints (abbrev. endpoints), broker operators, and brokers. Controllers, endpoints, and brokers are agents usually represented by computer processes and communicate with each other through the Internet. Experimenters and operators are principals (usually some real-world person) manipulating privileges and their owned agents. In the following sections, we provide more detailed description for each entity. TBA: picture on describing entity relation . Experimenter . An experimenter entity represents a real-world network measurement researcher that wants to perform network measurements. To achieve this, the experimenter needs to request experiment privileges (in the form of certificates) from endpoint operators owning the required network resources, and then utilize the obtained privileges by running controllers that announce the experiments and carry out the actual measurement using the obtained privileges by submitting PacketLab protocol requests to endpoints. Experiment Controller . Experiment controllers are computer processes run by experimenters that perform (1) the actual announcement of experiments and (2) the execution of measurements via the PacketLab protocol. The announcement of an experiment is done by contacting a broker agent and publishing experiment descriptors, which are strings describing the experiment containing information such as controller address and experiment priority, etc. Before a publication is accepted, the controller will also need to demonstrate that sufficient experiment privilege has been obtained for publication via supplying a valid privilege certificate chain to the broker. After publication, controllers simply wait for incoming endpoints that responded to the publication. For an incoming endpoint, a controller first demonstrates (again) that sufficient experiment privilege has been obtained to the endpoint, and only after successful endpoint verification is the actual measurement carried out using the PacketLab protocol against the endpoint. Note for the PacketLab software package, the controller is represented via two parts: the Experiment Manager Utility program pktxpmgr that handles the experiment publication and endpoint connection setup (both including privilege demonstration), and the exchangeable mlets accepted by pktxpmgr that handle the actual measurement logic. Endpoint Operator . An endpoint operator entity represents a real-world network measurement researcher that wants to volunteer their network resource for the community to utilize for measurement experiments. To achieve this, the endpoint operator will need to hand out experiment privileges (in the form of signing certificates) to requesting experimenters, and also run endpoints that will subscribe for experiments and contact controllers for actual measurement running via serving PacketLab protocol requests. Measurement Endpoint . Measurement endpoints are computer processes run by endpoint operators that perform (1) the actual subscription of experiments and (2) the execution of measurement network operations based on PacketLab protocol requests. The subscription of an experiment is done by contacting a broker agent for a subscription and waiting for notifications containing experiment descriptors from the broker after subscription. For an incoming notification, the endpoint first connects to the controller specified by the descriptor, then verifies the corresponding experiment privilege presented by the controller. Only if the verification passes will the endpoint continue serving the controller. Note that similar to controllers, before a subscription is accepted, the endpoint will need to demonstrate that sufficient representation privilege (i.e. the subscription is allowed by some endpoint operator) has been obtained for a subscription via supplying a valid privilege certificate chain to the broker. Note for the PacketLab software package, the endpoint is represented via the Reference PacketLab Endpoint Program pktendpt. Broker Operator and Broker . In PacketLab, broker operators are volunteers that help facilitate experiments running by running the broker which performs matching-making among controller and endpoints by supporting experiment publication and subscription. Currently, no broker program is shipped within the PacketLab software package. Instead, PacketLab users are encouraged to utilize the public broker server hosted at the Center for Applied Internet Data Analysis (CAIDA) at pktbrokr.caida.org. ",
+    "url": "/tutorial/pktlab_overview/#packetlab-entities",
+    "relUrl": "/tutorial/pktlab_overview/#packetlab-entities"
+  },"24": {
+    "doc": "Overview",
+    "title": "Overview",
+    "content": " ",
+    "url": "/tutorial/pktlab_overview/",
+    "relUrl": "/tutorial/pktlab_overview/"
+  },"25": {
+    "doc": "Tutorial",
+    "title": "Tutorials",
+    "content": "We provide topic-oriented tutorials in the following on how to use the PacketLab software package. For newcomers, following through the Getting Started section is recommended. For users with specific goals, separate goal-oriented tutorials are also provided for people to easily navigate through the different topics. ",
+    "url": "/tutorial/#tutorials",
+    "relUrl": "/tutorial/#tutorials"
+  },"26": {
+    "doc": "Tutorial",
+    "title": "Getting Started (Introductory Topics)",
+    "content": ". | PacketLab Overview - A general overview of the PacketLab settings and jargons. | Package Installation - Guide on (building and) installing the PacketLab software package. | Running our First Local Experiment - Guide on running the example measurements using the PacketLab software package after installation. | [Running our First External Experiment (TBA)] - Guide on running the example measurements using the PacketLab software package after installation. | . ",
+    "url": "/tutorial/#getting-started-introductory-topics",
+    "relUrl": "/tutorial/#getting-started-introductory-topics"
+  },"27": {
+    "doc": "Tutorial",
+    "title": "Advanced Topics (TBA)",
+    "content": ". | [Configurable Options for pktxpmgr] - Additional information on options supported by the experiment manager utility program pktxpmgr. | [Configurable Options for pktendpt] - Additional information on options supported by the reference endpoint program pktendpt. | [Intro to libpktlab] - A general overview of the functionality provided by the PacketLab general utility library libpktlab. | [Writing Custom Measurement Applets] - Guide on writing custom measurement applets. | . ",
+    "url": "/tutorial/#advanced-topics-tba",
+    "relUrl": "/tutorial/#advanced-topics-tba"
+  },"28": {
+    "doc": "Tutorial",
+    "title": "Goal-oriented Tutorials (TBA)",
+    "content": ". | [Goal: conduct measurement study with EXISTING applets and endpoints] | [Goal: volunteer network resources via hosting an endpoint] | [Goal: conduct measurement study with CUSTOM applets and endpoints] | . ",
+    "url": "/tutorial/#goal-oriented-tutorials-tba",
+    "relUrl": "/tutorial/#goal-oriented-tutorials-tba"
+  },"29": {
+    "doc": "Tutorial",
+    "title": "Tutorial",
+    "content": " ",
+    "url": "/tutorial/",
+    "relUrl": "/tutorial/"
+  }
+}
