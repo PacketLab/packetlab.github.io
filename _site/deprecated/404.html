@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Redirecting to PacketLab</title>
+  </head>
+  <body>
+    <h1 id='page-title'>Redirecting to PacketLab</h1>
+    <script type="text/javascript">
+      const title = 'Redirecting to ' + window.location.origin
+      document.title = title;
+      document.getElementById('page-title').textContent = title;
+      window.location.replace(window.location.origin + "/#" + window.location.pathname);
+    </script>
+  </body>
+</html>

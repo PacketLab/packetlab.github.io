@@ -1,0 +1,6 @@
+{"name":"DNS_quad_1", "color":"#D58092", "categories":["latency", "rtt"]}
+{"name":"DNS_quad_8", "color":"#00AD89", "categories":["latency", "rtt"]}
+{"name":"DNS_quad_9", "color":"#639ED0", "categories":["latency", "rtt"]}
+{"name":"DNS_quad_101", "color":"#AD8AD2", "categories":["latency", "rtt"]}
+{"name":"DNS_local", "color":"#C780C4", "categories":["latency", "rtt"]}
+{"name":"avail_band", "color":"#7FA44F", "categories":["bandwidth","rtt"]}
