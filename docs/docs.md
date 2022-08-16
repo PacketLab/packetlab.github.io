@@ -7,4 +7,4 @@ permalink: /docs/
 
 # Documentation
 
-Here is a [link](https://packetlab.github.io/doxygen/index.html) to the library documentation.
+Here is a [link](/doxygen/index.html) to the library documentation.
