@@ -7,7 +7,7 @@ permalink: /tutorial/pktlab_overview/
 ---
 
 # PacketLab Overview
-This page contains information w.r.t. the settings and jargons of PacketLab. The goal of this page is to allow software package users to have a better grasp of what is happening when setting up and running programs in the package in later tutorials. For users seeking more information on the design of PacketLab, see **[About](/home/about)**.
+This page contains information w.r.t. the settings and jargons of PacketLab. The goal of this page is to allow software package users to have a better grasp of what is happening when setting up and running programs in the package in later tutorials. For users seeking more information on the design of PacketLab, see **[About](/about/)**.
 
 ## PacketLab Entities
 In the PacketLab design, there are six types of entities: **[experimenters](#experimenter)**, **[experiment controllers](#experiment-controller)** (abbrev. controllers), **[endpoint operators](#endpoint-operator)**, **[measurement endpoints](#measurement-endpoint)** (abbrev. endpoints), **[broker operators](#broker-operator-and-broker)**, and **[brokers](#broker-operator-and-broker)**. Controllers, endpoints, and brokers are *agents* usually represented by computer processes and communicate with each other through the Internet. Experimenters and operators are *principals* (usually some real-world person) manipulating *privileges* and their owned agents. In the following sections, we provide more detailed description for each entity.
