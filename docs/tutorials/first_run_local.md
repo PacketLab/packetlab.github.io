@@ -1,6 +1,6 @@
 ---
 layout: default
-title: First local experiment
+title: Running our First Local Experiment
 parent: Tutorial
 nav_order: 3
 permalink: /tutorial/first_run_local/

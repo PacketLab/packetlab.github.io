@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Overview
+title: PacketLab Overview
 parent: Tutorial
 nav_order: 1
 permalink: /tutorial/pktlab_overview/
