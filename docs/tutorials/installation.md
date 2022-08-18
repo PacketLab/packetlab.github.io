@@ -49,7 +49,7 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 - Python >= 3.7
 - `pip`
 - `tar` with gzip support (e.g. GNU tar)
-- Build tools (e.g. build-essential package for Debian/Ubuntu)export PATH=~/Downloads/pktlab-0.1.1/tmp/bin/:$PATH
+- Build tools (e.g. build-essential package for Debian/Ubuntu)
 
 ### Installation Steps
 1. Download the source tarball (see **[Download](/download)** for download links). The latest release is preferred.
@@ -61,7 +61,7 @@ tar xvzf pktlab-[VER].tar.gz
 4. Run `./configure`
 > Note one may want to also specify the `--prefix` option to avoid installing in the system directories. To do this, instead run `./configure --prefix=[ABSOLUTE_INSTALL_DIR_PATH]`, where `[ABSOLUTE_INSTALL_DIR_PATH]` is the *absolute* path to the target install destination (need not exist beforehand).
 5. Run `make`
-6. Run `make install`. If all steps have been successful, the software package is now installed at the target location or in the GNU autotools default directories if `--prefix` is not specified.
+6. Run `make install`. If all steps have been successful, thPackage File Structuree software package is now installed at the target location or in the GNU autotools default directories if `--prefix` is not specified.
 > The default install destinations are `/usr/local/bin`, `/usr/local/include`, `/usr/local/lib`, and `/usr/local/share`.
 7. Finally, follow step 3 and 4 in **[Install Using Prebuilt Package](#install-using-prebuilt-package)**.
 > Note the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt` or `/usr/local/share/pktlab/setup_aux/requirements.txt` for step 3. For step 4, the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init` if `--prefix` specified, or one can directly execute `pktlab_init`.
@@ -71,7 +71,7 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 >
 > Also note if the built and installed content is shared among different users, only step 7 (and `PATH` variable exporting if applicable) needs to be performed by new users after the initial installation.
 >
-> See the **[Package File Structure]** below for information about the file tree and directories for the installed package.
+> See the **[Package File Structure](#package-file-structure)** below for information about the file tree and directories for the installed package.
 
 ---
 ## Package File Structure
