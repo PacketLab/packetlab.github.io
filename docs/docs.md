@@ -7,4 +7,4 @@ permalink: /docs/
 
 # Documentation
 
-Here is a [link](/doxygen/index.html) to the library documentation.
+- [`libpktlab` doxygen documentation](/doxygen/index.html)
