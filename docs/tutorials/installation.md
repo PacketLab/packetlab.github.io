@@ -19,7 +19,7 @@ This page provides information on installing the PacketLab software package. Cur
 > Installation via prebuilt package is currently only for Linux on amd64 arch. We plan to support more platforms/archs in the future.
 
 ### Installation Steps
-1. Download the prebuilt package (see **[Download](/home/download/)** for download links). The latest release is preferred.
+1. Download the prebuilt package (see **[Download](/download/)** for download links). The latest release is preferred.
 2. Extract the prebuilt package content. With `unzip` this can be done with
 ```
 unzip pktlab-[VER]_prebuilt.[PLATFORM].[ARCH].zip
@@ -34,7 +34,7 @@ pip install -r [EXTRACT_DIR_PATH]/setup_aux/requirements.txt
 ```
 > Note during this step, `pktlab_init` may complain about not finding the `PPKSMan` command even if the previous `pip` step is completed successfully (the `PPKSMan` tool is shipped with the `pktlab` Python module). One possible reason for this is that `pip` installs the `PPKSMan` script to `~/.local/bin`, which is by default not within the `PATH` variable. To fix this, one can add `export PATH=~/.local/bin:$PATH` to `~/.bashrc` and run `source ~/.bashrc` to reload `~/.bashrc` to fix the problem.
 
-After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. See **[Running our First Local Experiment](/home/tutorial/first_run_local)** and **[Running our First External Experiment]** for more information.
+After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment]** for more information.
 > Note one may also want to add `[EXTRACT_DIR_PATH]/bin` to `PATH` to run the shipped programs more easily.
 >
 > Also note if the extracted package content is shared among different users, only steps 3 and 4 (and `PATH` variable exporting if applicable) need to be performed by new users after the initial installation.
