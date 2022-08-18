@@ -52,7 +52,7 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 - Build tools (e.g. build-essential package for Debian/Ubuntu)
 
 ### Installation Steps
-1. Download the source tarball (see **[Download](/home/download)** for download links). The latest release is preferred.
+1. Download the source tarball (see **[Download](/download)** for download links). The latest release is preferred.
 2. Extract the source tarball content. With GNU tar this can be done with
 ```
 tar xvzf pktlab-[VER].tar.gz
@@ -147,7 +147,7 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
                                         <span class = "hovertext" hoverdata = "">
                                             <li>test_http_get.c</li>
                                         </span>
-                                    </ul>
+                                    </ul>export PATH=~/Downloads/pktlab-0.1.1/tmp/bin/:$PATH
                                 </li>
                             </span>
                             <span class = "hovertextdir" hoverdata = "include">
@@ -180,7 +180,7 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
                                         <span class = "hovertext" hoverdata = "">
                                             <li>pktlab-init.py</li>
                                         </span>
-                                        <span class = "hovertext" hoverdata = "">
+                                        <span class = "hovertext" hoverdata = "">export PATH=~/Downloads/pktlab-0.1.1/tmp/bin/:$PATH
                                             <li>requirements.txt</li>
                                         </span>
                                     </ul>
@@ -243,7 +243,7 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
                                     <ul>
                                         <span class = "hovertextdir" hoverdata = "config">
                                             <li class="folder">config
-                                                <ul>
+                                                <ul>export PATH=~/Downloads/pktlab-0.1.1/tmp/bin/:$PATH
                                                     <span class = "hovertext" hoverdata = "">
                                                         <li>endpt.conf.template</li>
                                                     </span>
