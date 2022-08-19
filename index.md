@@ -12,4 +12,4 @@ To try out our software package, including a reference PacketLab endpoint, exper
 
 *TBA: geo location of active endpoint and controller on map*
 
-> PacketLab is supported by NSF award #1764055, NSF award #1903612 (REU), and Comcast.
+> PacketLab is supported by NSF award #1764055/1903612 and a gift from Comcast.
