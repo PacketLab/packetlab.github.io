@@ -6,12 +6,12 @@ permalink: /tutorial/
 has_children: true
 ---
 
-# Tutorials
-We provide topic-oriented tutorials in the following on how to use the PacketLab software package. For newcomers, following through the **Getting Started** section is recommended. For users with specific goals, separate goal-oriented tutorials are also provided for people to easily navigate through the different topics.
+# Tutorial
+We provide topic-oriented tutorials in the following on how to use the PacketLab software package. For newcomers, following through the **[Getting Started](#getting-started-introductory-topics)** section is recommended. For users with specific goals, separate goal-oriented tutorials are also provided for people to easily navigate through the different topics.
 
 ## Getting Started (Introductory Topics)
 - **[PacketLab Overview](/tutorial/pktlab_overview)** - A general overview of the PacketLab settings and jargons.
-- **[Package Installation](/tutorial/installation)** - Guide on (building and) installing the PacketLab software package.
+- **[Installation](/tutorial/installation)** - Guide on (building and) installing the PacketLab software package.
 - **[Running our First Local Experiment](/tutorial/first_run_local)** - Guide on running the example measurements using the PacketLab software package after installation.
 - **[Running our First External Experiment (TBA)]** - Guide on running the example measurements using the PacketLab software package after installation.
 

@@ -9,11 +9,11 @@ permalink: /tutorial/first_run_local/
 # Running our First Local Experiment
 After installation, we are now ready to run our first experiment. To keep things simple, for this tutorial we will demonstrate how to run an experiment *locally* (i.e. having both the controller and endpoint run on your machine for the experiment) using the PacketLab software package.
 
-## Setup
+## 1. Setup
 For this tutorial, we will use both the `pktxpmgr` program (PacketLab Experiment Manager Utility) and the `pktendpt` program (PacketLab Reference Measurement Endpoint). As two programs need to be run at the same time, it is recommended to open two terminals, one for `pktxpmgr` and one for `pktendpt`. If either program cannot be found via the `PATH` environment variable, one will need to navigate to the `bin` directory under the package installation directory to find the programs.
 > In the following text, we will assume that the programs can be found via the `PATH` environment variable when describing the commands to run the programs.
 
-## Running the Experiment Manager
+## 2. Running the Experiment Manager
 We will first start with running the Experiment Manager. Running the `pktxpmgr` requires supplying some additional arguments, which can be displayed by running `pktxpmgr -h`:
 ```
 USAGE: pktxpmgr [-h] [-c XM_CONF_PATH] ADDR[:PORT] MLET [MLET_ARGS ...]
@@ -40,7 +40,7 @@ where `[EXAMPLE_MLETS_DIR_PATH]` is the path to the `example_mlets` directory un
 >
 > Afterward for any incoming endpoint, `pktxpmgr` also perform TLS handshake with the endpoints, fork and exec the mlet, and forward any traffic between the endpoint and the mlet process.
 
-## Running the Reference Endpoint
+## 3. Running the Reference Endpoint
 Next, we will need to run the Reference Endpoint. Running the `pktendpt` does **not** require any additional arguments. One can directly run `pktendpt` as follows:
 ```
 pktendpt
@@ -50,8 +50,8 @@ pktendpt
 >
 > Afterward for any received experiment descriptor from the broker, `pktendpt` creates a connection to the controller described by the descriptors.
 
-## Seeing the Result
-After successfully running the two commands, one should see HTML code retrieved from the HTTP server `www.example.com`. Congratulations, you have just run your first experiment using PacketLab! For more information, see below for a rundown of what exactly happened for the HTML code to be displayed. Also see **[Running our First External Experiment]** on steps to run the example mlets with external (CAIDA) endpoints.
+## 4. Seeing the Result
+After successfully running the two commands, one should see HTML code retrieved from the HTTP server `www.example.com`. Congratulations, you have just run your first experiment using PacketLab! For more information, see below for a rundown of what exactly happened for the HTML code to be displayed. Also see **[Running our First External Experiment (TBA)]** on steps to run the example mlets with external (CAIDA) endpoints.
 > Note one can kill the two processes with SIGINT directly.
 
 ### Process Rundown

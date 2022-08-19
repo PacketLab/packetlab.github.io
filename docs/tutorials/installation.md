@@ -28,16 +28,14 @@ unzip pktlab-[VER]_prebuilt.[PLATFORM].[ARCH].zip
 ```
 pip install -r [EXTRACT_DIR_PATH]/setup_aux/requirements.txt
 ```
-4. Run the init script within `[EXTRACT_DIR_PATH]/bin` to setup the user home directory for the package. This can be done by executing the `pktlab_init` script with
+4. Run the init script within `[EXTRACT_DIR_PATH]/bin` and follow the prompts to set up the user home directory for the package. This can be done by executing the `pktlab_init` script with
 ```
 [EXTRACT_DIR_PATH]/bin/pktlab_init
 ```
 > Note during this step, `pktlab_init` may complain about not finding the `PPKSMan` command even if the previous `pip` step is completed successfully (the `PPKSMan` tool is shipped with the `pktlab` Python module). One possible reason for this is that `pip` installs the `PPKSMan` script to `~/.local/bin`, which is by default not within the `PATH` variable. To fix this, one can add `export PATH=~/.local/bin:$PATH` to `~/.bashrc` and run `source ~/.bashrc` to reload `~/.bashrc` to fix the problem.
 
-After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment]** for more information.
-> Note one may also want to add `[EXTRACT_DIR_PATH]/bin` to `PATH` to run the shipped programs more easily.
->
-> Also note if the extracted package content is shared among different users, only steps 3 and 4 (and `PATH` variable exporting if applicable) need to be performed by new users after the initial installation.
+After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. Before running pktlab programs, we recommend adding `[EXTRACT_DIR_PATH]/bin` to `PATH` to allow running the shipped programs more easily. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment]** for more information on experiment/endpoint running.
+> Note if the extracted package content is shared among different users, only steps 3 and 4 (and `PATH` variable exporting if applicable) need to be performed by new users after the initial installation.
 >
 > See **[Package File Structure]** for information about the file tree and directories in the prebuilt package.
 
@@ -61,14 +59,11 @@ tar xvzf pktlab-[VER].tar.gz
 4. Run `./configure`
 > Note one may want to also specify the `--prefix` option to avoid installing in the system directories. To do this, instead run `./configure --prefix=[ABSOLUTE_INSTALL_DIR_PATH]`, where `[ABSOLUTE_INSTALL_DIR_PATH]` is the *absolute* path to the target install destination (need not exist beforehand).
 5. Run `make`
-6. Run `make install`. If all steps have been successful, thPackage File Structuree software package is now installed at the target location or in the GNU autotools default directories if `--prefix` is not specified.
+6. Run `make install`. If all steps have been successful, the software package is now installed at the target location or in the GNU autotools default directories if `--prefix` is not specified.
 > The default install destinations are `/usr/local/bin`, `/usr/local/include`, `/usr/local/lib`, and `/usr/local/share`.
-7. Finally, follow step 3 and 4 in **[Install Using Prebuilt Package](#install-using-prebuilt-package)**.
-> Note the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt` or `/usr/local/share/pktlab/setup_aux/requirements.txt` for step 3. For step 4, the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init` if `--prefix` specified, or one can directly execute `pktlab_init`.
+7. Finally, follow step 3 and 4 in **[Install Using Prebuilt Package](#install-using-prebuilt-package)**. Note the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt` or `/usr/local/share/pktlab/setup_aux/requirements.txt` for step 3. For step 4, the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init` if `--prefix` specified, or one can directly execute `pktlab_init`.
 
-After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment]** for more information.
-> Note one may also want to add `[ABSOLUTE_INSTALL_DIR_PATH]/bin` to `PATH` to run the shipped programs more easily when specifying `--prefix`.
->
+After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. Before running pktlab programs, if `--prefix` was specified we recommend adding `[ABSOLUTE_INSTALL_DIR_PATH]/bin` to `PATH` to allow running the shipped programs more easily. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment (TBA)]** for more information on experiment/endpoint running.
 > Also note if the built and installed content is shared among different users, only step 7 (and `PATH` variable exporting if applicable) needs to be performed by new users after the initial installation.
 >
 > See the **[Package File Structure](#package-file-structure)** below for information about the file tree and directories for the installed package.
@@ -318,14 +313,14 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
     </ul>
 </div>
 
-**bin** contains compiled binaries for the Broker, Experiment Manager, and Endpoint.
-**config** contains template config files for the Experiment Manager and Endpoint that can be modified to suit the needs of different experimenters, as well as an example config file for each entity.
-**cred** contains test credentials for running sample experiments and general testing. These credentials are NOT suitable for use in actual experiments - a key and certificate should be generated for them instead.
-**example_mlets** contains sample experiments included with PacketLab as well as a Makefile to compile them.
-**include** contains the two header files for the PacketLab Library.
-**lib** contains compiled source code for the PacketLab Library.
-**setup_aux** contains the PacketLab Python library requirements and initialization script code used when initializing PacketLab.
-> **share/pktlab** is only present in the **source tarball** that is home to config, cred, example_mlets, and setup_aux.
+- **`bin`** contains compiled binaries for `pktxpmgr`, `pktendpt`, and a symbolic link to the `pktlab_init` script.
+- **`config`** contains template config files for `pktxpmgr` and `pktendpt`.
+- **`cred`** contains pre-shipped credentials by the PacketLab team.
+- **`example_mlets`** contains sample measurement applet binaries, their C source code, as well as an example Makefile to compile them.
+- **`include`** contains the header files for `libpktlab`.
+- **`lib`** contains compiled binaries for `libpktlab`.
+- **`setup_aux`** contains the auxiliary files required to set up the user for the PacketLab software package.
+> **`share/pktlab`** is only present when building from source and is home to `config`, `cred`, `example_mlets`, and `setup_aux`.
 
 <style lang="css">
     .box {
