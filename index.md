@@ -15,11 +15,11 @@ permalink: /
 <style>
 iframe {
     aspect-ratio: 16 / 9;
-    height: 100%;
-    width: 100%;
+    height: 90%;
+    width: 90%;
     border-style: hidden;
 }
 </style>
-<iframe src="map.html"></iframe>
+<p style="text-align:center"><iframe src="map.html"></iframe></p>
 
 > PacketLab is supported by NSF award #1764055/1903612 and a gift from Comcast.

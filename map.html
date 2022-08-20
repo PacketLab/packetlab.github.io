@@ -20,14 +20,17 @@
     <script>
         var map = L.map('map', {
             maxZoom: 10,
-            minZoom: 1.5,
+            minZoom: 0,
             zoomSnap: 0.1,
             zoomDelta: 0.5
         });
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
         }).addTo(map);
-        map.setView([30, 5], 1.5);
+        map.fitBounds([
+            [-56, -166],
+            [78, 180]
+        ]);
         // todo: add get active endpoint json and plot them
     </script>
 </body>
