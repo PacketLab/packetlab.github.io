@@ -22,18 +22,19 @@ USAGE: pktxpmgr [-h] [-c XM_CONF_PATH] ADDR[:PORT] MLET [MLET_ARGS ...]
 - `MLET` is the path to the compiled measurement applets (abbrev. mlet, pronounce as [EM-LET]) to run for this experiment. A set of compiled example mlets (`test_fd`, `test_dns`, and `test_http_get`) can be found within the installation directory under `example_mlets` for prebuilt package and `share/pktlab/example_mlets` for installation from source. For this tutorial, one can choose any mlet. We will use the `test_http_get` mlet as an example.
 > For a high level description on what each mlet does:
 > - `test_fd`: Test if file descriptor 0 and 1 is open. This mlet does not issue any request to the endpoint.
-> - `test_dns`: Craft and issues a DNS request to `8.8.8.8` for `www.example.com`.
-> - `test_http_get`: Craft and issue a HTTP GET request to `93.184.216.34` (`www.example.com` resolved) for `www.example.com`.
+> - `test_dns`: Crafts and submits a DNS request, by default queries `8.8.8.8` for `www.example.com`. The domain name and DNS resolver IP can be passed in using `MLET_ARGS`: `./test_dns [DOMAIN_NAME] [IP]` (e.g. `./test_dns www.example.com 8.8.8.8`)
+> - `test_http_get`: Crafts and issues a HTTP GET request, by default queries `www.example.com/`. The domain name and path can be passed in using `MLET_ARGS`: `./test_http_get [DOMAIN_NAME] [PATH]` (e.g. `./test_http_get www.example.com /path`)
+> - `test_icmp_echo`: Pings the domain passed in. Crafts and issues an ICMP request, by default pings `www.example.com/`. The domain name can be passed in using `MLET_ARGS`: `./test_icmp_echo [DOMAIN_NAME]` (e.g. `./test_icmp_echo www.example.com`). Please check if the endpoint configuration file (`~/.pktlab/endpt.conf`) supports raw mode (`TransprotoSup` has the field `raw`). We understand a lot of users are stringent with permissions, however, since this test program uses raw sockets and bpf filters, in order to run this test program without `sudo`, users will need to grant extra capabilities via `sudo setcap cap_net_raw=ep pktendpt` and `sudo sysctl -w kernel.unprivileged_bpf_disabled=0`. Of course, `sudo` will work directly.
+
 >
 > The `-c` option is to specify alternative config files to use when running `pktxpmgr`. Note that we will not need to supply this option as the config file `~/.pktlab/xpmgr.conf` is used by default, which is created and populated when running `pktlab_init`.
 >
-> Though not used by the example mlets, mlets are allowed to accept arguments from the command-line via the `[MLET_ARGS ...]` arguments.
 
 One can now run `pktxpmgr` as follows:
 ```
-pktxpmgr 127.0.0.1:5566 [EXAMPLE_MLETS_DIR_PATH]/test_http_get
+pktxpmgr 127.0.0.1:5566 [EXAMPLE_MLETS_DIR_PATH]/test_http_get [MLET_ARGS ...]
 ```
-where `[EXAMPLE_MLETS_DIR_PATH]` is the path to the `example_mlets` directory under the installation directory.
+where `[EXAMPLE_MLETS_DIR_PATH]` is the path to the `example_mlets` directory under the installation directory. `MLET_ARGS` are equivalent to command-line arguments.
 > Note when running this command, two things are happening:
 > 1. `pktxpmgr` publishes the experiment (in experiment descriptor form) to the CAIDA broker at `pktbrokr.caida.org`.
 > 2. `pktxpmgr` creates a listening socket to greet incoming endpoints.
