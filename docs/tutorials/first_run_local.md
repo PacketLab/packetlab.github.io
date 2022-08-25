@@ -37,7 +37,7 @@ where `[EXAMPLE_MLETS_DIR_PATH]` is the path to the `example_mlets` directory un
 > 1. `pktxpmgr` publishes the experiment (in experiment descriptor form) to the CAIDA broker at `pktbrokr.caida.org`.
 > 2. `pktxpmgr` creates a listening socket to greet incoming endpoints.
 >
-> Afterward, for any incoming endpoint, `pktxpmgr` also perform TLS handshake with the endpoints, fork \& exec the mlet, and forward any traffic between the endpoint and the mlet process.
+> Afterward, for any incoming endpoint, `pktxpmgr` also perform TLS handshake with the endpoints, fork & exec the mlet, and forward any traffic between the endpoint and the mlet process.
 
 ## 3. Running the Reference Endpoint
 Next, we will need to run the Reference Endpoint. Running the `pktendpt` does **not** require any additional arguments. One can directly run `pktendpt` as follows:

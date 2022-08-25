@@ -16,6 +16,7 @@ We provide topic-oriented tutorials in the following on how to use the PacketLab
 - **[Running our First External Experiment (TBA)]** - Guide on running the example measurements using the PacketLab software package after installation.
 
 ## Advanced Topics (TBA)
+- **[Package File Structure](/tutorial/package_file_structure)** - Additional information on the PacketLab software package file structure.
 - **[Configurable Options for `pktxpmgr`]** - Additional information on options supported by the experiment manager utility program `pktxpmgr`.
 - **[Configurable Options for `pktendpt`]** - Additional information on options supported by the reference endpoint program `pktendpt`.
 - **[Intro to `libpktlab`]** - A general overview of the functionality provided by the PacketLab general utility library `libpktlab`.
