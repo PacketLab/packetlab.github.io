@@ -7,7 +7,7 @@ has_children: true
 ---
 
 # Tutorial
-We provide topic-oriented tutorials in the following on how to use the PacketLab software package. For newcomers, following through the **[Getting Started](#getting-started-introductory-topics)** section is recommended. For users with specific goals, separate goal-oriented tutorials are also provided for people to easily navigate through the different topics.
+We provide topic-oriented tutorials in the following on how to use the PacketLab software package. For newcomers, following through the **[Getting Started](#getting-started)** section is recommended. For users with specific goals, separate goal-oriented tutorials are also provided for people to easily navigate through the different topics.
 
 ## Getting Started
 - **[PacketLab Overview](/tutorial/pktlab_overview)** - A general overview of the PacketLab settings and jargons.
