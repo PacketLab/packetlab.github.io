@@ -13,7 +13,7 @@ This page provides information on installing the PacketLab software package. Cur
 ## Install Using Prebuilt Package
 ### Prerequisite
 - Linux kernel OS
-- Python $\geq$ 3.7
+- Python ≥ 3.7
 - `pip`
 - Utility for zip archive extraction (e.g. `unzip`)
 > Installation via prebuilt package is currently only for Linux on amd64 arch. We plan to support more platforms/archs in the future.
@@ -43,8 +43,8 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 ## Install from Source
 ### Prerequisite
 - A [POSIX.1-2004](https://pubs.opengroup.org/onlinepubs/009695399/nfindex.html) compliant OS
-- OpenSSL $\geq$ 1.1.1
-- Python $\geq$ 3.7
+- OpenSSL ≥ 1.1.1
+- Python ≥ 3.7
 - `pip`
 - `tar` with gzip support (e.g. GNU tar)
 - Build tools (e.g. build-essential package for Debian/Ubuntu)
