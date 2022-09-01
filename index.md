@@ -10,7 +10,7 @@ permalink: /
 
 - To try out our software package, including a reference PacketLab endpoint, experiment running utilities, and some example measurement applets, see [Downloads](/download/) and [Tutorials](/tutorial/).
 - For documentation of the `libpktlab` utility library, see [Docs](/docs/).
-- To learn more about PacketLab, see **[About (TBA)]**.
+- To learn more about PacketLab, see [About](/about/).
 
 <style>
 iframe {

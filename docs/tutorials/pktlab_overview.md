@@ -7,7 +7,7 @@ permalink: /tutorial/pktlab_overview/
 ---
 
 # PacketLab Overview
-This page contains information w.r.t. the settings and jargons of PacketLab. The goal of this page is to allow software package users to have a better grasp of what is happening when setting up and running programs in the package in later tutorials. For users seeking more information on the design of PacketLab, see **[About (TBA)]**.
+This page contains information w.r.t. the settings and jargons of PacketLab. The goal of this page is to allow software package users to have a better grasp of what is happening when setting up and running programs in the package in later tutorials. For users seeking more information on the design of PacketLab, see [About](/about/).
 
 ---
 ## PacketLab Entities
