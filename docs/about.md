@@ -96,18 +96,20 @@ PacketLab is currently being developed by a collaboration of students and resear
     </tr>
     <tr>
         <td width="30%" align="center" valign="middle">
+            <img src="/assets/images/tabishshaik.png" alt="Tabish Shaik" class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
-            <img src="/assets/images/tabishshaik.png" alt="Tabish Shaik" class="avatar"/>
+            <img src="/assets/images/richardmasserfrye.jpg" alt="Richard Masser-Frye" class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
         </td>
     </tr>
     <tr>
         <td width="30%" align="center" valign="middle">
+            <p class="name">Tabish Shaik (UIUC)</p>
         </td>
         <td width="30%" align="center" valign="middle">
-            <p class="name">Tabish Shaik (UIUC)</p>
+            <p class="name">Richard Masser-Frye (UCSD)</p>
         </td>
         <td width="30%" align="center" valign="middle">
         </td>
