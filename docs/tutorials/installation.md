@@ -22,7 +22,7 @@ This page provides information on installing the PacketLab software package. Cur
 1. Download the prebuilt package (see **[Download](/download/)** for download links). The latest release is preferred.
 2. Extract the prebuilt package content. With `unzip` this can be done with
 ```
-unzip pktlab-[VER]_prebuilt.[PLATFORM].[ARCH].zip
+unzip pktlab-[VER]_prebuilt.[raw|noraw].[PLATFORM].[ARCH].zip
 ```
 3. Install the required Python modules. This can be done by running
 ```
