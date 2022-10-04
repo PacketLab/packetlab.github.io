@@ -6,31 +6,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
+    
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
+    
     <style>
         html { height: 100%; margin: 0; }
         body { height: 100%; margin: 0; }
-        #map { height: 100%; }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
+
 </head>
+
 <body>
     <div id="map"></div>
-    <script>
+    <script type="text/javascript">
+
         var map = L.map('map', {
+            zoom: 4.0,
             maxZoom: 10,
-            minZoom: 0,
+            minZoom: 1.6,
             zoomSnap: 0.1,
-            zoomDelta: 0.5
-        });
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
-        }).addTo(map);
+            zoomDelta: 0.5,
+            maxBounds: [[-51, -138.9],[76.5, 138.8]],
+            maxBoundsViscosity: 1.0,
+            noWrap: true
+        }).setView([0,0], 1.0);
+
+
+        var svgMap = 'worldapproved.svg';
+        var svgMapBounds = [
+            [-51, -138.9],
+            [76.5, 138.8]
+        ];
+
+        L.imageOverlay(svgMap, svgMapBounds).addTo(map);
+        
+        const imageUrl = 'worldapproved/{z}/{x}/{y}.svg'
+
+        /*L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            noWrap: true,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);*/
+
         map.fitBounds([
-            [-56, -166],
-            [78, 180]
+            [-50, -166],
+            [77, 180]
         ]);
+
+        var marker = L.marker([54, -77.4]).addTo(map);
+        marker.bindPopup("<b>Welcome to UIUC!</b>").openPopup();
+        
         // todo: add get active endpoint json and plot them
     </script>
 </body>

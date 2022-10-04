@@ -12,7 +12,7 @@ permalink: /
 - For documentation of the `libpktlab` utility library, see [Docs](/docs/).
 - To learn more about PacketLab, see [About](/about/).
 
-<!--
+
 <style>
 iframe {
     aspect-ratio: 16 / 9;
@@ -22,6 +22,6 @@ iframe {
 }
 </style>
 <p style="text-align:center"><iframe src="map.html"></iframe></p>
--->
+
 
 > PacketLab is supported by NSF award #1764055/1903612 and a gift from Comcast.
