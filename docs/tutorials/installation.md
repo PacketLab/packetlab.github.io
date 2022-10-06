@@ -47,7 +47,25 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 - Python ≥ 3.7
 - `pip`
 - `tar` with gzip support (e.g. GNU tar)
-- Build tools (e.g. build-essential package for Debian/Ubuntu)
+- Build tools (e.g. `build-essential` package for Debian/Ubuntu)
+
+> - **Note for Mac users:**
+> On MacOS, OpenSSL can be installed via [Homebrew](https://brew.sh/) with `brew install openssl`. However, it is possible for the installed OpenSSL libraries and headers to be not found by the C compiler. To fix this, one way is to soft link the OpenSSL header directory to under `/usr/local/include` and soft link the OpenSSL libraries to under `/usr/local/lib`. These can be done with:
+> ```
+> sudo mkdir -p /usr/local/include /usr/local/lib # In case directories do not exist
+> sudo ln -s BREW_OPENSSL_INSTALLATION_LIB_DIR/libssl.a /usr/local/lib
+> sudo ln -s BREW_OPENSSL_INSTALLATION_LIB_DIR/libcrypto.a /usr/local/lib
+> sudo ln -s BREW_OPENSSL_INSTALLATION_INCLUDE_DIR/openssl /usr/local/include
+> ```
+> `BREW_OPENSSL_INSTALLATION_LIB_DIR` and `BREW_OPENSSL_INSTALLATION_INCLUDE_DIR` can be found by running `brew info openssl`, which should include the following text:
+> ```
+> For compilers to find openssl@VER you may need to set:
+>  export LDFLAGS="-LBREW_OPENSSL_INSTALLATION_LIB_DIR"
+>  export CPPFLAGS="-IBREW_OPENSSL_INSTALLATION_INCLUDE_DIR"
+> ```
+
+> - **Note for FreeBSD users:**
+> On FreeBSD, one may also need to install the `rust` package (e.g. `pkg install rust`) to build the [Python cryptography module](https://cryptography.io/en/latest/). In addition, if `python3` is installed via `pkg`, one may also need to install the `databases/py-sqlite3` package with `pkg install databases/py-sqlite3`.
 
 ### Installation Steps
 1. Download the source tarball (see **[Download](/download)** for download links). The latest release is preferred.
