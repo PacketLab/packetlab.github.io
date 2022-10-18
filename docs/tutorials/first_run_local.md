@@ -16,28 +16,23 @@ For this tutorial, we will use both the `pktxpmgr` program (PacketLab Experiment
 ## 2. Running the Experiment Manager
 We will first start with running the Experiment Manager. Running the `pktxpmgr` requires supplying some additional arguments, which can be displayed by running `pktxpmgr -h`:
 ```
-USAGE: pktxpmgr [-h] [-c XM_CONF_PATH] ADDR[:PORT] MLET [MLET_ARGS ...]
+USAGE: pktxpmgr [-h] [-c XM_CONF_PATH] [-a ADDR:[PORT]] [-p PUBLISH_ADDR:[PORT]] MLET [MLET_ARGS ...]
 ```
-- `ADDR[:PORT]` refers to the IP address and port that the `pktxpmgr` should listen to accept incoming endpoint connections. For this tutorial, one should use `127.0.0.1:5566`, i.e. listen on localhost port 5566.
-- `MLET` is the path to the compiled measurement applets (abbrev. mlet, pronounce as [EM-LET]) to run for this experiment. A set of compiled example mlets (`test_fd`, `test_dns`, and `test_http_get`) can be found within the installation directory under `example_mlets` for prebuilt package and `share/pktlab/example_mlets` for installation from source. For this tutorial, one can choose any mlet. We will use the `test_http_get` mlet as an example.
-> For a high-level description of what each mlet does:
-> - `test_fd`: Test if file descriptor 0 and 1 is open. This mlet does not issue any request to the endpoint.
-> - `test_dns`: Craft and issue a DNS A record query. The default is to `8.8.8.8` for `www.example.com`. The domain name and DNS resolver IP address can be passed in using `MLET_ARGS`: `test_dns [DOMAIN_NAME] [IP]`. E.g. `pktxpmgr 127.0.0.1:5566 example_mlets/test_dns www.example.org 1.1.1.1`.
-> - `test_http_get`: Craft and issue a HTTP GET request. The default is to request `www.example.com` for `/`. The domain name and path can be passed in using `MLET_ARGS`: `test_http_get [DOMAIN_NAME] [PATH]`. E.g. `pktxpmgr 127.0.0.1:5566 example_mlets/test_http_get www.example.org /index.html`.
-> - `test_icmp_echo`: Ping a target with a single ICMP echo request packet. The default is to ping `www.example.com`. The target can be passed in using `MLET_ARGS`: `test_icmp_echo [TARGET]`. E.g. `pktxpmgr 127.0.0.1:5566 example_mlets/test_icmp_echo 1.1.1.1`. Note to run this mlet, the endpoint needs to be compiled and configured for raw support (currently only for Linux). This is done by default if one is using the raw-flavor prebuilt package or compiling from source tarball on Linux. One can check if the configuration is correct by checking whether in `~/.pktlab/endpt.conf`, the `TransprotoSup` option has `raw` specified. In addition, as the `test_icmp_echo` mlet requires endpoints to use raw sockets and eBPF filters, one will need to give `pktendpt` the correct privileges by either (1) run `pktendpt` with `sudo`, or (2) set the `CAP_NET_RAW` capability for `pktendpt` (can be done with `sudo setcap cap_net_raw=ep pktendpt`) and enable kernel unprivileged BPF support with `sudo sysctl -w kernel.unprivileged_bpf_disabled=0`.
->
-> The `-c` option is to specify alternative config files to use when running `pktxpmgr`. Note that we will not need to supply this option as the config file `~/.pktlab/xpmgr.conf` is used by default, which is created and populated when running `pktlab_init`.
+- `MLET` is the path to the compiled measurement applets (abbrev. mlet, pronounce as [EM-LET]) to run for this experiment. A set of compiled example mlets (`test_fd`, `test_dns`, `test_http_get`, and `test_icmp_echo`) can be found within the installation directory under `example_mlets` for prebuilt package and `share/pktlab/example_mlets` for installation from source. For this tutorial, one can choose any mlet (note `test_icmp_echo` requires `pktendpt` special setup; see [here](#more-information-on-pktxpmgr-options-and-arguments)). We will use the `test_http_get` mlet as an example.
+- `[-a ADDR[:PORT]]` refers to the target host address and port that `pktxpmgr` should use when running the experiment. For this tutorial, one should omit this option.
+- `[-p PUBLISH_ADDR[:PORT]]` refers to the host address and port that `pktxpmgr` should use as the publication controller address. When an endpoint receives experiment notifications, this is the address that they will see and attempt to connect to. For this tutorial, one should omit this option.
+> See [here](#more-information-on-pktxpmgr-options-and-arguments) for more information on the supported options and arguments (including some explanation on what each example mlet does).
 
 One can now run `pktxpmgr` as follows:
 ```
-pktxpmgr 127.0.0.1:5566 [EXAMPLE_MLETS_DIR_PATH]/test_http_get
+pktxpmgr [EXAMPLE_MLETS_DIR_PATH]/test_http_get
 ```
 where `[EXAMPLE_MLETS_DIR_PATH]` is the path to the `example_mlets` directory under the installation directory.
 > Note when running this command, two things are happening:
 > 1. `pktxpmgr` publishes the experiment (in experiment descriptor form) to the CAIDA broker at `pktbrokr.caida.org`.
 > 2. `pktxpmgr` creates a listening socket to greet incoming endpoints.
 >
-> Afterward, for any incoming endpoint, `pktxpmgr` also perform TLS handshake with the endpoints, fork & exec the mlet, and forward any traffic between the endpoint and the mlet process.
+> Afterward, for any incoming endpoint, `pktxpmgr` also performs TLS handshake with the endpoints, fork & exec the mlet, and forward any traffic between the endpoint and the mlet process.
 
 ## 3. Running the Reference Endpoint
 Next, we will need to run the Reference Endpoint. Running the `pktendpt` does **not** require any additional arguments. One can directly run `pktendpt` as follows:
@@ -54,4 +49,17 @@ After successfully running the two commands, one should see HTML code retrieved 
 > Note one can kill the two processes with SIGINT directly.
 
 ### Process Rundown
-To briefly explain the process, The Caida broker forwards the experiment descriptor to `pktendpt` after being notified of the experiment by `pktxpmgr`. Receiving an experiment descriptor, `pktendpt` initiates the connection to the controller described by the descriptor (in this case `127.0.0.1:5566`). Both processes then complete the TLS handshake with `pktxpmgr` exec-ing the mlet `test_http_get` at the end, which starts issuing PacketLab protocol request to `pktendpt` over `pktxpmgr`. By design `test_http_get` then asks `pktendpt` (via multiple PacketLab protocol requests) on sending out the HTTP GET request, and receives the forwarded back HTTP response from `pktendpt` which is then displayed in the terminal.
+To briefly explain the process, The Caida broker forwards the experiment descriptor to `pktendpt` after being notified of the experiment by `pktxpmgr`. Receiving an experiment descriptor, `pktendpt` initiates the connection to the controller described by the descriptor (in this case `127.0.0.1:5566`). Both processes then complete the TLS handshake with `pktxpmgr` exec-ing the mlet `test_http_get` at the end, which starts issuing PacketLab protocol requests to `pktendpt` over `pktxpmgr`. By design `test_http_get` then asks `pktendpt` (via multiple PacketLab protocol requests) on sending out the HTTP GET request, and receives the forwarded back HTTP response from `pktendpt` which is then displayed in the terminal.
+
+## More information on `pktxpmgr` options and arguments
+1. For a high-level description of what each mlet does:
+- `test_dns`: Craft and issue a DNS A record query. The default is to `8.8.8.8` for `www.example.com`. The domain name and DNS resolver IP address can be passed in using `MLET_ARGS`: `test_dns [DOMAIN_NAME] [IP]`. E.g. `pktxpmgr example_mlets/test_dns www.example.org 1.1.1.1`.
+- `test_http_get`: Craft and issue a HTTP GET request. The default is to request `www.example.com` for `/`. The domain name and path can be passed in using `MLET_ARGS`: `test_http_get [DOMAIN_NAME] [PATH]`. E.g. `pktxpmgr example_mlets/test_http_get www.example.org /index.html`.
+- `test_icmp_echo`: Ping a target with a single ICMP echo request packet. The default is to ping `www.example.com`. The target can be passed in using `MLET_ARGS`: `test_icmp_echo [TARGET]`. E.g. `pktxpmgr example_mlets/test_icmp_echo 1.1.1.1`. Note to run this mlet, the endpoint needs to be compiled and configured for raw support (currently only for Linux). The compilation is done by default if one is using the raw-flavor prebuilt package or compiling from source tarball on Linux. For configuration, one can check if it is correct by checking whether in `~/.pktlab/endpt.conf`, the `TransprotoSup` option has `raw` specified. In addition, as the `test_icmp_echo` mlet requires endpoints to use raw sockets and eBPF filters, one will need to give `pktendpt` the correct privileges by either (1) run `pktendpt` with `sudo`, or (2) set the `CAP_NET_RAW` capability for `pktendpt` (can be done with `sudo setcap cap_net_raw=ep PATH_TO_pktendpt`) and enable kernel unprivileged BPF support with `sudo sysctl -w kernel.unprivileged_bpf_disabled=0`.
+2. For option `-a`, when omitted `pktxpmgr` tries to listen on `0.0.0.0:20556`. If supplied, how `pktxpmgr` uses the address depends on the operation mode specified by the config file used:
+- Passive (listen) mode (default): `pktxpmgr` listens on the address for incoming endpoint connection.
+- Active (proxy) mode: `pktxpmgr` connects to the address to set up proxy backlog connections. Note this option is **REQUIRED** if running `pktxpmgr` in active mode.
+3. For option `-p`:
+- In passive (listen) mode (default), if the option is specified, the supplied address is always used by `pktxpmgr` as the publication controller address. If not, if the `-a` option is given, the `-a`-supplied address is used instead. If both `-a` and `-p` are not specified, if `PubControllerAddr` is specified within the currently-used config, the address supplied via `PubControllerAddr` is used. Otherwise, the local host address used by `pktxpmgr` (retrieved by `getsockname`) to talk to the broker is used.
+- In active (proxy) mode, if the option is specified, the supplied address is always used by `pktxpmgr` as the publication controller address. If not, if `PubControllerAddr` is specified within the currently-used config, the address supplied via `PubControllerAddr` is used. Otherwise, the host part of the `-a`-supplied address with port 20556 is used.
+4. The `-c` option is to specify alternative config files to use when running `pktxpmgr`. Note that we will not need to supply this option as the config file `~/.pktlab/xpmgr.conf` is used by default, which is created and populated when running `pktlab_init`.
