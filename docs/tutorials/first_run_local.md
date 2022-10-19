@@ -45,11 +45,11 @@ pktendpt
 > Afterward for any received experiment descriptor from the broker, `pktendpt` creates a connection to the controller described by the descriptors.
 
 ## 4. Seeing the Result
-After successfully running the two commands, one should see HTML code retrieved from the HTTP server `www.example.com`. Congratulations, you have just run your first experiment using PacketLab! For more information, see below for a rundown of what exactly happened for the HTML code to be displayed. Also see **[Running our First External Experiment (TBA)]** on steps to run the example mlets with external (CAIDA) endpoints.
+After successfully running the two commands, one should see HTML code retrieved from the HTTP server `www.example.com`. Congratulations, you have just run your first experiment using PacketLab! For more information, see below for a rundown of what exactly happened for the HTML code to be displayed. Also see **[Running our First External Experiment](/tutorial/first_run_external)** on steps to run the example mlets with external (CAIDA) endpoints.
 > Note one can kill the two processes with SIGINT directly.
 
 ### Process Rundown
-To briefly explain the process, The Caida broker forwards the experiment descriptor to `pktendpt` after being notified of the experiment by `pktxpmgr`. Receiving an experiment descriptor, `pktendpt` initiates the connection to the controller described by the descriptor (in this case `127.0.0.1:5566`). Both processes then complete the TLS handshake with `pktxpmgr` exec-ing the mlet `test_http_get` at the end, which starts issuing PacketLab protocol requests to `pktendpt` over `pktxpmgr`. By design `test_http_get` then asks `pktendpt` (via multiple PacketLab protocol requests) on sending out the HTTP GET request, and receives the forwarded back HTTP response from `pktendpt` which is then displayed in the terminal.
+To briefly explain the process, The CAIDA broker forwards the experiment descriptor to `pktendpt` after being notified of the experiment by `pktxpmgr`. Receiving an experiment descriptor, `pktendpt` initiates the connection to the controller described by the descriptor. Both processes then complete the TLS handshake with `pktxpmgr` exec-ing the mlet `test_http_get` at the end, which starts issuing PacketLab protocol requests to `pktendpt` over `pktxpmgr`. By design `test_http_get` then asks `pktendpt` (via multiple PacketLab protocol requests) on sending out the HTTP GET request, and receives the forwarded back HTTP response from `pktendpt` which is then displayed in the terminal.
 
 ## More information on `pktxpmgr` options and arguments
 1. For a high-level description of what each mlet does:
