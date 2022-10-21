@@ -27,7 +27,7 @@ Via our demo setup, attendees could see sample measurements being run on geo-dis
 Sample measurements runnable to attendees:
 1. Query A record for `DOMAIN` (default to `www.example.org`, using `8.8.8.8`):
 ```
-pktxpmgr -c ~/.pktlab/xpmgr.proxy.conf -a pktproxy.caida.org [-i HOSTID] test_dns [DOMAIN [DNS_RESOLVER_IP]]`
+pktxpmgr -c ~/.pktlab/xpmgr.proxy.conf -a pktproxy.caida.org [-i HOSTID] test_dns [DOMAIN [DNS_RESOLVER_IP]]
 ```
 2. Issue HTTP GET request for `DOMAIN` for `PATH` file (default to `www.example.org` for `/`):
 ```
