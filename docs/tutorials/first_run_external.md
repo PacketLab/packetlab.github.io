@@ -44,8 +44,8 @@ mv caida_exppriv.cert ~/.pktlab/certs
 ```
 4. Run the following two commands to amend `~/.pktlab/xpmgr.conf` and `~/.pktlab/xpmgr.proxy.conf`:
 ```
-printf "%b" "\nExpExec 0::${HOME}/.pktlab/certs/caida_exppriv.cert,${HOME}/.pktlab/certs/pubcmd_exper_xc.cert:${HOME}/.pktlab/keys/caida_k_eop.pub::\n" >> xpmgr.conf
-printf "%b" "\nExpExec 0::${HOME}/.pktlab/certs/caida_exppriv.cert,${HOME}/.pktlab/certs/pubcmd_exper_xc.cert:${HOME}/.pktlab/keys/caida_k_eop.pub::\n" >> xpmgr.proxy.conf
+printf "%b" "\nExpExec 0::${HOME}/.pktlab/certs/caida_exppriv.cert,${HOME}/.pktlab/certs/pubcmd_exper_xc.cert:${HOME}/.pktlab/keys/caida_k_eop.pub::\n" >> ~/.pktlab/xpmgr.conf
+printf "%b" "\nExpExec 0::${HOME}/.pktlab/certs/caida_exppriv.cert,${HOME}/.pktlab/certs/pubcmd_exper_xc.cert:${HOME}/.pktlab/keys/caida_k_eop.pub::\n" >> ~/.pktlab/xpmgr.proxy.conf
 ```
 > Note the moved files must be named `caida_k_eop.pub` and `caida_exppriv.cert` for the amendment to work.
 >
