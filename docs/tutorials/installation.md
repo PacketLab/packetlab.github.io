@@ -13,10 +13,15 @@ This page provides information on installing the PacketLab software package. Cur
 ## Install Using Prebuilt Package
 ### Prerequisite
 - Linux kernel OS
+- lmdb ≥ 0.9.21
 - Python ≥ 3.7
 - `pip`
 - Utility for zip archive extraction (e.g. `unzip`)
+
 > Installation via prebuilt package is currently only for Linux on amd64 arch. We plan to support more platforms/archs in the future.
+
+> - **Note for Potential Requirement of Rust:**
+> The Python `pktlab` module depends on the [Python cryptography module](https://cryptography.io/en/latest/), which may require rust installation. See the [Python cryptography module installation page](https://cryptography.io/en/latest/installation/) for more information.
 
 ### Installation Steps
 1. Download the prebuilt package (see **[Download](/download/)** for download links). The latest release is preferred.
@@ -36,7 +41,7 @@ pip install -r [EXTRACT_DIR_PATH]/setup_aux/requirements.txt
 
 After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. Before running pktlab programs, we recommend adding `[EXTRACT_DIR_PATH]/bin` to `PATH` to allow running the shipped programs more easily. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment](/tutorial/first_run_external)** for more information on experiment/endpoint running.
 > Note if the extracted package content is shared among different users, only steps 3 and 4 (and `PATH` variable exporting if applicable) need to be performed by new users after the initial installation.
->
+
 > See **[Package File Structure](/tutorial/package_file_structure)** for information about the file tree and directories in the prebuilt package.
 
 ---
@@ -44,10 +49,14 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 ### Prerequisite
 - A [POSIX.1-2004](https://pubs.opengroup.org/onlinepubs/009695399/nfindex.html) compliant OS
 - OpenSSL ≥ 1.1.1
+- lmdb ≥ 0.9.21
 - Python ≥ 3.7
 - `pip`
 - `tar` with gzip support (e.g. GNU tar)
 - Build tools (e.g. `build-essential` package for Debian/Ubuntu)
+
+> - **Note for Potential Requirement of Rust:**
+> The Python `pktlab` module depends on the [Python cryptography module](https://cryptography.io/en/latest/), which may require rust installation on some platforms. See the [Python cryptography module installation page](https://cryptography.io/en/latest/installation/) for more information.
 
 > - **Note for Mac users:**
 > On MacOS, OpenSSL can be installed via [Homebrew](https://brew.sh/) with `brew install openssl`. However, it is possible for the installed OpenSSL libraries and headers to be not found by the C compiler. To fix this, one way is to soft link the OpenSSL header directory to under `/usr/local/include` and soft link the OpenSSL libraries to under `/usr/local/lib`. These can be done with:
@@ -65,7 +74,7 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 > ```
 
 > - **Note for FreeBSD users:**
-> On FreeBSD, one may also need to install the `rust` package (e.g. `pkg install rust`) to build the [Python cryptography module](https://cryptography.io/en/latest/). In addition, if `python3` is installed via `pkg`, one may also need to install the `databases/py-sqlite3` package with `pkg install databases/py-sqlite3`.
+> On FreeBSD, if `python3` is installed via `pkg`, one may also need to install the `databases/py-sqlite3` package with `pkg install databases/py-sqlite3`. Also note rust may be required, and could be installed similarly via `pkg install rust`.
 
 ### Installation Steps
 1. Download the source tarball (see **[Download](/download)** for download links). The latest release is preferred.
@@ -79,9 +88,9 @@ tar xvzf pktlab-[VER].tar.gz
 5. Run `make`
 6. Run `make install`. If all steps have been successful, the software package is now installed at the target location or in the GNU autotools default directories if `--prefix` is not specified.
 > The default install destinations are `/usr/local/bin`, `/usr/local/include`, `/usr/local/lib`, and `/usr/local/share`.
-7. Finally, follow step 3 and 4 in **[Install Using Prebuilt Package](#install-using-prebuilt-package)**. Note the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt` or `/usr/local/share/pktlab/setup_aux/requirements.txt` for step 3. For step 4, the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init` if `--prefix` specified, or one can directly execute `pktlab_init`.
+7. Finally, follow steps 3 and 4 in **[Install Using Prebuilt Package](#install-using-prebuilt-package)**. Note the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt` or `/usr/local/share/pktlab/setup_aux/requirements.txt` for step 3. For step 4, the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init` if `--prefix` specified, or one can directly execute `pktlab_init`.
 
 After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. Before running pktlab programs, if `--prefix` was specified we recommend adding `[ABSOLUTE_INSTALL_DIR_PATH]/bin` to `PATH` to allow running the shipped programs more easily. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment](/tutorial/first_run_external)** for more information on experiment/endpoint running.
 > Also note if the built and installed content is shared among different users, only step 7 (and `PATH` variable exporting if applicable) needs to be performed by new users after the initial installation.
->
+
 > See the **[Package File Structure](/tutorial/package_file_structure)** for information about the file tree and directories for the installed package.
