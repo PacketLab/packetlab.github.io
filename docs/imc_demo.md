@@ -76,7 +76,7 @@ After following the steps, the privileges are now set up. You can now run sample
 For other interested attendees that could not attend the demo, you will need to set up the PacketLab software package on your local machine to try out the package. We provide the following options:
 
 **Try-it-out Special Bundle** We provide a **Try-it-out special bundle** (for a selected set of OS/arch) that would alleviate you from the full installation steps required to set up the PacketLab software package on your local machine. The steps to use the bundle are as follows:
-1. Download the special bundle based on your OS/arch: [Linux/amd64](LINK), [MacOS/amd64](LINK), and [MacOS/arm](LINK).
+1. Download the special bundle based on your OS/arch: [Linux/amd64](https://packetlab.web.illinois.edu/release/special_bundle/pktlab-special.linux.amd64.zip), [MacOS/amd64](LINK), and [MacOS/arm](https://packetlab.web.illinois.edu/release/special_bundle/pktlab-special.macos.arm.zip).
 2. Unzip the bundle.
 3. cd into the unzipped directory.
 You can then run the commands described at [Running Sample Measurements on External PacketLab Endpoints](#running-sample-measurements-on-external-packetlab-endpoints) as well (you will need to change the `-c` option argument to give `-c xpmgr.proxy.conf` instead)!
