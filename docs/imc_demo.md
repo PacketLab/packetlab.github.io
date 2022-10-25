@@ -23,6 +23,7 @@ permalink: /imc_demo/
 
 ## For Demo Participants
 > Find us at our poster during the poster session to see the demo!
+
 For demo participants, we will provide the setup for you to directly use the PacketLab software package without needing to install anything. For this demo, there are two things for you to try out:
 
 ### Running Sample Measurements on External PacketLab Endpoints
@@ -45,6 +46,7 @@ pktxpmgr -c ~/.pktlab/xpmgr.proxy.conf -a pktproxy.caida.org [-i HOSTID] mlets/t
 ```
 pktxpmgr -c ~/.pktlab/xpmgr.proxy.conf -a pktproxy.caida.org [-i HOSTID] mlets/test_pktif_traceroute DOMAIN
 ```
+
 > The `-i HOSTID` option allows users to select the specific endpoint of interest by supplying the endpoint `HOSTID`. See **[here (TBA)]** for a list of available endpoints.
 
 ### Getting and Using Privileges from the PacketLab Team
