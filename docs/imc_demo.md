@@ -49,6 +49,8 @@ pktxpmgr -c ~/.pktlab/xpmgr.proxy.conf -a pktproxy.caida.org [-i HOSTID] mlets/t
 
 > The `-i HOSTID` option allows users to select the specific endpoint of interest by supplying the endpoint `HOSTID`. See **[here (TBA)]** for a list of available endpoints.
 
+> Big thanks to [EdgeNet](https://www.edge-net.org/) for hosting most of the demo endpoints!
+
 ### Getting and Using Privileges from the PacketLab Team
 Via our demo setup, you can experience the process of requesting experiment privilege certificates from the PacketLab team and installing the certificate to be used with the PacketLab software package.
 
