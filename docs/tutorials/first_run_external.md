@@ -19,7 +19,7 @@ permalink: /tutorial/first_run_external/
 </style>
 
 # Running our First External Experiment
-After installation (and potentially running our first local experiment), we are now ready to run our first *external* experiment. For this tutorial, we will demonstrate how to run an experiment using external endpoints, taking the CAIDA(-controlled) endpoints as an example, using the PacketLab software package.
+After installation (and potentially running our first local experiment), we are now ready to run our first *external* experiment. For this tutorial, we will demonstrate how to run an experiment using external endpoints (taking the PacketLab team endpoints as an example) using the PacketLab software package.
 
 ## 1. Setup
 For this tutorial, we will only use the `pktxpmgr` program (PacketLab Experiment Manager Utility). If `pktxpmgr` cannot be found via the `PATH` environment variable, one will need to navigate to the `bin` directory under the package installation directory to find the program.
@@ -85,7 +85,7 @@ After successfully running `pktxpmgr`, one should see HTML code (potentially mul
 > Note one can kill `pktxpmgr` with SIGINT directly.
 
 ### Process Rundown
-**Passive (listen) mode** The CAIDA broker forwards the experiment descriptor to CAIDA endpoints after being notified of the experiment by `pktxpmgr`. Receiving the experiment descriptor, CAIDA endpoints initiate the connections to the controller described by the descriptor. `pktxpmgr` then performs TLS handshake with each of the incoming CAIDA endpoints, exec-ing the mlet `test_http_get` at the end, which starts issuing PacketLab protocol requests to one of the endpoints over `pktxpmgr`. By design, `test_http_get` asks the endpoint (via multiple PacketLab protocol requests) on sending out the HTTP GET request, and receives the forwarded back HTTP response from the endpoint which is then displayed in the terminal. Also see Image 1 below for a graphical representation of the overall process.
+**Passive (listen) mode** The CAIDA broker forwards the experiment descriptor to the PacketLab team endpoints after being notified of the experiment by `pktxpmgr`. Receiving the experiment descriptor, the PacketLab team endpoints initiate the connections to the controller described by the descriptor. `pktxpmgr` then performs TLS handshake with each of the incoming endpoints, exec-ing the mlet `test_http_get` at the end, which starts issuing PacketLab protocol requests to one of the endpoints over `pktxpmgr`. By design, `test_http_get` asks the endpoint (via multiple PacketLab protocol requests) on sending out the HTTP GET request, and receives the forwarded back HTTP response from the endpoint which is then displayed in the terminal. Also see Image 1 below for a graphical representation of the overall process.
 
 **Active (proxy) mode** The process is similar to the passive case, except that `pktxpmgr` now connects to the proxy to register for snikeys, and then relies on the proxy to forward the `pktxpmgr`-endpoint traffic with the correct endpoint.
 

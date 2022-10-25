@@ -46,7 +46,7 @@ pktendpt
 > Afterward for any received experiment descriptor from the broker, `pktendpt` creates a connection to the controller described by the descriptors.
 
 ## 4. Seeing the Result
-After successfully running the two commands, one should see HTML code retrieved from the HTTP server `www.example.com`. Congratulations, you have just run your first experiment using PacketLab! For more information, see below for a rundown of what exactly happened for the HTML code to be displayed. Also see **[Running our First External Experiment](/tutorial/first_run_external)** on steps to run the example mlets with external (CAIDA) endpoints.
+After successfully running the two commands, one should see HTML code retrieved from the HTTP server `www.example.com`. Congratulations, you have just run your first experiment using PacketLab! For more information, see below for a rundown of what exactly happened for the HTML code to be displayed. Also see **[Running our First External Experiment](/tutorial/first_run_external)** on steps to run the example mlets with external endpoints.
 > Note one can kill the two processes with SIGINT directly.
 
 ### Process Rundown
