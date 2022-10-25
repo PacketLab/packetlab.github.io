@@ -15,7 +15,7 @@ permalink: /
 
 ### PacketLab is a new measurement endpoint interface designed to facilitate endpoint sharing among the network measurement research community.
 
-- To try out our software package, including a reference PacketLab endpoint, experiment running utilities, and some example measurement applets, see [Downloads](/download/) *(Latest release: v0.4.0 on 2022/10/21)* and [Tutorials](/tutorial/).
+- To try out our software package, including a reference PacketLab endpoint, experiment running utilities, and some example measurement applets, see [Downloads](/download/) *(Latest release: v0.4.1 on 2022/10/24)* and [Tutorials](/tutorial/).
 - For documentation of the `libpktlab` utility library, see [Docs](/docs/).
 - To learn more about PacketLab, see [About](/about/).
 
