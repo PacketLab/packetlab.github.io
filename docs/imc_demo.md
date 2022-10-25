@@ -75,7 +75,7 @@ After following the steps, the privileges are now set up. You can now run sample
 
 ---
 ## For Other Interested Attendees
-For other interested attendees that could not attend the demo, you will need to set up the PacketLab software package on your local machine to try out the package. We provide the following options:
+For other interested attendees who could not attend the demo, you will need to set up the PacketLab software package on your local machine to try out the package. We provide the following options:
 
 **Try-it-out Special Bundle** We provide a **Try-it-out special bundle** (for a selected set of OS/arch) that would alleviate you from the full installation steps required to set up the PacketLab software package on your local machine. The steps to use the bundle are as follows:
 1. Download the special bundle based on your OS/arch: [Linux/amd64](https://packetlab.web.illinois.edu/release/special_bundle/pktlab-special.linux.amd64.zip), [MacOS/amd64](https://packetlab.web.illinois.edu/release/special_bundle/pktlab-special.macos.amd64.zip), and [MacOS/arm](https://packetlab.web.illinois.edu/release/special_bundle/pktlab-special.macos.arm.zip).
@@ -83,7 +83,7 @@ For other interested attendees that could not attend the demo, you will need to 
 3. cd into the unzipped directory.
 You can then run the commands described at [Running Sample Measurements on External PacketLab Endpoints](#running-sample-measurements-on-external-packetlab-endpoints) as well (note you will need to change the `-c` option argument to give `-c xpmgr.proxy.conf` and do `./pktxpmgr` instead)!
 
-> Note the special bundle is for temporary use only due to endpoint-side resource limits. For attendees that would like to use PacketLab in a more permanent manner, we recommend they follow the [Installation Tutorial](/tutorial/installation) to set up the full PacketLab software package.
+> Note the special bundle is for temporary use only due to endpoint-side resource limits. For attendees who would like to use PacketLab in a more permanent manner, we recommend they follow the [Installation Tutorial](/tutorial/installation) to set up the full PacketLab software package.
 
 > Note for MacOS users: when running our binaries, a warning may be given on *the developer cannot be verified*. To fix this, you can go to **System Preferences->Security & Privacy->Allow Anyway** to allow execution of our binaries.
 
