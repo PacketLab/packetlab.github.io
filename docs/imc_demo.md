@@ -81,6 +81,8 @@ For other interested attendees who could not attend the demo, you will need to s
 1. Download the special bundle based on your OS/arch: [Linux/amd64](https://packetlab.web.illinois.edu/release/special_bundle/pktlab-special.linux.amd64.zip), [MacOS/amd64](https://packetlab.web.illinois.edu/release/special_bundle/pktlab-special.macos.amd64.zip), and [MacOS/arm](https://packetlab.web.illinois.edu/release/special_bundle/pktlab-special.macos.arm.zip).
 2. Unzip the bundle.
 3. cd into the unzipped directory.
+4. *(Optional, but recommended if you are somewhere that has high RTT to `pktbrokr.caida.org`/`pktproxy.caida.org`)*: Edit `xpmgr.proxy.conf` and change the `TargetBacklogConn` option to a higher value (say 10).
+
 You can then run the commands described at [Running Sample Measurements on External PacketLab Endpoints](#running-sample-measurements-on-external-packetlab-endpoints) as well (note you will need to change the `-c` option argument to give `-c xpmgr.proxy.conf` and do `./pktxpmgr` instead)!
 
 > Note the special bundle is for temporary use only due to endpoint-side resource limits. For attendees who would like to use PacketLab in a more permanent manner, we recommend they follow the [Installation Tutorial](/tutorial/installation) to set up the full PacketLab software package.
