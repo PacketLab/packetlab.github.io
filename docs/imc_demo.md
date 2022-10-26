@@ -47,7 +47,7 @@ pktxpmgr -c ~/.pktlab/xpmgr.proxy.conf -a pktproxy.caida.org [-i HOSTID] mlets/t
 pktxpmgr -c ~/.pktlab/xpmgr.proxy.conf -a pktproxy.caida.org [-i HOSTID] mlets/test_pktif_traceroute DOMAIN
 ```
 
-> The `-i HOSTID` option allows users to select the specific endpoint of interest by supplying the endpoint `HOSTID`. See **[here (TBA)]** for a list of available endpoints.
+> The `-i HOSTID` option allows users to select the specific endpoint of interest by supplying the endpoint `HOSTID`. See **[here](/assets/Serverlist.txt)** for a list of available endpoints.
 
 > Big thanks to [EdgeNet](https://www.edge-net.org/) for hosting most of the demo endpoints!
 
