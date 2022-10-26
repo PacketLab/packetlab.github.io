@@ -87,6 +87,8 @@ You can then run the commands described at [Running Sample Measurements on Exter
 
 > Note the special bundle is for temporary use only due to endpoint-side resource limits. For attendees who would like to use PacketLab in a more permanent manner, we recommend they follow the [Installation Tutorial](/tutorial/installation) to set up the full PacketLab software package.
 
+> Note on IMC Conference Venue Wi-Fi Limitation: If you plan to try our special bundle (or our full package installation) during IMC, do note that **the firewall imposed on the IMC conference venue Wi-Fi will prevent our software package from working correctly**. You will need to access the Internet using alternative methods such as cellular data.
+
 > Note for MacOS users: when running our binaries, a warning may be given on *the developer cannot be verified*. To fix this, you can go to **System Preferences->Security & Privacy->Allow Anyway** to allow execution of our binaries.
 
 **Other OS/Arch Users** Due to lack of time, we are not able to provide other OS/arch users with special bundles. However, if you are running a POSIX.1-2004-compliant OS, you could still follow our [Tutorial - Getting Started](/tutorial#getting-started) on setting up the software package and trying them out.
