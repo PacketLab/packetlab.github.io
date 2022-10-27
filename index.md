@@ -17,7 +17,7 @@ permalink: /
 
 - To try out our software package, including a reference PacketLab endpoint, experiment running utilities, and some example measurement applets, see [Downloads](/download/) *(Latest release: v0.4.1 on 2022/10/24)* and [Tutorials](/tutorial/).
 
-> For users who would like to get a quick taste of PacketLab without performing the full setup, see the [IMC demo information page](/imc_demo/#for-other-interested-attendees) for more info on the **try-it-out special bundle**.
+> For users who would like to get a quick taste of PacketLab without performing the full setup, see the [IMC demo information page](/imc_demo/#for-other-interested-attendees) for more info on the **try-it-out special bundle**. External endpoint access included!
 
 > Cooperating with [EdgeNet](https://www.edge-net.org/), users can now run example measurement applets on external PacketLab endpoints. See [Tutorials](/tutorial/) for more information.
 
