@@ -29,7 +29,7 @@ This page provides information on installing the PacketLab software package. Cur
 ```
 unzip pktlab-[VER]_prebuilt.[raw|noraw].[PLATFORM].[ARCH].zip
 ```
-3. Install the required Python modules. This can be done by running
+3. Install the required Python modules. This can be done by running. Note that if you installed from source `requirements.txt` may be in `[EXTRACT_DIR_PATH]`
 ```
 pip install -r [EXTRACT_DIR_PATH]/setup_aux/requirements.txt
 ```
@@ -73,6 +73,9 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 >  export CPPFLAGS="-IBREW_OPENSSL_INSTALLATION_INCLUDE_DIR"
 > ```
 
+> - **Note for Apple Silicon Mac users:**
+> We need to create two additional softlinks that links `liblmdb.a` and `lmdb.h`. The package `lmdb` needs to be installed through [Homebrew](https://brew.sh/). You will need to softlink the `liblmdb.a` to `usr/local/lib`. To do this, run `brew info lmdb` to find the `lmdb` installation folder. Go to the folder, find the file `liblmdb.a`, and get the path of the file. To create the softlink for `liblmdb.a`, run `sudo ln -s [PATH_liblmdb.a] /usr/local/lib`. Similarly, to create the soft link for `lmdb.h`, find the path of the file under the same `lmdb` installation folder, and run `sudo ln -s [PATH_lmdb.h] /usr/local/include`.
+
 > - **Note for FreeBSD users:**
 > On FreeBSD, if `python3` is installed via `pkg`, one may also need to install the `databases/py-sqlite3` package with `pkg install databases/py-sqlite3`. Also note rust may be required, and could be installed similarly via `pkg install rust`.
 
@@ -84,7 +87,7 @@ tar xvzf pktlab-[VER].tar.gz
 ```
 3. `cd` into the extracted directory (should be `pktlab-[VER]`)
 4. Run `./configure`
-> Note one may want to also specify the `--prefix` option to avoid installing in the system directories. To do this, instead run `./configure --prefix=[ABSOLUTE_INSTALL_DIR_PATH]`, where `[ABSOLUTE_INSTALL_DIR_PATH]` is the *absolute* path to the target install destination (need not exist beforehand).
+> It is recommended to also specify the `--prefix` option to avoid installing in the system directories. To do this, instead run `./configure --prefix=[ABSOLUTE_INSTALL_DIR_PATH]`, where `[ABSOLUTE_INSTALL_DIR_PATH]` is the *absolute* path to the target install destination (need not exist beforehand). 
 5. Run `make`
 6. Run `make install`. If all steps have been successful, the software package is now installed at the target location or in the GNU autotools default directories if `--prefix` is not specified.
 > The default install destinations are `/usr/local/bin`, `/usr/local/include`, `/usr/local/lib`, and `/usr/local/share`.
