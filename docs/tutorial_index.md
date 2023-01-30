@@ -12,17 +12,17 @@ We provide topic-oriented tutorials in the following on how to use the PacketLab
 ## Getting Started
 - **[PacketLab Overview](/tutorial/pktlab_overview)** - A general overview of the PacketLab settings and jargons.
 - **[Installation](/tutorial/installation)** - Guide on (building and) installing the PacketLab software package.
-- **[Running our First Local Experiment](/tutorial/first_run_local)** - Guide on running the example measurements using the PacketLab software package after installation.
-- **[Running our First External Experiment (TBA)]** - Guide on running the example measurements using the PacketLab software package after installation.
+- **[Running our First Local Experiment](/tutorial/first_run_local)** - Guide on running the example measurements (on a local endpoint) using the PacketLab software package after installation.
+- **[Running our First External Experiment](/tutorial/first_run_external)** - Guide on running the example measurements (on external endpoints) using the PacketLab software package after installation.
 
-## Advanced Topics (TBA)
+## Advanced Topics
 - **[Package File Structure](/tutorial/package_file_structure)** - Additional information on the PacketLab software package file structure.
 - **[Configurable Options for `pktxpmgr`]** - Additional information on options supported by the experiment manager utility program `pktxpmgr`.
 - **[Configurable Options for `pktendpt`]** - Additional information on options supported by the reference endpoint program `pktendpt`.
 - **[Intro to `libpktlab`]** - A general overview of the functionality provided by the PacketLab general utility library `libpktlab`.
 - **[Writing Custom Measurement Applets]** - Guide on writing custom measurement applets.
 
-## Goal-oriented Tutorials (TBA)
+## Goal-oriented Tutorials
 - **[Goal: conduct measurement study with EXISTING applets and endpoints]**
 - **[Goal: volunteer network resources via hosting an endpoint]**
 - **[Goal: conduct measurement study with CUSTOM applets and endpoints]**
