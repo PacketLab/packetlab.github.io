@@ -92,10 +92,10 @@
             noWrap: true,
             attribution: '© OpenStreetMap'
         }).addTo(map);*/
-        var UIUC = millerProjection(61.2176, -149.8997);
+        var UIUC = millerProjection(40.1020, -88.2272);
 
         var marker = L.marker(UIUC).addTo(map);
-        marker.bindPopup(UIUC[0] + " " + UIUC[1]).openPopup();
+        marker.bindPopup("Welcome to UIUC!").openPopup();
         
         var marker2 = L.marker([0, 0]).addTo(map);
         map.setView([775, 0]);
