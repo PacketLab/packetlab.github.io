@@ -18,7 +18,7 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            width: 100%;
+            width: 90%;
         }
     </style>
 
@@ -28,41 +28,86 @@
     <div id="map"></div>
     <script type="text/javascript">
 
-        var map = L.map('map', {
-            zoom: 4.0,
-            maxZoom: 10,
-            minZoom: 1.6,
-            zoomSnap: 0.1,
-            zoomDelta: 0.5,
-            maxBounds: [[-51, -138.9],[76.5, 138.8]],
-            maxBoundsViscosity: 1.0,
-            noWrap: true
-        }).setView([0,0], 1.0);
+        function millerProjection(lat, lng) {
 
+            // Create sec() function
+            function sec(value) {
+                return 1/Math.cos(value);
+            }
+
+            // Create fucntion to change degree to radians
+            function toRadian(value) {
+                return value * Math.PI / 180;
+            }
+
+            lng = toRadian(lng-11.8);
+            lat = toRadian(lat);
+
+            // Miller Projection
+            var x = lng;
+            var y = 1.25*Math.log(Math.tan(Math.PI/4+0.4*(lat)));
+
+            var width = 1673;
+            var scale = width/Math.PI/2;
+            x *= scale;
+            y *= scale;
+
+            x += width/2;
+            y += width/2*(1098/1673) 
+
+            return [y,x];
+        }
 
         var svgMap = 'worldapproved.svg';
+        var bounds = [
+            [0,0], 
+            [1098, 1673]
+        ];
         var svgMapBounds = [
-            [-51, -138.9],
-            [76.5, 138.8]
+            [0,0], 
+            [1098, 1673]
         ];
 
+        var map = L.map('map', {
+            // center: svgMapBounds.getCenter(),
+            crs: L.CRS.Simple,
+            zoom: 0.1,
+            maxZoom: 100,
+            minZoom: 0,
+            zoomSnap: 0.1,
+            zoomDelta: 0.5,
+            maxBounds: svgMapBounds,
+            maxBoundsViscosity: 1.0,
+            noWrap: true
+        }).setView([100,100], 1.0);
+
+
         L.imageOverlay(svgMap, svgMapBounds).addTo(map);
+        map.fitBounds(svgMapBounds);
         
-        const imageUrl = 'worldapproved/{z}/{x}/{y}.svg'
+        // const imageUrl = 'worldapproved/{z}/{x}/{y}.svg'
 
         /*L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             noWrap: true,
             attribution: '© OpenStreetMap'
         }).addTo(map);*/
+        var UIUC = millerProjection(61.2176, -149.8997);
 
-        map.fitBounds([
-            [-50, -166],
-            [77, 180]
-        ]);
+        var marker = L.marker(UIUC).addTo(map);
+        marker.bindPopup(UIUC[0] + " " + UIUC[1]).openPopup();
+        
+        var marker2 = L.marker([0, 0]).addTo(map);
+        map.setView([775, 0]);
+        // console.log("Got here");
+        // fetch("./data.json")
+        //     .then(function(resp){
+        //         return resp.json();
+        //     });
+        // for(;;){
 
-        var marker = L.marker([54, -77.4]).addTo(map);
-        marker.bindPopup("<b>Welcome to UIUC!</b>").openPopup();
+        // }
+        
         
         // todo: add get active endpoint json and plot them
     </script>
