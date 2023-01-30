@@ -24,13 +24,9 @@ permalink: /
 - For documentation of the `libpktlab` utility library, see [Docs](/docs/).
 - To learn more about PacketLab, see [About](/about/).
 
-<<<<<<< HEAD
-
-=======
 [IMC'22 Demo Information](/imc_demo){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 <!--
->>>>>>> origin/master
 <style>
 iframe {
     aspect-ratio: 16 / 9;
@@ -40,11 +36,7 @@ iframe {
 }
 </style>
 <p style="text-align:center"><iframe src="map.html"></iframe></p>
-<<<<<<< HEAD
-
-=======
 > PacketLab is supported by NSF award #1764055/1903612 and a gift from Comcast.
 -->
->>>>>>> origin/master
 
 > <div class="footer">PacketLab is supported by NSF award #1764055/1903612 and a gift from Comcast.</div>
