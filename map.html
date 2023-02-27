@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     
     <style>
         html { height: 100%; margin: 0; }
@@ -27,6 +28,7 @@
 <body>
     <div id="map"></div>
     <script type="text/javascript">
+        var urlJSON = "https://packetlabjson.web.illinois.edu/data.json";
 
         function millerProjection(lat, lng) {
 
@@ -57,6 +59,9 @@
 
             return [y,x];
         }
+        function getArray(){
+            return $.getJSON(urlJSON);
+        }
 
         var svgMap = 'worldapproved.svg';
         var bounds = [
@@ -69,10 +74,9 @@
         ];
 
         var map = L.map('map', {
-            // center: svgMapBounds.getCenter(),
             crs: L.CRS.Simple,
             zoom: 0.1,
-            maxZoom: 100,
+            maxZoom: 3,
             minZoom: 0,
             zoomSnap: 0.1,
             zoomDelta: 0.5,
@@ -85,31 +89,32 @@
         L.imageOverlay(svgMap, svgMapBounds).addTo(map);
         map.fitBounds(svgMapBounds);
         
-        // const imageUrl = 'worldapproved/{z}/{x}/{y}.svg'
+        //var UIUC = millerProjection(40.1020, -88.2272);
 
-        /*L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            noWrap: true,
-            attribution: '© OpenStreetMap'
-        }).addTo(map);*/
-        var UIUC = millerProjection(40.1020, -88.2272);
+        //var marker = L.marker(UIUC).addTo(map);
+        // marker.bindPopup("Welcome to UIUC!").openPopup();
 
-        var marker = L.marker(UIUC).addTo(map);
-        marker.bindPopup("Welcome to UIUC!").openPopup();
+        console.log("Got here");
+        // fetch(urlJSON)
+        //     .then((response) => response.json())
+        //     .then((json) => console.log(json));
         
-        var marker2 = L.marker([0, 0]).addTo(map);
-        map.setView([775, 0]);
-        // console.log("Got here");
-        // fetch("./data.json")
-        //     .then(function(resp){
-        //         return resp.json();
-        //     });
-        // for(;;){
+        getArray().done( function(json) {
+            console.log(json); // show the json data in console
+            var _len = json.length;
+            var fixture;
+                data = json["data"];
+                coordinates = data["coordinates"];
+                for(var i in coordinates){
+                    coordinate = coordinates[i];
+                    lat = coordinates[i]["latitude"];
+                    long = coordinates[i]["longitude"];
+                    var loc = millerProjection(lat, long);
+                    var marker = L.marker(loc).addTo(map);
+                    marker.bindPopup("Latitude: " + lat + "\nLongitude " + long).openPopup();
+                }
+            });
 
-        // }
-        
-        
-        // todo: add get active endpoint json and plot them
     </script>
 </body>
 </html>
