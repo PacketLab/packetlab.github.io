@@ -3,6 +3,7 @@ layout: default
 title: IMC'22 Demo Information
 nav_order: 6
 permalink: /imc_demo/
+nav_exclude: true
 ---
 
 ![PKTLAB_at_IMC](/assets/images/pktlab_logo_at_imc.png)
