@@ -74,42 +74,20 @@ PacketLab is currently being developed by a collaboration of students and resear
     </tr>
     <tr>
         <td width="30%" align="center" valign="middle">
-            <img src="/assets/images/michaelchen.jpg" alt='Yuxuan "Michael" Chen' class="avatar"/>
-        </td>
-        <td width="30%" align="center" valign="middle">
-            <img src="/assets/images/antheachen.jpg" alt='Anxue "Anthea" Chen' class="avatar"/>
+            <img src="/assets/images/empty.png" alt="Lamya Alowain" class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
             <img src="/assets/images/patrickmarschoun.jpg" alt="Patrick Marschoun" class="avatar"/>
         </td>
+        <td width="30%" align="center" valign="middle">
+        </td>
     </tr>
     <tr>
         <td width="30%" align="center" valign="middle">
-            <p class="name">Yuxuan "Michael" Chen (UIUC)</p>
-        </td>
-        <td width="30%" align="center" valign="middle">
-            <p class="name">Anxue "Anthea" Chen (UIUC)</p>
+            <p class="name">Jingxuan Wu (UIUC)</p>
         </td>
         <td width="30%" align="center" valign="middle">
             <p class="name">Patrick Marschoun (UIUC)</p>
-        </td>
-    </tr>
-    <tr>
-        <td width="30%" align="center" valign="middle">
-            <img src="/assets/images/tabishshaik.png" alt="Tabish Shaik" class="avatar"/>
-        </td>
-        <td width="30%" align="center" valign="middle">
-            <img src="/assets/images/richardmasserfrye.jpg" alt="Richard Masser-Frye" class="avatar"/>
-        </td>
-        <td width="30%" align="center" valign="middle">
-        </td>
-    </tr>
-    <tr>
-        <td width="30%" align="center" valign="middle">
-            <p class="name">Tabish Shaik (UIUC)</p>
-        </td>
-        <td width="30%" align="center" valign="middle">
-            <p class="name">Richard Masser-Frye (UCSD)</p>
         </td>
         <td width="30%" align="center" valign="middle">
         </td>
@@ -142,6 +120,46 @@ PacketLab is currently being developed by a collaboration of students and resear
         </td>
         <td width="30%" align="center" valign="middle">
             <p class="name">Vinay Pillai (UCSD)</p>
+        </td>
+    </tr>
+    <tr>
+        <td width="30%" align="center" valign="middle">
+            <img src="/assets/images/michaelchen.jpg" alt='Yuxuan "Michael" Chen' class="avatar"/>
+        </td>
+        <td width="30%" align="center" valign="middle">
+            <img src="/assets/images/antheachen.jpg" alt='Anxue "Anthea" Chen' class="avatar"/>
+        </td>
+        <td width="30%" align="center" valign="middle">
+            <img src="/assets/images/tabishshaik.png" alt="Tabish Shaik" class="avatar"/>
+        </td>
+    </tr>
+    <tr>
+        <td width="30%" align="center" valign="middle">
+            <p class="name">Yuxuan "Michael" Chen (UIUC)</p>
+        </td>
+        <td width="30%" align="center" valign="middle">
+            <p class="name">Anxue "Anthea" Chen (UIUC)</p>
+        </td>
+        <td width="30%" align="center" valign="middle">
+            <p class="name">Tabish Shaik (UIUC)</p>
+        </td>
+    </tr>
+    <tr>
+        <td width="30%" align="center" valign="middle">
+            <img src="/assets/images/richardmasserfrye.jpg" alt="Richard Masser-Frye" class="avatar"/>
+        </td>
+        <td width="30%" align="center" valign="middle">
+        </td>
+        <td width="30%" align="center" valign="middle">
+        </td>
+    </tr>
+    <tr>
+        <td width="30%" align="center" valign="middle">
+            <p class="name">Richard Masser-Frye (UCSD)</p>
+        </td>
+        <td width="30%" align="center" valign="middle">
+        </td>
+        <td width="30%" align="center" valign="middle">
         </td>
     </tr>
 </tbody>

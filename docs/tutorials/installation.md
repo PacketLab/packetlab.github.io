@@ -72,6 +72,8 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 >  export LDFLAGS="-LBREW_OPENSSL_INSTALLATION_LIB_DIR"
 >  export CPPFLAGS="-IBREW_OPENSSL_INSTALLATION_INCLUDE_DIR"
 > ```
+>
+> When installing lmdb via Homebrew, one may also need to soft link `liblmdb.a` and `lmdb.h` to `/usr/local/lib` and `/usr/local/include` as well. This can be done similarly as in the OpenSSL case: the library and header file could be found via `brew info lmdb`, and the soft links could then be created using the `ln -s` command.
 
 > - **Note for FreeBSD users:**
 > On FreeBSD, if `python3` is installed via `pkg`, one may also need to install the `databases/py-sqlite3` package with `pkg install databases/py-sqlite3`. Also note rust may be required, and could be installed similarly via `pkg install rust`.
@@ -83,12 +85,12 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 tar xvzf pktlab-[VER].tar.gz
 ```
 3. `cd` into the extracted directory (should be `pktlab-[VER]`)
-4. Run `./configure`
-> Note one may want to also specify the `--prefix` option to avoid installing in the system directories. To do this, instead run `./configure --prefix=[ABSOLUTE_INSTALL_DIR_PATH]`, where `[ABSOLUTE_INSTALL_DIR_PATH]` is the *absolute* path to the target install destination (need not exist beforehand).
+4. Run `./configure --prefix=[ABSOLUTE_INSTALL_DIR_PATH]`, where `[ABSOLUTE_INSTALL_DIR_PATH]` is the *absolute* path to the target install destination (need not exist beforehand).
+> Note it is **HIGHLY RECOMMENDED** to specify the `--prefix` option to avoid installing in the system directories.
 5. Run `make`
 6. Run `make install`. If all steps have been successful, the software package is now installed at the target location or in the GNU autotools default directories if `--prefix` is not specified.
 > The default install destinations are `/usr/local/bin`, `/usr/local/include`, `/usr/local/lib`, and `/usr/local/share`.
-7. Finally, follow steps 3 and 4 in **[Install Using Prebuilt Package](#install-using-prebuilt-package)**. Note the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt` or `/usr/local/share/pktlab/setup_aux/requirements.txt` for step 3. For step 4, the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init` if `--prefix` specified, or one can directly execute `pktlab_init`.
+7. Finally, follow steps 3 and 4 in **[Install Using Prebuilt Package](#install-using-prebuilt-package)**. **Please note the paths will be different.** The path should be `[ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt` or `/usr/local/share/pktlab/setup_aux/requirements.txt` for step 3. For step 4, the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init` if `--prefix` specified, or one can directly execute `pktlab_init`.
 
 After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. Before running pktlab programs, if `--prefix` was specified we recommend adding `[ABSOLUTE_INSTALL_DIR_PATH]/bin` to `PATH` to allow running the shipped programs more easily. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment](/tutorial/first_run_external)** for more information on experiment/endpoint running.
 > Also note if the built and installed content is shared among different users, only step 7 (and `PATH` variable exporting if applicable) needs to be performed by new users after the initial installation.
