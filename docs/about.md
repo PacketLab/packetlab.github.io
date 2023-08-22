@@ -74,7 +74,7 @@ PacketLab is currently being developed by a collaboration of students and resear
     </tr>
     <tr>
         <td width="30%" align="center" valign="middle">
-            <img src="/assets/images/empty.png" alt="Lamya Alowain" class="avatar"/>
+            <img src="/assets/images/jingxuan.jpg" alt="Jingxuan Wu" class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
             <img src="/assets/images/patrickmarschoun.jpg" alt="Patrick Marschoun" class="avatar"/>
