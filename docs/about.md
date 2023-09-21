@@ -127,7 +127,7 @@ PacketLab is currently being developed by a collaboration of students and resear
             <img src="/assets/images/michaelchen.jpg" alt='Yuxuan "Michael" Chen' class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
-            <img src="/assets/images/antheachen.jpg" alt='Anxue "Anthea" Chen' class="avatar"/>
+            <img src="/assets/images/antheachen.jpg" alt='Anthea Chen' class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
             <img src="/assets/images/tabishshaik.png" alt="Tabish Shaik" class="avatar"/>
