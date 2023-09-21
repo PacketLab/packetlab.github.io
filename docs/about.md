@@ -138,7 +138,7 @@ PacketLab is currently being developed by a collaboration of students and resear
             <p class="name">Yuxuan "Michael" Chen (UIUC)</p>
         </td>
         <td width="30%" align="center" valign="middle">
-            <p class="name">Anxue "Anthea" Chen (UIUC)</p>
+            <p class="name">Anthea Chen (UIUC)</p>
         </td>
         <td width="30%" align="center" valign="middle">
             <p class="name">Tabish Shaik (UIUC)</p>
