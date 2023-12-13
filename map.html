@@ -32,7 +32,7 @@
 <body>
     <div id="map"></div>
     <script type="text/javascript">
-        var urlJSON = "https://packetlabjson.web.illinois.edu/data.json";
+        var urlJSON = "https://packetlabjson.web.illinois.edu/coordinates.json";
 
         function millerProjection(lat, lng) {
 
@@ -98,22 +98,49 @@
         // marker.bindPopup("Welcome to UIUC!").openPopup();
 
         console.log("Got here");
+
+        function readJSONLFile(data) {
+            // Replace 'data.jsonl' with your actual JSONL file name
+            fetch(data)
+                .then(response => response.text())
+                .then(data => {
+                    // Split the file content into lines
+                    const lines = data.split('\n');
+                    // Process each line (JSON object)
+                    lines.forEach(line => {
+                        // Parse each line as JSON
+                        const jsonObj = JSON.parse(line);
+
+                        // Do something with the JSON object
+                        coordinate = jsonObj;
+                        lat = coordinate.coordinates.latitude;
+                        long = coordinate.coordinates.longitude;
+                        console.log(lat, long)
+                        var loc = millerProjection(lat, long);
+                        var marker = L.marker(loc).addTo(map);
+                        marker.bindPopup("Latitude: " + lat + "\nLogitude" + long).openPopup();
+                    });
+                })
+                .catch(error => console.error('Error reading JSONL file:', error));
+        }
+
+        window.onload = readJSONLFile(urlJSON);
         
-        getArray().done( function(json) {
-            console.log(json); // show the json data in console
-            var _len = json.length;
-            var fixture;
-                data = json["data"];
-                coordinates = data["coordinates"];
-                for(var i in coordinates){
-                    coordinate = coordinates[i];
-                    lat = coordinates[i]["latitude"];
-                    long = coordinates[i]["longitude"];
-                    var loc = millerProjection(lat, long);
-                    var marker = L.marker(loc).addTo(map);
-                    marker.bindPopup("Latitude: " + lat + "\nLongitude " + long).openPopup();
-                }
-            });
+        // getArray().done( function(json) {
+            // console.log(json); // show the json data in console
+            // data = json["data"];
+            // coordinates = data["coordinates"];
+            // for(var i in coordinates){
+            //     coordinate = coordinates[i];
+            //     lat = coordinates[i]["latitude"];
+            //     long = coordinates[i]["longitude"];
+            //     var loc = millerProjection(lat, long);
+            //     var marker = L.marker(loc).addTo(map);
+            //     marker.bindPopup("Latitude: " + lat + "\nLongitude " + long).openPopup();
+            // };
+            // console.log(json);
+
+        // });
 
     </script>
 </body>
