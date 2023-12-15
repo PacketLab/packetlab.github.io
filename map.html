@@ -118,7 +118,7 @@
                         console.log(lat, long)
                         var loc = millerProjection(lat, long);
                         var marker = L.marker(loc).addTo(map);
-                        marker.bindPopup("Latitude: " + lat + "\nLogitude" + long).openPopup();
+                        marker.bindPopup("Latitude: " + lat + "\nLongitude: " + long).openPopup();
                     });
                 })
                 .catch(error => console.error('Error reading JSONL file:', error));
