@@ -26,12 +26,12 @@ permalink: /
 
 [IMC'22 Demo Information](/imc_demo){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 <style>
-iframe {
-    aspect-ratio: 16 / 9;
-    height: 90%;
-    width: 90%;
-    border-style: hidden;
-}
+	iframe {
+	    aspect-ratio: 1673 / 1098;
+	    height: 200%;
+	    width: 200%;
+	    border-style: hidden;
+	}
 </style>
 <p style="text-align:center"><iframe src="map.html"></iframe></p>
 
