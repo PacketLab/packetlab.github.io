@@ -17,31 +17,35 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     
     <style>
-        html { height: 100%; margin: 0; }
-        body { height: 100%; margin: 0; }
+        html {height: 100%; margin: 0; }
+        body {height: 100%; margin: 0; }
+        #container {
+            height: 100%;
+        }
         #map {
             position: absolute;
             top: 0;
             bottom: 0;
-            width: 90%;
+            height: 100%;
+            width: 100%;
         }
     </style>
 
 </head>
 
 <body>
-    <div id="map"></div>
+    <div id="container">
+        <div id="map"></div>
+    </div>
     <script type="text/javascript">
         var urlJSON = "https://packetlabjson.web.illinois.edu/coordinates.json";
 
         function millerProjection(lat, lng) {
 
-            // Create sec() function
             function sec(value) {
                 return 1/Math.cos(value);
             }
 
-            // Create function to change degree to radians
             function toRadian(value) {
                 return value * Math.PI / 180;
             }
@@ -49,7 +53,6 @@
             lng = toRadian(lng-11.8);
             lat = toRadian(lat);
 
-            // Miller Projection
             var x = lng;
             var y = 1.25*Math.log(Math.tan(Math.PI/4+0.4*(lat)));
 
@@ -79,15 +82,15 @@
 
         var map = L.map('map', {
             crs: L.CRS.Simple,
-            zoom: 0.1,
-            maxZoom: 3,
-            minZoom: 0,
+            zoom: 0,
+            maxZoom: 2,
+            minZoom: 0.3,
             zoomSnap: 0.1,
             zoomDelta: 0.5,
             maxBounds: svgMapBounds,
             maxBoundsViscosity: 1.0,
             noWrap: true
-        }).setView([100,100], 1.0);
+        })
 
 
         L.imageOverlay(svgMap, svgMapBounds).addTo(map);
@@ -100,18 +103,21 @@
         console.log("Got here");
 
         function readJSONLFile(data) {
-            // Replace 'data.jsonl' with your actual JSONL file name
             fetch(data)
                 .then(response => response.text())
                 .then(data => {
-                    // Split the file content into lines
                     const lines = data.split('\n');
-                    // Process each line (JSON object)
                     lines.forEach(line => {
                         // Parse each line as JSON
+                        console.log(line)
+                        if(line[0] != '{'){
+                            console.log("Setting view")
+                            map.setView([750, 650], 0.3);
+                            return;
+                        }
                         const jsonObj = JSON.parse(line);
 
-                        // Do something with the JSON object
+                        // Coordinate calculations
                         coordinate = jsonObj;
                         lat = coordinate.coordinates.latitude;
                         long = coordinate.coordinates.longitude;
@@ -124,6 +130,7 @@
                 .catch(error => console.error('Error reading JSONL file:', error));
         }
 
+        map.invalidateSize();
         window.onload = readJSONLFile(urlJSON);
         
         // getArray().done( function(json) {
