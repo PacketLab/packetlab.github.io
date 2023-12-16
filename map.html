@@ -6,32 +6,149 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
+    
+
+    /
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
+
+    <!-- Using jQuery API -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    
     <style>
-        html { height: 100%; margin: 0; }
-        body { height: 100%; margin: 0; }
-        #map { height: 100%; }
+        html {height: 100%; margin: 0; }
+        body {height: 100%; margin: 0; }
+        #container {
+            height: 100%;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            height: 100%;
+            width: 100%;
+        }
     </style>
+
 </head>
+
 <body>
-    <div id="map"></div>
-    <script>
+    <div id="container">
+        <div id="map"></div>
+    </div>
+    <script type="text/javascript">
+        var urlJSON = "https://packetlabjson.web.illinois.edu/coordinates.json";
+
+        function millerProjection(lat, lng) {
+
+            function sec(value) {
+                return 1/Math.cos(value);
+            }
+
+            function toRadian(value) {
+                return value * Math.PI / 180;
+            }
+
+            lng = toRadian(lng-11.8);
+            lat = toRadian(lat);
+
+            var x = lng;
+            var y = 1.25*Math.log(Math.tan(Math.PI/4+0.4*(lat)));
+
+            var width = 1673;
+            var scale = width/Math.PI/2;
+            x *= scale;
+            y *= scale;
+
+            x += width/2;
+            y += width/2*(1098/1673) 
+
+            return [y,x];
+        }
+        function getArray(){
+            return $.getJSON(urlJSON);
+        }
+
+        var svgMap = 'worldapproved.svg';
+        var bounds = [
+            [0,0], 
+            [1098, 1673]
+        ];
+        var svgMapBounds = [
+            [0,0], 
+            [1098, 1673]
+        ];
+
         var map = L.map('map', {
-            maxZoom: 10,
-            minZoom: 0,
+            crs: L.CRS.Simple,
+            zoom: 0,
+            maxZoom: 2,
+            minZoom: 0.3,
             zoomSnap: 0.1,
-            zoomDelta: 0.5
-        });
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
-        }).addTo(map);
-        map.fitBounds([
-            [-56, -166],
-            [78, 180]
-        ]);
-        // todo: add get active endpoint json and plot them
+            zoomDelta: 0.5,
+            maxBounds: svgMapBounds,
+            maxBoundsViscosity: 1.0,
+            noWrap: true
+        })
+
+
+        L.imageOverlay(svgMap, svgMapBounds).addTo(map);
+        map.fitBounds(svgMapBounds);
+        
+        //var UIUC = millerProjection(40.1020, -88.2272);
+        //var marker = L.marker(UIUC).addTo(map);
+        // marker.bindPopup("Welcome to UIUC!").openPopup();
+
+        console.log("Got here");
+
+        function readJSONLFile(data) {
+            fetch(data)
+                .then(response => response.text())
+                .then(data => {
+                    const lines = data.split('\n');
+                    lines.forEach(line => {
+                        // Parse each line as JSON
+                        console.log(line)
+                        if(line[0] != '{'){
+                            console.log("Setting view")
+                            map.setView([750, 650], 0.3);
+                            return;
+                        }
+                        const jsonObj = JSON.parse(line);
+
+                        // Coordinate calculations
+                        coordinate = jsonObj;
+                        lat = coordinate.coordinates.latitude;
+                        long = coordinate.coordinates.longitude;
+                        console.log(lat, long)
+                        var loc = millerProjection(lat, long);
+                        var marker = L.marker(loc).addTo(map);
+                        marker.bindPopup("Latitude: " + lat + "\nLongitude: " + long).openPopup();
+                    });
+                })
+                .catch(error => console.error('Error reading JSONL file:', error));
+        }
+
+        map.invalidateSize();
+        window.onload = readJSONLFile(urlJSON);
+        
+        // getArray().done( function(json) {
+            // console.log(json); // show the json data in console
+            // data = json["data"];
+            // coordinates = data["coordinates"];
+            // for(var i in coordinates){
+            //     coordinate = coordinates[i];
+            //     lat = coordinates[i]["latitude"];
+            //     long = coordinates[i]["longitude"];
+            //     var loc = millerProjection(lat, long);
+            //     var marker = L.marker(loc).addTo(map);
+            //     marker.bindPopup("Latitude: " + lat + "\nLongitude " + long).openPopup();
+            // };
+            // console.log(json);
+
+        // });
+
     </script>
 </body>
 </html>

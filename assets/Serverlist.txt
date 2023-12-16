@@ -1,0 +1,48 @@
+Hostid,IP,city,state,Countrycode,Lat,Lon
+geni-us-oh-5fc8.edge-net.io,192.171.20.104,Cleveland,Ohio,US,41.4816,-81.7018
+geni-us-il-190e.edge-net.io,72.36.65.75,Champaign,Illinois,US,72.36.65.75
+geni-us-il-f81b.edge-net.io,206.196.180.221,College Park,Maryland,US,38.9807,-76.9369
+geni-us-oh-a84d.edge-net.io,140.254.14.102,Columbus,Ohio,US,39.9612,-82.9988
+geni-us-tx-710c.edge-net.io,129.110.253.26,Richardson,Texas,US,32.9482,-96.7297
+geni-us-ma-f3e9.edge-net.io,192.1.242.155,Worcester,Massachusetts,US,42.2626,-71.8023
+geni-us-ca-ce0d.edge-net.io,137.110.252.68,San Diego,California,US,32.7157,-117.1647
+geni-us-ca-116f.edge-net.io,137.110.252.67,San Diego,California,US,32.7157,-117.1647
+geni-us-ca-5125.edge-net.io,204.102.244.50,Los Angeles,California,34.0522,-118.2437
+geni-us-mi-2ea7.edge-net.io,192.41.233.61,Marquette,Michigan,US,46.5435,-87.3954
+geni-us-oh-90fb.edge-net.io,66.104.96.101,Dublin,Ohio,US,40.0992,-83.1141
+geni-us-va-8f08.edge-net.io,198.82.156.41,Blacksburg,Virginia,US,37.2563,-80.4347
+geni-us-oh-35c9.edge-net.io,140.254.14.104,Columbus,Ohio,US,39.9612,-82.9988
+geni-us-wi-179f.edge-net.io,128.104.159.128,Madison,Wisconsin,US,43.0731,-89.4012
+geni-us-oh-07a4.edge-net.io,66.104.96.100,Dublin,Ohio,US,40.0992,-83.1141
+geni-us-mi-a2a2.edge-net.io,192.41.233.57,Marquette,Michigan,US,46.5435,-87.3954
+geni-us-hi-3e6b.edge-net.io,128.171.8.124,Honolulu,Hawaii,US,21.3069,-157.8583
+geni-us-ny-e7b2.edge-net.io,199.109.64.51,Syracuse,New York,US,43.0481,-76.1474
+geni-us-il-c2dc.edge-net.io,165.124.51.192,Chicago,Illinois,US,41.8500,-87.6500
+geni-us-mo-31bc.edge-net.io,128.206.119.42,Columbia,Missouri,US,38.9517,-92.3341
+geni-us-ca-3c7f.edge-net.io,204.102.244.51,Los Angeles,California,US,34.0522,-118.2437
+geni-us-il-d844.edge-net.io,192.170.230.102,Chicago,Illinois,US,41.8500,-87.6500
+geni-us-mo-458a.edge-net.io,204.76.187.52,Kansas City,Missouri,US,39.0997,-94.5786
+geni-us-oh-5e20.edge-net.io,192.171.20.102,Cleveland,Ohio,US,41.4816,-81.7018
+geni-us-va-6eb9.edge-net.io,208.22.78.85,Richmond,Virginia,US,37.5538,-77.4603
+geni-us-wi-cdd5.edge-net.io,128.104.159.131,Madison,Wisconsin,US,43.0731,-89.4012
+geni-us-il-454f.edge-net.io,165.124.51.191,Chicago,Illinois,US,41.8500,-87.6500
+geni-us-ny-f290.edge-net.io,199.109.64.50,Syracuse,New York,US,43.0481,-76.1474
+geni-us-nj-7f93.edge-net.io,165.230.161.232,New Brunswick,New Jersey,US,40.4862,-74.4518
+geni-us-nj-1669.edge-net.io,165.230.161.231,New Brunswick,New Jersey,US,40.4862,-74.4518
+geni-us-il-4df5.edge-net.io,206.196.180.220,College Park,Maryland,US,38.9807,-76.9369
+geni-us-hi-1bf2.edge-net.io,128.171.8.125,Honolulu,Hawaii,US,21.3069,-157.8583
+geni-us-ma-5015.edge-net.io,192.1.242.150,Worcester,Massachusetts,US,42.2626,-71.8023
+geni-us-in-d6cc.edge-net.io,149.165.249.128,Indianapolis,Indiana,US,39.7684,-86.1580
+geni-us-va-6425.edge-net.io,208.22.78.86,Richmond,Virginia,US,37.5538,-77.4603
+geni-us-il-4bda.edge-net.io,72.36.65.70,Champaign,Illinois,US,40.1164,-88.2434
+geni-us-il-9341.edge-net.io,192.170.230.100,Chicago,Illinois,US,41.8500,-87.6500
+geni-us-va-823c.edge-net.io,198.82.156.39,Blacksburg,Virginia,US,37.2563,-80.4347
+geni-us-tn-6374.edge-net.io,150.182.135.42,Chattanooga,Tennessee,US,35.0456,-85.3097
+geni-us-ny-10cf.edge-net.io,192.122.236.100,Ithaca,New York,US,42.4406,-76.4966
+geni-us-mo-fc12.edge-net.io,204.76.187.50,Kansas City,Missouri,US,39.0997,-94.5786
+geni-us-mo-017a.edge-net.io,128.206.119.40,Columbia,Missouri,US,38.9517,-92.3341
+aws-2ff41f04aea3,3.143.230.140,Hilliard,Ohio,US,40.0334,-83.1582
+aws-9260502a0931,13.41.72.17,London,England,GB,51.5085,-0.1257
+aws-fb86d96dcd50,13.39.82.233,Paris,Île-de-France,FR,48.8534,2.3488
+aws-3a39d1d07dc9,15.228.41.198,São Paulo,São Paulo,BR,-23.5475,-46.6361
+aws-1a28f0622398,18.177.82.78,Tokyo,Tokyo,JP,35.6895,139.6917

@@ -7,7 +7,7 @@ permalink: /about/
 
 # About
 This page contains information for the PacketLab project, including [the problem](#the-problem) PacketLab addresses, [the PacketLab design](#the-design), and [the People](#the-people) behind PacketLab. Readers looking for more in-depth information can also refer to the [original IMC'17 paper](https://www.caida.org/publications/papers/2017/packetlab/packetlab.pdf) that first introduced PacketLab to the measurement community.
-> Part of the following text is adapted from the extended abstract *Poster: PacketLab - Tools Alpha Release and Demo* for the IMC'22 poster session.
+> Part of the following text is adapted from the extended abstract *PacketLab - Tools Alpha Release and Demo* for the IMC'22 poster session.
 
 ## The Problem
 One tricky problem for distributed network measurement studies is having access to the proper vantage points for experiment data collection. Due to the high cost of establishing and maintaining a large distributed measurement infrastructure, researchers have relied on sharing of measurement infrastructure. This nevertheless introduces new difficulties:

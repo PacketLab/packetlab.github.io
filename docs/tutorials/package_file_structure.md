@@ -2,7 +2,7 @@
 layout: default
 title: Package File Structure
 parent: Tutorial
-nav_order: 4
+nav_order: 5
 permalink: /tutorial/package_file_structure/
 ---
 
