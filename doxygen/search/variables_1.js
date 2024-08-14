@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['type_0',['type',['../a00022.html#a1775864dbf5575e69835d66794940e10',1,'pktlab_uri']]]
+  ['imm_342',['imm',['../a00026.html#a61ebed1ff732dd3c04f1c8ede0c342be',1,'pktlab_ebpf_instr']]]
 ];
