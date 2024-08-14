@@ -42,14 +42,17 @@ pip install -r [EXTRACT_DIR_PATH]/setup_aux/requirements.txt
 After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. Before running pktlab programs, we recommend adding `[EXTRACT_DIR_PATH]/bin` to `PATH` to allow running the shipped programs more easily. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment](/tutorial/first_run_external)** for more information on experiment/endpoint running.
 > Note if the extracted package content is shared among different users, only steps 3 and 4 (and `PATH` variable exporting if applicable) need to be performed by new users after the initial installation.
 
+<!--
 > See **[Package File Structure](/tutorial/package_file_structure)** for information about the file tree and directories in the prebuilt package.
-
+-->
 ---
 ## Install from Source
 ### Prerequisite
 - A [POSIX.1-2004](https://pubs.opengroup.org/onlinepubs/009695399/nfindex.html) compliant OS
 - OpenSSL ≥ 1.1.1
 - lmdb ≥ 0.9.21
+- [Wasmtime C API](https://docs.wasmtime.dev/c-api/) ≥ 23.0.1
+> You will need to install the Wasmtime C API at some local directory.
 - Python ≥ 3.7
 - `pip`
 - `tar` with gzip support (e.g. GNU tar)
@@ -85,14 +88,23 @@ After completing all previous steps, we will have the `~/.pktlab` set up and rea
 tar xvzf pktlab-[VER].tar.gz
 ```
 3. `cd` into the extracted directory (should be `pktlab-[VER]`)
-4. Run `./configure --prefix=[ABSOLUTE_INSTALL_DIR_PATH]`, where `[ABSOLUTE_INSTALL_DIR_PATH]` is the *absolute* path to the target install destination (need not exist beforehand).
+4. Run
+```
+./configure \
+    --prefix=[ABSOLUTE_INSTALL_DIR_PATH] \
+    --enable-wasmtime=[ABSOLUTE_WASMTIME_CAPI_INSTALL_DIR_PATH]
+```
+where `[ABSOLUTE_INSTALL_DIR_PATH]` is the *absolute* path to the target pktlab package install destination (need not exist beforehand), and `[ABSOLUTE_WASMTIME_CAPI_INSTALL_DIR_PATH]` is the absolute path to the Wasmtime C API install location.
 > Note it is **HIGHLY RECOMMENDED** to specify the `--prefix` option to avoid installing in the system directories.
 5. Run `make`
-6. Run `make install`. If all steps have been successful, the software package is now installed at the target location or in the GNU autotools default directories if `--prefix` is not specified.
-> The default install destinations are `/usr/local/bin`, `/usr/local/include`, `/usr/local/lib`, and `/usr/local/share`.
-7. Finally, follow steps 3 and 4 in **[Install Using Prebuilt Package](#install-using-prebuilt-package)**. **Please note the paths will be different.** The path should be `[ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt` or `/usr/local/share/pktlab/setup_aux/requirements.txt` for step 3. For step 4, the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init` if `--prefix` specified, or one can directly execute `pktlab_init`.
+6. Run `make install`. If all steps have been successful, the software package is now installed at the target location.
+7. Finally, follow steps 3 and 4 in **[Install Using Prebuilt Package](#install-using-prebuilt-package)**. **Please note the paths will be different.** The path should be `[ABSOLUTE_INSTALL_DIR_PATH]/share/pktlab/setup_aux/requirements.txt` or `/usr/local/share/pktlab/setup_aux/requirements.txt` for step 3. For step 4, the path should be `[ABSOLUTE_INSTALL_DIR_PATH]/bin/pktlab_init`.
 
-After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. Before running pktlab programs, if `--prefix` was specified we recommend adding `[ABSOLUTE_INSTALL_DIR_PATH]/bin` to `PATH` to allow running the shipped programs more easily. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment](/tutorial/first_run_external)** for more information on experiment/endpoint running.
+After completing all previous steps, we will have the `~/.pktlab` set up and ready for experiment/endpoint running. Before running pktlab programs, we recommend adding `[ABSOLUTE_INSTALL_DIR_PATH]/bin` to `PATH` to allow running the shipped programs more easily. See **[Running our First Local Experiment](/tutorial/first_run_local)** and **[Running our First External Experiment](/tutorial/first_run_external)** for more information on experiment/endpoint running.
+
+<!--
 > Also note if the built and installed content is shared among different users, only step 7 (and `PATH` variable exporting if applicable) needs to be performed by new users after the initial installation.
 
+<!--
 > See the **[Package File Structure](/tutorial/package_file_structure)** for information about the file tree and directories for the installed package.
+-->

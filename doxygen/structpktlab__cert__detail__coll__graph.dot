@@ -1,0 +1,18 @@
+digraph "pktlab_cert_detail"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="pktlab_cert_detail",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Structure for storing pktlab certificate detail information, including cert_info and cert_limit."];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" max_burst_rate_pkt\nmax_burst_rate_byte" ,fontname="Helvetica"];
+  Node2 [label="pktlab_burst_rate",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpktlab__burst__rate.html",tooltip="Structure for storing pktlab burst rate information."];
+  Node2 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" next" ,fontname="Helvetica"];
+  Node3 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" valid_dest" ,fontname="Helvetica"];
+  Node3 [label="pktlab_valid_dest",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpktlab__valid__dest.html",tooltip="Structure for storing pktlab valid destination information."];
+  Node3 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" next" ,fontname="Helvetica"];
+  Node4 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" aux_info\naux_limit" ,fontname="Helvetica"];
+  Node4 [label="pktlab_aux_field",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpktlab__aux__field.html",tooltip="Structure of auxiliary field in pktlab_cert_detail."];
+  Node5 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" pair" ,fontname="Helvetica"];
+  Node5 [label="pktlab_namevalue_pair",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpktlab__namevalue__pair.html",tooltip="Structure for encoding/decoding experiment descriptor (xdescr)/endpoint attribute (dattr) in xpub and..."];
+  Node1 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" next" ,fontname="Helvetica"];
+}

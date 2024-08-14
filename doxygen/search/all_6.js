@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['uri_0',['uri',['../a00022.html#a07ceb6990b3853a63ad034d700bfb63b',1,'pktlab_uri']]]
+  ['offset_7',['offset',['../a00026.html#a8a4900a186f60c6dc69387a837c8e25e',1,'pktlab_ebpf_instr']]],
+  ['opcode_8',['opcode',['../a00026.html#a8f4a3f88a29e54f7f1aa45ede01a86b1',1,'pktlab_ebpf_instr']]]
 ];

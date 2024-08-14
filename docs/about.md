@@ -74,20 +74,18 @@ PacketLab is currently being developed by a collaboration of students and resear
     </tr>
     <tr>
         <td width="30%" align="center" valign="middle">
-            <img src="/assets/images/jingxuan.jpg" alt="Jingxuan Wu" class="avatar"/>
+            <img src="/assets/images/patrickmarschoun.jpg" alt="Patrick Marschoun" class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
-            <img src="/assets/images/patrickmarschoun.jpg" alt="Patrick Marschoun" class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
         </td>
     </tr>
     <tr>
         <td width="30%" align="center" valign="middle">
-            <p class="name">Jingxuan Wu (UIUC)</p>
+            <p class="name">Patrick Marschoun (UIUC)</p>
         </td>
         <td width="30%" align="center" valign="middle">
-            <p class="name">Patrick Marschoun (UIUC)</p>
         </td>
         <td width="30%" align="center" valign="middle">
         </td>
@@ -149,6 +147,7 @@ PacketLab is currently being developed by a collaboration of students and resear
             <img src="/assets/images/richardmasserfrye.jpg" alt="Richard Masser-Frye" class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
+            <img src="/assets/images/jingxuan.jpg" alt="Jingxuan Wu" class="avatar"/>
         </td>
         <td width="30%" align="center" valign="middle">
         </td>
@@ -158,6 +157,7 @@ PacketLab is currently being developed by a collaboration of students and resear
             <p class="name">Richard Masser-Frye (UCSD)</p>
         </td>
         <td width="30%" align="center" valign="middle">
+            <p class="name">Jingxuan Wu (UIUC)</p>
         </td>
         <td width="30%" align="center" valign="middle">
         </td>

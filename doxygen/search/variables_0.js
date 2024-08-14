@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['malformed_0',['malformed',['../a00022.html#a04ac5dc3b6e625ab3ab26a0e17249c4b',1,'pktlab_uri']]]
+  ['dstreg_341',['dstreg',['../a00026.html#a2ee4aa0e0113dbc39fd8c50f9db67286',1,'pktlab_ebpf_instr']]]
 ];

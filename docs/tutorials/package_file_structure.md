@@ -4,6 +4,7 @@ title: Package File Structure
 parent: Tutorial
 nav_order: 5
 permalink: /tutorial/package_file_structure/
+nav_exclude: true
 ---
 
 # Package File Structure
